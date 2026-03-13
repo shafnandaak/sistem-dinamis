@@ -1,8 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7fae8;
+  --foreground: #24391f;
+  --agri-surface: #ffffff;
+  --agri-border: #d3e5a4;
+  --agri-primary: #3f7d20;
+  --agri-primary-hover: #336719;
+  --agri-accent: #f4ca3d;
+}
+
+.dark {
+  --background: #0e1a0b;
+  --foreground: #d8edb8;
+  --agri-surface: #152110;
+  --agri-border: #2a4a1c;
+  --agri-primary: #74c93e;
+  --agri-primary-hover: #5fae2e;
+  --agri-accent: #f4ca3d;
 }
 
 @theme inline {
@@ -12,15 +33,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(189, 224, 94, 0.15), transparent 32%),
+    radial-gradient(circle at 85% 0%, rgba(251, 226, 125, 0.18), transparent 28%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.dark body {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(74, 120, 30, 0.15), transparent 32%),
+    radial-gradient(circle at 85% 0%, rgba(100, 80, 10, 0.15), transparent 28%),
+    var(--background);
 }
