@@ -4,7 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 const authSecret =
   process.env.NEXTAUTH_SECRET ||
   process.env.AUTH_SECRET ||
-  process.env.GOOGLE_CLIENT_SECRET;
+  process.env.GOOGLE_CLIENT_SECRET ||
+  "sd-model-web-temporary-secret-change-in-vercel";
 
 export const authOptions: NextAuthOptions = {
   providers: [
