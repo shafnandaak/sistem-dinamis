@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import initModel from "@/lib/SFDmodel1.js";
 import { runSimulation } from "@/lib/engine";
-import { supabase } from "@/lib/supabase";
+import { hasSupabaseConfig, supabase } from "@/lib/supabase";
 import Chart from "@/components/Chart";
 
 type DataRow = Record<string, number | string | null | undefined>;
@@ -68,8 +68,7 @@ export default function BaselinePage() {
   const [saveStatus, setSaveStatus] = useState<string>("");
 
   const supabaseConfigured =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    hasSupabaseConfig();
 
   const handleRunModel = async () => {
     setLoading(true);
@@ -101,18 +100,22 @@ export default function BaselinePage() {
 
       setData(enrichedResult);
 
-      const { error } = await supabase.from("simulation_results").insert([
-        {
-          simulation_type: "baseline",
-          run_data: enrichedResult,
-          description: "Running model baseline otomatis",
-        },
-      ]);
+      if (supabase) {
+        const { error } = await supabase.from("simulation_results").insert([
+          {
+            simulation_type: "baseline",
+            run_data: enrichedResult,
+            description: "Running model baseline otomatis",
+          },
+        ]);
 
-      if (error) {
-        setSaveStatus(`Model jalan, tapi gagal simpan ke Supabase: ${error.message}`);
+        if (error) {
+          setSaveStatus(`Model jalan, tapi gagal simpan ke Supabase: ${error.message}`);
+        } else {
+          setSaveStatus("Simulasi baseline berhasil dan tersimpan di Supabase.");
+        }
       } else {
-        setSaveStatus("Simulasi baseline berhasil dan tersimpan di Supabase.");
+        setSaveStatus("Simulasi baseline berhasil dijalankan. Simpan ke Supabase dilewati karena konfigurasi belum tersedia.");
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Terjadi error saat menjalankan model.";
