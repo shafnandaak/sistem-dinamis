@@ -1,5 +1,7 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+
 export default function LoginPage() {
   return (
     <div className="relative w-full min-h-screen overflow-hidden flex items-center justify-center">
@@ -14,8 +16,9 @@ export default function LoginPage() {
         </p>
         <p className="mt-1 text-lg text-lime-800">Provinsi Jawa Barat</p>
 
-        <a
-          href="/api/auth/signin/google?callbackUrl=%2F&prompt=select_account"
+        <button
+          type="button"
+          onClick={() => signIn("google", { callbackUrl: "/", prompt: "select_account" })}
           className="mx-auto mt-8 inline-flex items-center gap-3 rounded-xl border border-lime-200 bg-white px-5 py-3 text-sm font-semibold text-lime-900 shadow-sm hover:bg-lime-50 transition"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
@@ -25,7 +28,7 @@ export default function LoginPage() {
             <path fill="#4285F4" d="M20.8 10.4H12v3.9h5.4c-.3 1.4-1.2 2.4-2.1 3.1l3.1 2.4c1.8-1.7 2.8-4.1 2.8-7.4 0-.7-.1-1.3-.2-2z" />
           </svg>
           Login dengan Google
-        </a>
+        </button>
       </div>
     </div>
   );
