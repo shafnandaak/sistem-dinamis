@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import initModel from "@/lib/SFDmodel1.js";
+import initModel from "@/model/build/SFDmodel1-edit6-koreksi.js";
 import { runSimulation } from "@/lib/engine";
 import Chart from "@/components/Chart";
 
