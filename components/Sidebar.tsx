@@ -1,26 +1,31 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 
 const menuItems = [
   { name: "Dashboard", href: "/" },
   { name: "Baseline", href: "/baseline" },
   { name: "Scenario", href: "/scenario" },
   { name: "Simulation", href: "/simulation" },
+  { name: "Pengujian", href: "/pengujian" },
   { name: "About", href: "/about" },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const visibleItems = menuItems.filter((item) => item.href !== PENGUJIAN_PATH || canAccessPengujian(session?.user?.email));
 
   return (
-    <aside className="w-64 h-screen border-r border-lime-200 flex flex-col sticky top-0 shadow-sm bg-gradient-to-b from-lime-50 via-white to-yellow-50">
+    <aside className="w-64 h-screen border-r border-lime-200 flex flex-col sticky top-0 shadow-sm bg-lime-50">
       <div className="p-6 border-b border-lime-200">
         <p className="text-xs uppercase tracking-wide text-lime-800/80">Agri System</p>
         <p className="font-bold text-xl text-lime-900">SD Model App</p>
       </div>
       <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive = pathname === item.href;
 
           return (

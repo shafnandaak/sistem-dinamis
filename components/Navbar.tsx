@@ -7,12 +7,14 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 
 const menuItems = [
   { name: "Dashboard", href: "/" },
   { name: "Baseline", href: "/baseline" },
   { name: "Scenario", href: "/scenario" },
   { name: "Simulation", href: "/simulation" },
+  { name: "Pengujian", href: "/pengujian" },
   { name: "About", href: "/about" },
 ];
 
@@ -21,6 +23,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
 
+  // Menu Pengujian hanya tampil untuk akun yang berhak (lihat lib/access.ts).
+  const visibleItems = menuItems.filter((item) => item.href !== PENGUJIAN_PATH || canAccessPengujian(session?.user?.email));
   const userName = session?.user?.name || "Pengguna";
   const userEmail = session?.user?.email || "Belum login";
   const initial = (session?.user?.name || session?.user?.email || "U")
@@ -44,7 +48,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {menuItems.map((item) => {
+            {visibleItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
@@ -125,7 +129,7 @@ export default function Navbar() {
         }`}
       >
         <nav className="px-4 pt-2 pb-4 space-y-1 border-t border-lime-100 dark:border-lime-900 bg-white dark:bg-gray-950">
-          {menuItems.map((item) => {
+          {visibleItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
