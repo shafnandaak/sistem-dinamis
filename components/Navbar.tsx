@@ -13,8 +13,9 @@ import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 const menuItems = [
   { name: "Dashboard", href: "/" },
   { name: "Baseline", href: "/baseline" },
-  { name: "Scenario", href: "/scenario" },
-  { name: "Simulation", href: "/simulation" },
+  { name: "Kebijakan", href: "/kebijakan" },
+  { name: "Skenario", href: "/scenario" },
+  { name: "Simulasi", href: "/simulation" },
   { name: "Pengujian", href: "/pengujian" },
   { name: "About", href: "/about" },
 ];

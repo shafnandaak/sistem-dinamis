@@ -6,7 +6,15 @@ import dynamic from "next/dynamic";
 import initModel from "@/lib/sfd-model-fix-2.js";
 import { runSimulation } from "@/lib/engine";
 import { buildModelFunctions } from "@/lib/modelFunctions";
-import { BASELINE_END_YEAR, BASELINE_START_YEAR, BASELINE_YEARS, MAPE_VARIABLES, computeMape, mapeCategory } from "@/lib/historicalActuals";
+import {
+  BASELINE_END_YEAR,
+  BASELINE_START_YEAR,
+  BASELINE_YEARS,
+  MAPE_VARIABLES,
+  computeMape,
+  getModelValue,
+  mapeCategory,
+} from "@/lib/historicalActuals";
 import AnalysisDetail from "@/components/AnalysisDetail";
 import { changeTone } from "@/lib/policies";
 import { useViewMode } from "@/lib/viewMode";
@@ -140,6 +148,22 @@ function ResultsTable({ rows, title, filename }: { rows: DataRow[]; title: strin
   );
 }
 
+// Pilihan grafik baseline: variabel endogen yang dibandingkan dengan data statistik resmi (variabel validasi MAPE).
+const VALIDATION_OPTIONS = MAPE_VARIABLES.filter((v) => v.actual.some((a) => a !== null));
+const VALIDATION_GROUPS = Array.from(new Set(VALIDATION_OPTIONS.map((v) => v.subsistem)));
+
+type ModelInfo = {
+  initialTime: number;
+  finalTime: number;
+  timeStep: number;
+  saveper: number;
+  stok: number;
+  aliran: number;
+  bantu: number;
+  lookup: number;
+  parameter: number;
+};
+
 // Indikator utama untuk ringkasan akurasi (dipahami pengguna awam).
 const KEY_ACCURACY = [
   { key: "produksi-padi", label: "Produksi padi" },
@@ -194,7 +218,8 @@ export default function BaselinePage() {
   const [results, setResults] = useState<DataRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [stage, setStage] = useState<Stage>(0);
-  const [baselineMetric, setBaselineMetric] = useState<string>(METRICS[0].variable);
+  const [modelInfo, setModelInfo] = useState<ModelInfo | null>(null);
+  const [baselineKey, setBaselineKey] = useState<string>("produksi-padi");
   const [forecastMetric, setForecastMetric] = useState<string>(METRICS[0].variable);
   const [notification, setNotification] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
   const baselineRef = useRef<HTMLDivElement | null>(null);
@@ -206,7 +231,23 @@ export default function BaselinePage() {
       try {
         const model = await initModel();
         model.setModelFunctions(buildModelFunctions());
-        setResults(runSimulation(model) as unknown as DataRow[]);
+        const rows = runSimulation(model) as unknown as DataRow[];
+        setResults(rows);
+        // Identitas model: pengaturan waktu dibaca langsung dari model hasil kompilasi, jumlah variabel dari persamaan SFD.
+        const { describeVariables } = await import("@/lib/modelVariables");
+        const vars = describeVariables(Object.keys(rows[0] ?? {}));
+        const count = (jenis: string[]) => vars.filter((v) => jenis.includes(v.jenis)).length;
+        setModelInfo({
+          initialTime: model.getInitialTime(),
+          finalTime: model.getFinalTime(),
+          timeStep: model.getTimeStep(),
+          saveper: model.getSaveFreq(),
+          stok: count(["Stok"]),
+          aliran: count(["Aliran"]),
+          bantu: count(["Variabel bantu"]),
+          lookup: count(["Lookup", "Tabel lookup"]),
+          parameter: count(["Parameter"]),
+        });
       } catch (err) {
         const message = err instanceof Error ? err.message : "Terjadi error saat menjalankan model.";
         setNotification({ type: "error", message: `Gagal menjalankan model: ${message}` });
@@ -228,16 +269,15 @@ export default function BaselinePage() {
 
   const toPoints = (rows: DataRow[], variable: string) => rows.map((r) => ({ x: toNumber(r["Time"]), y: toNumber(r[variable]) }));
 
-  const baselineMetricLabel = METRICS.find((m) => m.variable === baselineMetric)?.label ?? baselineMetric;
   const forecastMetricLabel = METRICS.find((m) => m.variable === forecastMetric)?.label ?? forecastMetric;
-  const baselineMetricUnit = METRICS.find((m) => m.variable === baselineMetric)?.unit;
   const forecastMetricUnit = METRICS.find((m) => m.variable === forecastMetric)?.unit;
 
-  // Data aktual pembanding untuk grafik baseline (diambil dari daftar validasi MAPE).
-  const baselineActualPoints = useMemo(() => {
-    const actual = MAPE_VARIABLES.find((v) => v.modelVar === baselineMetric)?.actual ?? [];
-    return BASELINE_YEARS.flatMap((year, idx) => (actual[idx] != null ? [{ x: year, y: actual[idx] as number }] : []));
-  }, [baselineMetric]);
+  // Grafik baseline: hasil model vs data statistik resmi untuk variabel validasi yang dipilih.
+  const baselineVar = VALIDATION_OPTIONS.find((v) => v.key === baselineKey) ?? VALIDATION_OPTIONS[0];
+  const baselineModelPoints = baselineRows.map((r) => ({ x: toNumber(r["Time"]), y: getModelValue(baselineVar, r) }));
+  const baselineActualPoints = BASELINE_YEARS.flatMap((year, idx) =>
+    baselineVar.actual[idx] != null ? [{ x: year, y: baselineVar.actual[idx] as number }] : [],
+  );
 
   const forecastSummary = useMemo(() => {
     const start = baselineRows.at(-1);
@@ -259,7 +299,7 @@ export default function BaselinePage() {
   };
 
   const steps = [
-    { n: 1, title: "Pelajari Baseline", period: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, desc: "Validasi model terhadap data aktual (MAPE)." },
+    { n: 1, title: "Simulasi", period: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, desc: "Validasi model terhadap data aktual (MAPE)." },
     { n: 2, title: "Forecasting", period: `${FORECAST_START_YEAR}–${FORECAST_END_YEAR}`, desc: "Proyeksi tanpa intervensi kebijakan." },
   ];
 
@@ -273,7 +313,7 @@ export default function BaselinePage() {
               <p className="text-xs uppercase tracking-wide text-lime-700">Baseline Model · Jawa Barat</p>
               <h1 className="text-2xl font-bold text-lime-900 md:text-3xl">Model Sistem Dinamis Kebijakan Pertanian Tanaman Pangan</h1>
               <p className="mt-2 text-sm text-lime-900/75">
-                Halaman ini terdiri dari dua tahap. <strong>Baseline</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji
+                Halaman ini terdiri dari dua tahap. <strong>Simulasi</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji
                 seberapa dekat model dengan data aktual melalui MAPE. Setelah itu, <strong>Forecasting</strong> ({FORECAST_START_YEAR}–
                 {FORECAST_END_YEAR}) memproyeksikan kondisi ke depan tanpa intervensi kebijakan.
               </p>
@@ -311,7 +351,7 @@ export default function BaselinePage() {
                 disabled={loading}
                 className="inline-flex items-center gap-2 rounded-xl bg-lime-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-lime-800 hover:shadow-md disabled:bg-lime-300"
               >
-                {loading ? "Menjalankan model..." : "Pelajari Baseline"}
+                {loading ? "Menjalankan model..." : "Mulai Simulasi"}
                 {!loading && <span aria-hidden="true">→</span>}
               </button>
               <Link
@@ -324,34 +364,49 @@ export default function BaselinePage() {
           </div>
 
           <div className="rounded-3xl border border-lime-200 bg-white p-6 shadow-sm">
-            <p className="text-xs uppercase tracking-wide text-lime-700">Status Model</p>
+            <p className="text-xs uppercase tracking-wide text-lime-700">Identitas Model</p>
             <h2 className="mt-2 text-xl font-semibold text-lime-900">sfd-model-fix-2 model 17</h2>
-            <div className="mt-4 space-y-3">
-              <div className="rounded-2xl bg-lime-50 p-4">
-                <p className="text-sm text-lime-900/70">Running</p>
-                <p className="mt-1 flex items-center gap-2 font-semibold text-lime-900">
-                  <span className={`h-2.5 w-2.5 rounded-full ${loading ? "animate-pulse bg-yellow-400" : "bg-lime-600"}`} />
-                  {loading ? "Sedang berjalan..." : `Selesai · ${results.length} tahun (${BASELINE_START_YEAR}–${FORECAST_END_YEAR})`}
-                </p>
-              </div>
-              <div className="rounded-2xl bg-lime-50 p-4">
-                <p className="text-sm text-lime-900/70">Wilayah</p>
-                <p className="mt-1 font-semibold text-lime-900">Jawa Barat</p>
-              </div>
-              <div className="rounded-2xl bg-lime-50 p-4">
-                <p className="text-sm text-lime-900/70">Tahap saat ini</p>
-                <p className="mt-1 font-semibold text-lime-900">
-                  {stage === 0 ? "Belum dimulai" : stage === 1 ? "1 · Baseline" : "2 · Forecasting"}
-                </p>
-              </div>
-            </div>
+            <p className="mt-1 flex items-center gap-2 text-xs text-lime-900/70">
+              <span className={`h-2 w-2 rounded-full ${loading ? "animate-pulse bg-yellow-400" : "bg-lime-600"}`} />
+              {loading ? "Model sedang dijalankan..." : "Model berhasil dijalankan · Jawa Barat"}
+            </p>
+            <dl className="mt-4 grid grid-cols-2 gap-2">
+              {[
+                ["Initial time", modelInfo ? String(modelInfo.initialTime) : "–"],
+                ["Final time", modelInfo ? String(modelInfo.finalTime) : "–"],
+                ["Time step", modelInfo ? `${modelInfo.timeStep} tahun` : "–"],
+                ["Saveper", modelInfo ? `${modelInfo.saveper} tahun` : "–"],
+                ["Satuan waktu", "Year"],
+                ["Metode integrasi", "Euler"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-xl bg-lime-50 px-3 py-2.5">
+                  <dt className="text-xs text-lime-900/65">{label}</dt>
+                  <dd className="font-semibold text-lime-900">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-lime-700">Struktur model</p>
+            <dl className="grid grid-cols-3 gap-2 text-center sm:grid-cols-5">
+              {[
+                ["Stok", modelInfo?.stok],
+                ["Aliran", modelInfo?.aliran],
+                ["Var. bantu", modelInfo?.bantu],
+                ["Lookup", modelInfo?.lookup],
+                ["Parameter", modelInfo?.parameter],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-xl border border-lime-100 px-2 py-2">
+                  <dd className="text-lg font-bold text-lime-900">{value ?? "–"}</dd>
+                  <dt className="text-[11px] text-lime-900/65">{label}</dt>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
       </Reveal>
 
       {notification && <Toast type={notification.type} message={notification.message} onClose={() => setNotification(null)} />}
 
-      {/* ===== Tahap 1: Baseline ===== */}
+      {/* ===== Tahap 1: Simulasi ===== */}
       {stage >= 1 && baselineRows.length > 0 && (
         <div ref={baselineRef} className="space-y-6 scroll-mt-24">
           <Reveal>
@@ -360,7 +415,7 @@ export default function BaselinePage() {
               <div>
                 <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 1</p>
                 <h2 className="text-xl font-bold text-lime-900 md:text-2xl">
-                  Baseline {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
+                  Simulasi {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h2>
                 <p className="text-sm text-lime-900/75">Hasil model dibandingkan dengan data aktual Jawa Barat.</p>
               </div>
@@ -383,35 +438,38 @@ export default function BaselinePage() {
                 </h3>
                 <select
                   className="rounded-lg border border-lime-300 bg-white px-3 py-1.5 text-sm"
-                  value={baselineMetric}
-                  onChange={(e) => setBaselineMetric(e.target.value)}
+                  value={baselineVar.key}
+                  onChange={(e) => setBaselineKey(e.target.value)}
                   aria-label="Pilih variabel grafik baseline"
                 >
-                  {METRICS.map((m) => (
-                    <option key={m.variable} value={m.variable}>
-                      {m.label}
-                    </option>
+                  {VALIDATION_GROUPS.map((group) => (
+                    <optgroup key={group} label={group}>
+                      {VALIDATION_OPTIONS.filter((v) => v.subsistem === group).map((v) => (
+                        <option key={v.key} value={v.key}>
+                          {v.label}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>
+              <p className="-mt-2 text-xs text-lime-900/60">
+                Pilihan berisi variabel endogen model yang dibandingkan dengan data statistik resmi ({VALIDATION_OPTIONS.length} variabel).
+              </p>
               <div className="rounded-xl border border-lime-200 bg-lime-50 p-3">
                 <Chart
-                  title={baselineMetricLabel}
-                  yAxisLabel={baselineMetricUnit}
-                  points={toPoints(baselineRows, baselineMetric)}
+                  title={baselineVar.label}
+                  yAxisLabel={baselineVar.unit}
+                  points={baselineModelPoints}
                   series={[
-                    { name: "Model (baseline)", points: toPoints(baselineRows, baselineMetric), lineColor: "#3f7d20" },
-                    ...(baselineActualPoints.length > 0
-                      ? [{ name: "Data aktual", points: baselineActualPoints, lineColor: "#d97706" }]
-                      : []),
+                    { name: "Model (baseline)", points: baselineModelPoints, lineColor: "#3f7d20" },
+                    { name: "Data statistik resmi", points: baselineActualPoints, lineColor: "#d97706" },
                   ]}
                   valueFormatter={formatValue}
                   xFormatter={(value) => String(value)}
                 />
               </div>
-              {baselineActualPoints.length === 0 && (
-                <p className="text-xs text-lime-900/60">Data aktual untuk variabel ini belum tersedia; grafik hanya menampilkan hasil model.</p>
-              )}
+              {baselineVar.note && <p className="text-xs text-lime-900/60">Catatan: {baselineVar.note}</p>}
             </div>
           </Reveal>
 
@@ -496,7 +554,7 @@ export default function BaselinePage() {
           <Reveal>
             <div className="space-y-4 rounded-2xl border border-amber-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <h3 className="text-lg font-semibold text-amber-950">Grafik Baseline vs Forecasting</h3>
+                <h3 className="text-lg font-semibold text-amber-950">Grafik Simulasi vs Forecasting</h3>
                 <select
                   className="rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-sm"
                   value={forecastMetric}

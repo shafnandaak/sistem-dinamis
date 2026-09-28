@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Reveal from "@/components/Reveal";
-import PolicyExplorer from "@/components/PolicyExplorer";
 import SatelliteNovelty from "@/components/SatelliteNovelty";
 import CausalLoopDiagram, { CausalLoopLegend } from "@/components/CausalLoopDiagram";
 import { CLD_SOURCE } from "@/lib/cldData";
@@ -88,7 +88,6 @@ export default function Home() {
   const [selectedYear, setSelectedYear] = useState(2015);
   const [openDiagram, setOpenDiagram] = useState<"cld" | "sfd" | null>(null);
   const [showCldNumbers, setShowCldNumbers] = useState(true);
-  const [mapKey, setMapKey] = useState(0);
   const [activeConceptId, setActiveConceptId] = useState(concepts[0].id);
   const activeConcept = concepts.find((c) => c.id === activeConceptId) ?? concepts[0];
 
@@ -103,12 +102,6 @@ export default function Home() {
 
   const scrollToModel = () => {
     document.getElementById("model-kebijakan")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  // Memuat ulang iframe peta agar kembali ter-zoom ke Jawa Barat, lalu scroll ke peta
-  const zoomToJabar = () => {
-    setMapKey((prev) => prev + 1);
-    document.getElementById("peta-jabar")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const years = useMemo(() => {
@@ -127,8 +120,9 @@ export default function Home() {
         <div className="blob blob-b" aria-hidden="true" />
         <div className="blob blob-c" aria-hidden="true" />
 
-        <div className="relative grid items-center gap-8 xl:grid-cols-[1.2fr_1fr] xl:gap-10">
-        <div className="max-w-3xl space-y-5">
+        {/* Satu kolom di semua ukuran layar: judul & alur di tengah, kartu kebaruan di bawahnya. */}
+        <div className="relative space-y-8">
+        <div className="mx-auto max-w-3xl space-y-5 text-center">
           <p className="fade-up inline-flex items-center gap-2 rounded-full border border-lime-300 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-lime-800 backdrop-blur">
             <span className="h-2 w-2 animate-pulse rounded-full bg-lime-600" />
             Dashboard Penelitian · Jawa Barat
@@ -136,12 +130,12 @@ export default function Home() {
           <h1 className="fade-up text-3xl font-bold leading-tight text-lime-950 md:text-5xl" style={{ animationDelay: "80ms" }}>
             Model Simulasi Kebijakan <span className="text-lime-700">Pertanian Tanaman Pangan</span>
           </h1>
-          <p className="fade-up max-w-2xl text-sm leading-relaxed text-lime-900/80 md:text-base" style={{ animationDelay: "160ms" }}>
+          <p className="fade-up mx-auto max-w-2xl text-sm leading-relaxed text-lime-900/80 md:text-base" style={{ animationDelay: "160ms" }}>
             Jelajahi bagaimana kebijakan subsidi pupuk, irigasi, belanja pertanian, dan perlindungan lahan memengaruhi
             produksi, harga, dan ketahanan pangan Jawa Barat hingga 2035.
           </p>
 
-          <div className="fade-up flex flex-wrap gap-2" style={{ animationDelay: "240ms" }}>
+          <div className="fade-up flex flex-wrap justify-center gap-2" style={{ animationDelay: "240ms" }}>
             {["7 komoditas pangan", "Baseline 2018–2025", "Forecast hingga 2035"].map((chip) => (
               <span key={chip} className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-lime-800 backdrop-blur">
                 {chip}
@@ -149,32 +143,55 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="fade-up flex flex-wrap gap-3 pt-1" style={{ animationDelay: "320ms" }}>
-            <button
-              type="button"
-              onClick={scrollToLearn}
-              className="group inline-flex items-center gap-2 rounded-xl bg-lime-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-800 hover:shadow-lg"
-            >
-              Pelajari Sistem Dinamis
-              <span className="transition-transform duration-300 group-hover:translate-y-0.5" aria-hidden="true">↓</span>
-            </button>
-            <button
-              type="button"
-              onClick={scrollToModel}
-              className="rounded-xl border border-lime-700 bg-white/80 px-5 py-3 text-sm font-semibold text-lime-800 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
-            >
-              Lihat Model Kebijakan Tanaman Pangan
-            </button>
-            <button
-              type="button"
-              onClick={zoomToJabar}
-              className="rounded-xl border border-lime-300 bg-white/80 px-5 py-3 text-sm font-semibold text-lime-800 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
-            >
-              Lihat Peta Jawa Barat
-            </button>
+          {/* Alur eksplorasi: konsep -> struktur model -> baseline (tanpa kebijakan) -> kebijakan. */}
+          <div className="fade-up space-y-3 pt-1" style={{ animationDelay: "320ms" }}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Alur eksplorasi</p>
+            <ol className="grid gap-2 text-left sm:grid-cols-2">
+              {[
+                { n: 1, label: "Konsep sistem dinamis", hint: "Stock, flow, dan feedback loop", onClick: scrollToLearn },
+                { n: 2, label: "Struktur model kebijakan", hint: "CLD, SFD, dan rumus model", onClick: scrollToModel },
+              ].map((step) => (
+                <li key={step.n}>
+                  <button
+                    type="button"
+                    onClick={step.onClick}
+                    className="group flex w-full items-center gap-3 rounded-xl border border-lime-200 bg-white/80 px-3 py-2.5 text-left backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                  >
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-100 text-xs font-bold text-lime-800">{step.n}</span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-lime-950">{step.label}</span>
+                      <span className="block truncate text-xs text-lime-900/60">{step.hint}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/baseline"
+                  className="group flex w-full items-center gap-3 rounded-xl border border-lime-300 bg-lime-50/90 px-3 py-2.5 text-left backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-50 hover:shadow-md"
+                >
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-600 text-xs font-bold text-white">3</span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-lime-950">Baseline Model (tanpa Kebijakan) →</span>
+                    <span className="block truncate text-xs text-lime-900/60">Validasi dengan data resmi dan proyeksi hingga 2035</span>
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/kebijakan"
+                  className="group flex w-full items-center gap-3 rounded-xl bg-lime-700 px-3 py-2.5 text-left text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-800 hover:shadow-lg"
+                >
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/20 text-xs font-bold">4</span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold">Pelajari Kebijakan Pertanian Tanaman Pangan →</span>
+                    <span className="block truncate text-xs text-white/75">Empat tuas kebijakan, lalu skenario dan simulasi</span>
+                  </span>
+                </Link>
+              </li>
+            </ol>
           </div>
         </div>
-        <SatelliteNovelty />
         </div>
 
         <button
@@ -193,9 +210,9 @@ export default function Home() {
       {/* ===== Belajar Sistem Dinamis ===== */}
       <section id="belajar-sd" className="scroll-mt-24 space-y-5">
         <Reveal>
-          <div className="grid gap-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div className="grid gap-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Mengenal pendekatan</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Langkah 1 · Mengenal pendekatan</p>
               <h2 className="text-2xl font-bold text-lime-950 md:text-3xl">Apa itu Sistem Dinamis?</h2>
               <p className="text-sm leading-relaxed text-gray-700 md:text-base">
                 Sistem dinamis adalah pendekatan pemodelan untuk memahami bagaimana hubungan sebab-akibat,{" "}
@@ -313,39 +330,37 @@ export default function Home() {
                 <span className="text-xs text-lime-900/50">
                   {concepts.findIndex((c) => c.id === activeConcept.id) + 1} / {concepts.length}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => stepConcept(1)}
-                  className="rounded-lg px-3 py-2 text-sm font-semibold text-lime-700 transition hover:bg-lime-50"
-                >
-                  Berikutnya →
-                </button>
+                {activeConcept.id === concepts[concepts.length - 1].id ? (
+                  <button
+                    type="button"
+                    onClick={scrollToModel}
+                    className="rounded-lg bg-lime-700 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-lime-800"
+                  >
+                    Lanjut ke 2. Struktur Model Kebijakan →
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => stepConcept(1)}
+                    className="rounded-lg px-3 py-2 text-sm font-semibold text-lime-700 transition hover:bg-lime-50"
+                  >
+                    Berikutnya →
+                  </button>
+                )}
               </div>
             </article>
           </Reveal>
         </div>
       </section>
 
-      <Reveal>
-      <section className="rounded-3xl border border-lime-100 bg-white p-6 md:p-8 shadow-sm space-y-5">
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold text-lime-900">Eksplorasi Skenario Kebijakan</h2>
-          <p className="mt-1 max-w-3xl text-sm text-lime-900/75">
-            Empat tuas kebijakan dalam model. Pilih satu untuk melihat jalur pengaruhnya dan dampaknya bila dijalankan sendiri.
-          </p>
-        </div>
-        <PolicyExplorer />
-      </section>
-      </Reveal>
-
       <Reveal id="model-kebijakan">
       <section className="scroll-mt-24 space-y-4 rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
         <div>
-          <p className="text-xs uppercase tracking-wide text-lime-700">Struktur model</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Langkah 2 · Struktur model</p>
           <h2 className="text-xl font-bold text-lime-900 md:text-2xl">Model Kebijakan Tanaman Pangan</h2>
           <p className="mt-1 max-w-3xl text-sm text-lime-900/75">
             Causal Loop Diagram menunjukkan hubungan sebab-akibat antarvariabel, sedangkan Stock Flow Diagram menunjukkan struktur stok,
-            aliran, dan rumus yang dijalankan di halaman Baseline, Scenario, dan Simulation. Klik diagram untuk memperbesar; pada SFD,
+            aliran, dan rumus yang dijalankan di halaman Baseline, Skenario, dan Simulasi. Klik diagram untuk memperbesar; pada SFD,
             klik variabel untuk melihat rumusnya.
           </p>
         </div>
@@ -444,9 +459,11 @@ export default function Home() {
       <section className="rounded-3xl border border-lime-200 bg-white p-5 md:p-7 shadow-sm space-y-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-lime-900">Peta Raster Jawa Barat</h2>
-            <p className="text-sm text-lime-900/75">
-              Basemap menampilkan Provinsi Jawa Barat. Layer raster dapat ditampilkan sebagai overlay data citra satelit.
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Kebaruan penelitian</p>
+            <h2 className="text-xl md:text-2xl font-bold text-lime-900">Data Citra Satelit Jawa Barat</h2>
+            <p className="max-w-3xl text-sm text-lime-900/75">
+              Data citra satelit (NDVI, curah hujan, LST, dan evapotranspirasi) dipakai untuk mengatasi jeda publikasi statistik resmi. Peta
+              menampilkan wilayah Jawa Barat; layer citra akan ditampilkan sebagai overlay di atasnya.
             </p>
           </div>
 
@@ -488,6 +505,8 @@ export default function Home() {
           </fieldset>
         </div>
 
+        <SatelliteNovelty />
+
         {!RASTER_IMAGE && (
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             <span className="mt-0.5 shrink-0 rounded-full bg-amber-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-900">
@@ -502,11 +521,13 @@ export default function Home() {
         )}
 
         <div className="relative overflow-hidden rounded-2xl border border-lime-200" style={{ height: 420 }}>
+          {/* Peta dibekukan pada tampilan Jawa Barat (tidak bisa digeser/di-zoom) selama data raster belum tersedia. */}
           <iframe
-            key={mapKey}
             title="Peta Jawa Barat"
-            className="h-full w-full"
+            className="pointer-events-none h-full w-full"
             loading="lazy"
+            tabIndex={-1}
+            aria-hidden="true"
             src={JABAR_MAP_URL}
           />
 
@@ -523,27 +544,14 @@ export default function Home() {
             />
           )}
 
-          <button
-            type="button"
-            onClick={zoomToJabar}
-            className="absolute right-3 top-3 flex items-center gap-2 rounded-lg border border-lime-300 bg-white/95 px-3 py-2 text-sm font-semibold text-lime-800 shadow-sm hover:bg-lime-50 transition"
-            aria-label="Zoom ke Provinsi Jawa Barat"
-          >
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="7" />
-              <circle cx="12" cy="12" r="2" />
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-            </svg>
-            Zoom ke Jawa Barat
-          </button>
-
           <div className="absolute left-3 bottom-3 rounded-md bg-white/90 px-3 py-2 text-xs text-lime-900 border border-lime-200">
-            Layer raster: {!RASTER_IMAGE ? "belum tersedia (pengembangan lanjutan)" : showRaster ? `aktif (${selectedYear})` : "nonaktif"}
+            Layer raster: {!RASTER_IMAGE ? "belum tersedia (pengembangan lanjutan) · peta dinonaktifkan" : showRaster ? `aktif (${selectedYear})` : "nonaktif"}
           </div>
         </div>
 
       </section>
       </Reveal>
+
     </div>
   );
 }
