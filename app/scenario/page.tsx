@@ -7,6 +7,8 @@ import { buildModelFunctions } from "@/lib/modelFunctions";
 import Chart from "@/components/Chart";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Reveal from "@/components/Reveal";
+import AnalysisDetail from "@/components/AnalysisDetail";
+import { useViewMode } from "@/lib/viewMode";
 
 import {
   FINAL_YEAR,
@@ -32,6 +34,8 @@ import {
 const METRICS = ALL_METRICS;
 
 const HIGHLIGHT_KEYS = ["padi", "pph", "ntp", "pdrb"];
+// Mode Ringkas: angka kunci yang mudah dipahami pengguna awam.
+const HIGHLIGHT_KEYS_RINGKAS = ["padi", "ntp"];
 
 function PolicyChips({ scenario }: { scenario: Scenario }) {
   return (
@@ -59,6 +63,7 @@ function ChangeValue({ value, lowerIsBetter = false }: { value: number; lowerIsB
 }
 
 export default function ScenarioPage() {
+  const viewMode = useViewMode();
   const [baseline, setBaseline] = useState<DataRow[]>([]);
   const [results, setResults] = useState<Record<string, DataRow[]>>({});
   const [error, setError] = useState("");
@@ -200,7 +205,7 @@ export default function ScenarioPage() {
                     <PolicyChips scenario={scenario} />
                     <p className="text-sm text-lime-900/75">{scenario.description}</p>
                     <dl className="mt-auto grid grid-cols-2 gap-x-4 gap-y-2 border-t border-lime-100 pt-3">
-                      {METRICS.filter((m) => HIGHLIGHT_KEYS.includes(m.key)).map((m) => (
+                      {METRICS.filter((m) => (viewMode === "lengkap" ? HIGHLIGHT_KEYS : HIGHLIGHT_KEYS_RINGKAS).includes(m.key)).map((m) => (
                         <div key={m.key}>
                           <dt className="text-xs text-lime-900/60">{m.label}</dt>
                           <dd className="text-base">
@@ -322,6 +327,7 @@ export default function ScenarioPage() {
           </Reveal>
 
           <Reveal>
+            <AnalysisDetail title="Tabel perbandingan lengkap" description="Perubahan semua indikator tahun 2035 dan rata-rata 2026–2035 untuk ketiga skenario, dapat diekspor ke CSV.">
             <section className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -382,6 +388,7 @@ export default function ScenarioPage() {
                 </table>
               </div>
             </section>
+            </AnalysisDetail>
           </Reveal>
 
           <Reveal>

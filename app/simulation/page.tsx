@@ -7,6 +7,8 @@ import { buildModelFunctions } from "@/lib/modelFunctions";
 import Chart from "@/components/Chart";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import LeaveGuard from "@/components/LeaveGuard";
+import AnalysisDetail from "@/components/AnalysisDetail";
+import { setViewMode, useViewMode } from "@/lib/viewMode";
 import {
   BELANJA_DASAR,
   FINAL_YEAR,
@@ -127,7 +129,11 @@ function PolicySlider({ policyKey, value, onChange }: { policyKey: PolicyKey; va
   );
 }
 
+// Mode Ringkas: kartu dampak utama saja.
+const KEY_CARDS = ["padi", "ncpr", "ntp"];
+
 export default function SimulationPage() {
+  const viewMode = useViewMode();
   const modelRef = useRef<Model | null>(null);
   const [baseline, setBaseline] = useState<DataRow[]>([]);
   const [rows, setRows] = useState<DataRow[]>([]);
@@ -436,7 +442,17 @@ export default function SimulationPage() {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <h2 className="text-lg font-semibold text-lime-900">Dampak tahun {year}</h2>
-                    <p className="text-xs text-lime-900/60">Perubahan terhadap baseline. Klik kartu untuk menampilkannya di grafik.</p>
+                    <p className="text-xs text-lime-900/60">
+                      Perubahan terhadap baseline. Klik kartu untuk menampilkannya di grafik.
+                      {viewMode === "ringkas" && (
+                        <>
+                          {" "}
+                          <button type="button" onClick={() => setViewMode("lengkap")} className="font-semibold text-lime-700 underline-offset-2 hover:underline">
+                            Tampilkan {cards.length - KEY_CARDS.length} indikator lain
+                          </button>
+                        </>
+                      )}
+                    </p>
                   </div>
                   <label className="flex items-center gap-3 text-sm text-lime-900">
                     Tahun
@@ -454,7 +470,7 @@ export default function SimulationPage() {
                   </label>
                 </div>
                 <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-                  {cards.map(({ metric: m, value, change }) => {
+                  {cards.filter(({ metric: m }) => viewMode === "lengkap" || KEY_CARDS.includes(m.key)).map(({ metric: m, value, change }) => {
                     const active = m.key === metricKey;
                     const tone = changeTone(change, m.lowerIsBetter);
                     return (
@@ -478,6 +494,7 @@ export default function SimulationPage() {
                 </div>
               </section>
 
+              <AnalysisDetail title="Tabel perbandingan semua indikator" description="Perubahan kedelapan indikator untuk setiap pembanding dan simulasi saat ini.">
               <section className="space-y-3 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
                 <div>
                   <h2 className="text-lg font-semibold text-lime-900">Perbandingan hasil tahun {year}</h2>
@@ -531,6 +548,7 @@ export default function SimulationPage() {
                   </div>
                 )}
               </section>
+              </AnalysisDetail>
 
               <section className="space-y-3 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -560,6 +578,7 @@ export default function SimulationPage() {
                 </div>
               </section>
 
+              <AnalysisDetail title="Tabel per tahun" description="Nilai indikator terpilih tiap tahun untuk baseline, pembanding, dan simulasi saat ini, dapat diekspor ke CSV.">
               <section className="space-y-3 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
@@ -628,6 +647,7 @@ export default function SimulationPage() {
                   </table>
                 </div>
               </section>
+              </AnalysisDetail>
 
               <ModelPrintNotice onPrint={() => window.print()} />
             </>

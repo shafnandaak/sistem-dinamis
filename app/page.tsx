@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Reveal from "@/components/Reveal";
+import PolicyExplorer from "@/components/PolicyExplorer";
 import CausalLoopDiagram, { CausalLoopLegend } from "@/components/CausalLoopDiagram";
 import { CLD_SOURCE } from "@/lib/cldData";
 import StockFlowLegend from "@/components/StockFlowLegend";
@@ -14,42 +15,6 @@ const StockFlowDiagram = dynamic(() => import("@/components/StockFlowDiagram"), 
   loading: () => <div className="grid h-full place-items-center text-sm text-lime-900/60">Memuat diagram…</div>,
 });
 const SFD_SOURCE = "sfd-model-fix-2 model 17.mdl";
-
-const scenarios = [
-  {
-    id: "subsidi",
-    label: "Subsidi Pupuk",
-    description:
-      "Meningkatkan keterjangkauan input produksi untuk mendorong produktivitas lahan dan menjaga kestabilan Nilai Tukar Petani.",
-    effects: [
-      "Produktivitas padi cenderung naik",
-      "Biaya produksi per hektar menurun",
-      "NTP membaik jika harga gabah stabil",
-    ],
-  },
-  {
-    id: "irigasi",
-    label: "Perbaikan Irigasi",
-    description:
-      "Penguatan infrastruktur irigasi teknis membuat sistem lebih tahan terhadap musim kering dan menekan risiko gagal panen.",
-    effects: [
-      "Luas panen lebih konsisten",
-      "Variasi hasil antar musim berkurang",
-      "Produksi padi tahunan meningkat",
-    ],
-  },
-  {
-    id: "lp2b",
-    label: "Perlindungan LP2B",
-    description:
-      "Kebijakan pembatasan alih fungsi lahan menjaga stok lahan produktif untuk ketahanan pangan jangka panjang.",
-    effects: [
-      "Laju alih fungsi lahan menurun",
-      "Luas lahan vegetasi lebih terjaga",
-      "Daya dukung produksi jangka panjang meningkat",
-    ],
-  },
-];
 
 const concepts = [
   {
@@ -117,8 +82,6 @@ const JABAR_MAP_URL =
   "https://www.openstreetmap.org/export/embed.html?bbox=106.30%2C-7.90%2C108.90%2C-5.85&layer=mapnik";
 
 export default function Home() {
-  const [activeScenario, setActiveScenario] = useState(scenarios[0].id);
-  const [showDetail, setShowDetail] = useState(true);
   const [showRaster, setShowRaster] = useState(true);
   const [rasterOpacity, setRasterOpacity] = useState(60);
   const [selectedYear, setSelectedYear] = useState(2015);
@@ -146,11 +109,6 @@ export default function Home() {
     setMapKey((prev) => prev + 1);
     document.getElementById("peta-jabar")?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const selectedScenario = useMemo(
-    () => scenarios.find((item) => item.id === activeScenario) ?? scenarios[0],
-    [activeScenario],
-  );
 
   const years = useMemo(() => {
     const list: number[] = [];
@@ -366,46 +324,13 @@ export default function Home() {
 
       <Reveal>
       <section className="rounded-3xl border border-lime-100 bg-white p-6 md:p-8 shadow-sm space-y-5">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div>
           <h2 className="text-xl md:text-2xl font-bold text-lime-900">Eksplorasi Skenario Kebijakan</h2>
-          <button
-            onClick={() => setShowDetail((prev) => !prev)}
-            className="w-fit rounded-lg bg-lime-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-lime-800"
-          >
-            {showDetail ? "Sembunyikan Detail" : "Tampilkan Detail"}
-          </button>
+          <p className="mt-1 max-w-3xl text-sm text-lime-900/75">
+            Empat tuas kebijakan dalam model. Pilih satu untuk melihat jalur pengaruhnya dan dampaknya bila dijalankan sendiri.
+          </p>
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          {scenarios.map((scenario) => {
-            const isActive = activeScenario === scenario.id;
-            return (
-              <button
-                key={scenario.id}
-                onClick={() => setActiveScenario(scenario.id)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-yellow-400 text-lime-950"
-                    : "bg-lime-100 text-lime-900 hover:bg-lime-200"
-                }`}
-              >
-                {scenario.label}
-              </button>
-            );
-          })}
-        </div>
-
-        <div key={selectedScenario.id} className="page-enter rounded-2xl border border-yellow-200 bg-yellow-50 p-5">
-          <h3 className="text-lg font-semibold text-lime-900">{selectedScenario.label}</h3>
-          <p className="mt-2 text-sm text-gray-700">{selectedScenario.description}</p>
-          {showDetail && (
-            <ul className="mt-3 list-disc pl-5 text-sm text-gray-800 space-y-1">
-              {selectedScenario.effects.map((effect) => (
-                <li key={effect}>{effect}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <PolicyExplorer />
       </section>
       </Reveal>
 

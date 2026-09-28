@@ -6,7 +6,10 @@ import dynamic from "next/dynamic";
 import initModel from "@/lib/sfd-model-fix-2.js";
 import { runSimulation } from "@/lib/engine";
 import { buildModelFunctions } from "@/lib/modelFunctions";
-import { BASELINE_END_YEAR, BASELINE_START_YEAR, BASELINE_YEARS, MAPE_VARIABLES } from "@/lib/historicalActuals";
+import { BASELINE_END_YEAR, BASELINE_START_YEAR, BASELINE_YEARS, MAPE_VARIABLES, computeMape, mapeCategory } from "@/lib/historicalActuals";
+import AnalysisDetail from "@/components/AnalysisDetail";
+import { changeTone } from "@/lib/policies";
+import { useViewMode } from "@/lib/viewMode";
 import Toast from "@/components/Toast";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Chart from "@/components/Chart";
@@ -137,7 +140,57 @@ function ResultsTable({ rows, title, filename }: { rows: DataRow[]; title: strin
   );
 }
 
+// Indikator utama untuk ringkasan akurasi (dipahami pengguna awam).
+const KEY_ACCURACY = [
+  { key: "produksi-padi", label: "Produksi padi" },
+  { key: "luas-panen-padi", label: "Luas panen padi" },
+  { key: "ntp", label: "NTP Tanaman Pangan" },
+];
+
+const CATEGORY_STYLE = {
+  good: "bg-lime-100 text-lime-800",
+  ok: "bg-yellow-100 text-yellow-800",
+  fair: "bg-amber-100 text-amber-800",
+  bad: "bg-red-100 text-red-800",
+} as const;
+
+function KeyAccuracy({ rows }: { rows: DataRow[] }) {
+  const items = KEY_ACCURACY.flatMap(({ key, label }) => {
+    const variable = MAPE_VARIABLES.find((v) => v.key === key);
+    const result = variable ? computeMape(variable, rows) : null;
+    return result && result.mape !== null ? [{ label, mape: result.mape, category: mapeCategory(result.mape) }] : [];
+  });
+  return (
+    <div className="space-y-3 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
+      <div>
+        <h3 className="text-lg font-semibold text-lime-900">Seberapa akurat model?</h3>
+        <p className="text-sm text-lime-900/70">
+          Rata-rata selisih hasil model dengan data resmi {BASELINE_START_YEAR}–{BASELINE_END_YEAR} (MAPE). Makin kecil makin akurat; di bawah 10%
+          tergolong sangat baik.
+        </p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {items.map((item) => (
+          <div key={item.label} className="rounded-xl border border-lime-100 bg-lime-50/60 p-4">
+            <p className="text-sm font-medium text-lime-900">{item.label}</p>
+            <p className="mt-1 text-2xl font-bold tabular-nums text-lime-950">
+              {item.mape.toLocaleString("id-ID", { maximumFractionDigits: 1 })}%
+            </p>
+            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${CATEGORY_STYLE[item.category.tone]}`}>
+              {item.category.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Indikator proyeksi yang tampil di mode Ringkas; mode Lengkap menampilkan semuanya.
+const KEY_FORECAST = ["Produksi Padi", "NTP Tanaman Pangan", "Luas Lahan Pertanian"];
+
 export default function BaselinePage() {
+  const viewMode = useViewMode();
   const [results, setResults] = useState<DataRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [stage, setStage] = useState<Stage>(0);
@@ -319,6 +372,10 @@ export default function BaselinePage() {
           </Reveal>
 
           <Reveal>
+            <KeyAccuracy rows={baselineRows} />
+          </Reveal>
+
+          <Reveal>
             <div className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <h3 className="text-lg font-semibold text-lime-900">
@@ -359,6 +416,10 @@ export default function BaselinePage() {
           </Reveal>
 
           <Reveal>
+            <AnalysisDetail
+              title="Semua variabel model & validasi"
+              description="Tabel seluruh variabel per subsistem dan fungsi, MAPE tiap variabel, nilai per tahun, rumus, dan grafik."
+            >
             <div className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
               <div>
                 <p className="text-xs uppercase tracking-wide text-lime-700">Variabel model & validasi</p>
@@ -373,6 +434,7 @@ export default function BaselinePage() {
               </div>
               <VariableExplorer rows={baselineRows} />
             </div>
+            </AnalysisDetail>
           </Reveal>
 
           {stage === 1 && (
@@ -414,7 +476,7 @@ export default function BaselinePage() {
           </Reveal>
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {forecastSummary.map((item, idx) => (
+            {forecastSummary.filter((item) => viewMode === "lengkap" || KEY_FORECAST.includes(item.variable)).map((item, idx) => (
               <Reveal key={item.variable} delay={idx * 60}>
                 <div className="card-hover h-full rounded-2xl border border-amber-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-wide text-amber-800">{item.label}</p>
@@ -423,7 +485,7 @@ export default function BaselinePage() {
                     {" → "}
                     {FORECAST_END_YEAR}: <span className="font-semibold text-lime-900">{formatValue(item.to)}</span>
                   </p>
-                  <p className={`mt-1 text-2xl font-bold ${item.change !== null && item.change < 0 ? "text-red-700" : "text-lime-700"}`}>
+                  <p className={`mt-1 text-2xl font-bold ${item.change !== null ? changeTone(item.change, item.variable === "NCPR") : "text-gray-500"}`}>
                     {item.change !== null ? `${item.change > 0 ? "+" : ""}${item.change.toFixed(2)}%` : "–"}
                   </p>
                 </div>
@@ -470,11 +532,13 @@ export default function BaselinePage() {
           </Reveal>
 
           <Reveal>
-            <ResultsTable
-              rows={forecastRows}
-              title={`Proyeksi model Jawa Barat ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
-              filename={`forecast-${FORECAST_START_YEAR}-${FORECAST_END_YEAR}.csv`}
-            />
+            <AnalysisDetail title="Tabel proyeksi per tahun" description="Nilai seluruh indikator utama tiap tahun hingga 2035, dapat diekspor ke CSV.">
+              <ResultsTable
+                rows={forecastRows}
+                title={`Proyeksi model Jawa Barat ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
+                filename={`forecast-${FORECAST_START_YEAR}-${FORECAST_END_YEAR}.csv`}
+              />
+            </AnalysisDetail>
           </Reveal>
 
           <Reveal>
