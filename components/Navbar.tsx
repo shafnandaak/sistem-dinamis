@@ -49,7 +49,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {visibleItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -70,7 +70,10 @@ export default function Navbar() {
 
           {/* Right side: status + profile + burger */}
           <div className="flex items-center gap-3">
-            <ViewModeToggle className="hidden sm:inline-flex" />
+            {/* Dibungkus agar kelas "hidden" tidak kalah oleh "inline-flex" bawaan komponen. */}
+            <div className="hidden sm:block">
+              <ViewModeToggle />
+            </div>
 
             <ThemeToggle />
 
@@ -99,7 +102,7 @@ export default function Navbar() {
             {/* Burger button (mobile) */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg hover:bg-lime-100 dark:hover:bg-lime-900/50 transition"
+              className="xl:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg hover:bg-lime-100 dark:hover:bg-lime-900/50 transition"
               aria-label="Toggle menu"
             >
               <span
@@ -124,7 +127,7 @@ export default function Navbar() {
 
       {/* Mobile dropdown menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >

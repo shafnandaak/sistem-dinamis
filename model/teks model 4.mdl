@@ -1,0 +1,2457 @@
+{UTF-8}
+Ketersediaan Kalori Ubi Jalar=Ubi Jalar Food*1000*Kalori Ubi Jalar*BDD Ubi Jalar
+	~	kkal/hari/kapita
+	~		|
+
+Kedelai Industri Makanan=Penyediaan Kedelai*K Industri Makanan Kedelai
+	~	
+	~		|
+
+"Kedelai Industri Non-Makanan"=Penyediaan Kedelai*"K Industri Non-Makanan Kedelai"
+	~	
+	~		|
+
+Kedelai Pakan=Penyediaan Kedelai*K Pakan Kedelai
+	~	
+	~		|
+
+Kedelai Tercecer=Penyediaan Kedelai*K Tercecer Kedelai
+	~	
+	~		|
+
+K Benih Kedelai=0.009
+	~	
+	~		|
+
+"Jagung Industri Non-Makanan"=Penyediaan Jagung*"K Industri Non-Makanan Jagung"
+	~	ton
+	~		|
+
+Konsumsi Perkapita Ubi Jalar=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Ubi Jalar\
+		, Proyeksi Konsumsi Perkapita Ubi Jalar)
+	~	kilogram/kapita/tahun
+	~		|
+
+Kedelai Benih=Penyediaan Kedelai*K Benih Kedelai
+	~	
+	~		|
+
+Beras Food=Jumlah Penduduk*Konsumsi Perkapita Beras/Konversi Ton Kilogram
+	~	
+	~		|
+
+Proyeksi Konsumsi Perkapita Ubi Jalar=(3.3 / 2.1) ^ (1 / (Tahun Akhir - Tahun Awal)) \
+		- 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Ubi Jalar Food=Jumlah Penduduk*Konsumsi Perkapita Ubi Jalar/Konversi Ton Kilogram
+	~	
+	~		|
+
+Jagung Pakan=Penyediaan Jagung*K Pakan Jagung
+	~	ton
+	~		|
+
+Data Historis Konsumsi Perkapita Ubi Jalar = WITH LOOKUP (Time,
+		([(2018,2.1)-(2025,3.3)],
+		 (2018,2.1),
+		 (2019,2.4),
+		 (2020,2),
+		 (2021,3),
+		 (2022,2.7),
+		 (2023,2.7),
+		 (2024,2),
+		 (2025,3.3)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Jagung Industri Makanan=Penyediaan Jagung*K Industri Makanan Jagung
+	~	ton
+	~		|
+
+Jagung Benih=Penyediaan Jagung*K Benih Jagung
+	~	ton
+	~		|
+
+K Pakan Kedelai=0.034
+	~	
+	~		|
+
+Jagung Tercecer=Penyediaan Jagung*K Tercecer Jagung
+	~	ton
+	~		|
+
+Proyeksi Konsumsi Perkapita Jagung=0.8 * ( 1 + (0.8 / 0.4) ^ (1 / (Tahun Akhir - Tahun Awal\
+		)) - 1 ) ^(Time-Tahun Akhir)
+	~	kilogram/kapita/tahun
+	~		|
+
+Data Historis Konsumsi Perkapita Beras = WITH LOOKUP (Time,
+		([(2018,100)-(2025,86.3)],
+		 (2018,100),
+		 (2019,96.7),
+		 (2020,97.3),
+		 (2021,96.6),
+		 (2022,94.7),
+		 (2023,94.3),
+		 (2024,92.5),
+		 (2025,86.3)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Konsumsi Perkapita Beras=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Beras\
+		, Proyeksi Konsumsi Perkapita Beras)
+	~	kilogram/kapita/tahun
+	~		|
+
+Penggunaan Beras=Beras Benih+Beras Industri Makanan+"Beras Industri Non-Makanan"+Beras Pakan\
+		+Beras Tercecer + Beras Food
+	~	
+	~		|
+
+Proyeksi Konsumsi Perkapita Beras=(100 / 86.3) ^ (1 / (Tahun Akhir - Tahun Awal)) - 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Ketersediaan Kalori Beras=Beras Food*1000*Kalori Beras*BDD Beras
+	~	
+	~		|
+
+Proyeksi Konsumsi Perkapita Kedelai=(10.5 / 10.5) ^ (1 / (Tahun Akhir - Tahun Awal)) \
+		- 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Proyeksi Konsumsi Perkapita Ubi Kayu=(12.1 / 8.7) ^ (1 / (Tahun Akhir - Tahun Awal)) \
+		- 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Data Historis Konsumsi Perkapita Ubi Kayu = WITH LOOKUP (Time,
+		([(2018,8.7)-(2025,12.1)],
+		 (2018,8.7),
+		 (2019,8.7),
+		 (2020,8.8),
+		 (2021,10.7),
+		 (2022,10),
+		 (2023,10.3),
+		 (2024,8.2),
+		 (2025,12.1)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Jagung Food=Jumlah Penduduk*Konsumsi Perkapita Jagung/Konversi Ton Kilogram
+	~	ton
+	~		|
+
+Konsumsi Perkapita Jagung=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Jagung\
+		, Proyeksi Konsumsi Perkapita Jagung)
+	~	kilogram/kapita/tahun
+	~		|
+
+Konsumsi Perkapita Kacang Hijau=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Kacang Hijau\
+		, Proyeksi Konsumsi Perkapita Kacang Hijau)
+	~	kilogram/kapita/tahun
+	~		|
+
+Konsumsi Perkapita Kacang Tanah=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Kacang Tanah\
+		, Proyeksi Konsumsi Perkapita Kacang Tanah)
+	~	kilogram/kapita/tahun
+	~		|
+
+Data Historis Konsumsi Perkapita Jagung = WITH LOOKUP (Time,
+		([(2018,0.4)-(2025,0.8)],
+		 (2018,0.4),
+		 (2019,0.8),
+		 (2020,1.1),
+		 (2021,0.4),
+		 (2022,0.5),
+		 (2023,0.6),
+		 (2024,0.9),
+		 (2025,0.8)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Data Historis Konsumsi Perkapita Kacang Hijau = WITH LOOKUP (Time,
+		([(2018,0.6)-(2025,0.5)],
+		 (2018,0.6),
+		 (2019,0.7),
+		 (2020,0.6),
+		 (2021,0.5),
+		 (2022,0.6),
+		 (2023,0.5),
+		 (2024,0.5),
+		 (2025,0.5)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Kedelai Food=Jumlah Penduduk*Konsumsi Perkapita Kedelai/Konversi Ton Kilogram
+	~	
+	~		|
+
+Data Historis Konsumsi Perkapita Kedelai = WITH LOOKUP (Time,
+		([(2018,10.5)-(2025,10.5)],
+		 (2018,10.5),
+		 (2019,10.4),
+		 (2020,10.1),
+		 (2021,10.7),
+		 (2022,11.3),
+		 (2023,9.8),
+		 (2024,11.2),
+		 (2025,10.5)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Ketersediaan Kalori Ubi Kayu=Food Ubi Kayu*1000*BDD Ubi Kayu*Kalori Ubi Kayu
+	~	
+	~		|
+
+Konsumsi Perkapita Ubi Kayu=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Ubi Kayu\
+		, Proyeksi Konsumsi Perkapita Ubi Kayu)
+	~	kilogram/kapita/tahun
+	~		|
+
+Konversi Ton Kuintal=10
+	~	Dmnl
+	~		|
+
+Penggunaan Kacang Tanah=Kacang Tanah Benih+Kacang Tanah Food+"Kacang Tanah Industri Non-Makanan"\
+		+Kacang Tanah Pakan+Kacang Tanah Tercecer
+	~	ton/tahun
+	~		|
+
+Ketersediaan Kalori Jagung=Jagung Food*1000*Kalori Jagung*BDD Jagung
+	~	kkal/tahun
+	~		|
+
+Ketersediaan Kalori Kacang Hijau=Kacang Hijau Food*1000*Kalori Kacang Hijau*BDD Kacang Hijau
+	~	
+	~		|
+
+Ketersediaan Kalori Kacang Tanah=Kacang Tanah Food*1000*Kalori Kacang Tanah*BDD Kacang Tanah
+	~	
+	~		|
+
+Ketersediaan Kalori Kedelai=Kedelai Food*1000*BDD Kedelai*Kalori Kedelai
+	~	
+	~		|
+
+Data Historis Konsumsi Perkapita Kacang Tanah = WITH LOOKUP (Time,
+		([(2018,0.2)-(2025,0.4)],
+		 (2018,0.2),
+		 (2019,0.3),
+		 (2020,0.3),
+		 (2021,0.3),
+		 (2022,0.3),
+		 (2023,0.2),
+		 (2024,0.2),
+		 (2025,0.4)))
+	~	kilogram/kapita/tahun
+	~		|
+
+Kacang Hijau Food=Jumlah Penduduk*Konsumsi Perkapita Kacang Hijau/Konversi Ton Kilogram
+	~	
+	~		|
+
+Penggunaan Kedelai=Kedelai Benih+Kedelai Food+Kedelai Industri Makanan+"Kedelai Industri Non-Makanan"\
+		+Kedelai Pakan+Kedelai Tercecer
+	~	ton/tahun
+	~		|
+
+Konversi Ton Kilogram=1000
+	~	Dmnl
+	~		|
+
+Penggunaan Kacang Hijau=Kacang Hijau Benih+Kacang Hijau Food+Kacang Hijau Industri Makanan\
+		+"Kacang Hijau Industri Non-Makanan"
+	+Kacang Hijau Pakan+Kacang Hijau Tercecer
+	~	ton/tahun
+	~		|
+
+Proyeksi Konsumsi Perkapita Kacang Tanah=(0.4 / 0.2) ^ (1 / (Tahun Akhir - Tahun Awal\
+		)) - 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Konsumsi Perkapita Kedelai=IF THEN ELSE(Time < 2025, Data Historis Konsumsi Perkapita Kedelai\
+		, Proyeksi Konsumsi Perkapita Kedelai)
+	~	kilogram/kapita/tahun
+	~		|
+
+Food Ubi Kayu=Jumlah Penduduk*Konsumsi Perkapita Ubi Kayu/Konversi Ton Kilogram
+	~	
+	~		|
+
+Proyeksi Konsumsi Perkapita Kacang Hijau=(0.5 / 0.6) ^ (1 / (Tahun Akhir - Tahun Awal\
+		)) - 1
+	~	kilogram/kapita/tahun
+	~		|
+
+Kacang Tanah Food=Jumlah Penduduk*Konsumsi Perkapita Kacang Tanah/Konversi Ton Kilogram
+	~	
+	~		|
+
+Kalori Beras=362.2
+	~	
+	~		|
+
+"K Industri Non-Makanan Ubi Kayu"=0
+	~	
+	~		|
+
+Penyediaan Beras=Beras * 0.6274
+	~	
+	~		|
+
+Penyediaan Jagung=Produksi Jagung/Konversi Ton Kuintal
+	~	ton
+	~		|
+
+"AKE Padi-padian"="Kontribusi Energi Padi-padian"/Total Kalori Ideal Harian*100
+	~	
+	~		|
+
+K Benih Ubi Kayu=0
+	~	
+	~		|
+
+"Skor PPH Padi-padian"=IF THEN ELSE(
+	    "Skor PPH Riil Padi-padian" > "Skor PPH Max Padi-padian",
+	    "Skor PPH Max Padi-padian",
+	    "Skor PPH Riil Padi-padian"
+	)
+	~	
+	~		~	:SUPPLEMENTARY 
+	|
+
+BDD Beras=100
+	~	
+	~		|
+
+BDD Jagung=90
+	~	
+	~		|
+
+BDD Kedelai=100
+	~	
+	~		|
+
+BDD Ubi Kayu=75
+	~	
+	~		|
+
+Beras=Stok Padi-Padi Benih-Padi Industri Non Makanan-Padi Pakan-Padi Tercecer
+	~	
+	~		|
+
+Beras Benih=Stok Beras*K Benih Beras
+	~	
+	~		|
+
+Beras Industri Makanan=Stok Beras*K Industri Makanan Beras
+	~	
+	~		|
+
+"Beras Industri Non-Makanan"=Stok Beras*"K Industri Non-Makanan Beras"
+	~	
+	~		|
+
+Beras Pakan=Stok Beras*K Pakan Beras
+	~	
+	~		|
+
+"Skor PPH Max Padi-padian"=25
+	~	
+	~		|
+
+"Bobot Padi-padian"=0.5
+	~	
+	~		|
+
+Padi Pakan=Stok Padi*K Pakan Padi
+	~	
+	~		|
+
+"Kontribusi Energi Kacang-kacangan"=Ketersediaan Kalori Kacang Tanah+Ketersediaan Kalori Kacang Hijau\
+		+Ketersediaan Kalori Kedelai
+	~	
+	~		|
+
+"Kontribusi Energi Padi-padian"=Ketersediaan Kalori Beras+Ketersediaan Kalori Jagung
+	~	
+	~		|
+
+K Industri Makanan Ubi Kayu=0
+	~	
+	~		|
+
+Ubi Kayu Industri Makanan=Stok Ubi Kayu*K Industri Makanan Ubi Kayu
+	~	
+	~		|
+
+"Ubi Kayu Industri Non-Makanan"=Stok Ubi Kayu*"K Industri Non-Makanan Ubi Kayu"
+	~	
+	~		|
+
+"K Industri Non-Makanan Kedelai"=0
+	~	
+	~		|
+
+"K Industri Non-Makanan Padi"=0
+	~	
+	~		|
+
+K Tercecer Jagung=0.05
+	~	Dmnl
+	~		|
+
+Produksi Kedelai=Luas Panen Kedelai*Produktivitas Kedelai
+	~	
+	~		|
+
+K Tercecer Kedelai=0.05
+	~	
+	~		|
+
+K Tercecer Padi=0.054
+	~	
+	~		|
+
+Padi Benih=Stok Padi*K Benih Padi
+	~	
+	~		|
+
+Padi Industri Non Makanan=Stok Padi*"K Industri Non-Makanan Padi"
+	~	
+	~		|
+
+"Skor PPH Riil Padi-padian"="AKE Padi-padian"*"Bobot Padi-padian"
+	~	
+	~		|
+
+K Pakan Beras=0.017
+	~	
+	~		|
+
+K Pakan Jagung=0.06
+	~	Dmnl
+	~		|
+
+Stok Beras= INTEG (Penyediaan Beras-Penggunaan Beras,
+		7.38431e+06)
+	~	
+	~		|
+
+K Pakan Padi=0.044
+	~	
+	~		|
+
+Nilai Produksi Jagung=Produksi Jagung*Konversi Ton Kuintal*Harga Produsen Jagung
+	~	rupiah
+	~		|
+
+K Pakan Ubi Kayu=2
+	~	
+	~		|
+
+K Tercecer Beras=0.025
+	~	
+	~		|
+
+Ubi Kayu Tercecer=Stok Ubi Kayu*K Tercecer Ubi Kayu
+	~	
+	~		|
+
+K Benih Padi=0.009
+	~	
+	~		|
+
+Produksi Ubi Kayu=Luas Panen Ubi Kayu*Produktivitas Ubi Kayu
+	~	
+	~		|
+
+"K Industri Non-Makanan Jagung"=0
+	~	Dmnl
+	~		|
+
+K Industri Makanan Beras=0
+	~	
+	~		|
+
+K Industri Makanan Jagung=0
+	~	Dmnl
+	~		|
+
+Padi Tercecer=Stok Padi*K Tercecer Padi
+	~	
+	~		|
+
+K Industri Makanan Kedelai=0
+	~	
+	~		|
+
+Ubi Kayu Benih=Stok Ubi Kayu*K Benih Ubi Kayu
+	~	
+	~		|
+
+Produksi Jagung=Luas Panen Jagung*Produktivitas Jagung
+	~	ton
+	~		|
+
+K Benih Jagung=0.009
+	~	Dmnl
+	~		|
+
+"K Industri Non-Makanan Beras"=0
+	~	
+	~		|
+
+K Benih Beras=0
+	~	
+	~		|
+
+K Tercecer Ubi Kayu=2.13
+	~	
+	~		|
+
+Ubi Kayu Pakan=Stok Ubi Kayu*K Pakan Ubi Kayu
+	~	
+	~		|
+
+Nilai Produksi Padi=Harga Produsen Padi GKG*Produksi Padi*10
+	~	rp
+	~		|
+
+Penyediaan Padi=Produksi Padi
+	~	ton
+	~		|
+
+Beras Tercecer=Stok Beras*K Tercecer Beras
+	~	
+	~		|
+
+Penggunaan padi=Padi Tercecer+Padi Pakan+Padi Industri Non Makanan+Padi Benih+Beras
+	~	ton/tahun
+	~		|
+
+Kalori Ubi Kayu=130.9
+	~	kkal/tahun
+	~		|
+
+"Bobot Kacang-kacangan"=2
+	~	
+	~		|
+
+"Kontribusi Energi Umbi-umbian"=Ketersediaan Kalori Ubi Jalar+Ketersediaan Kalori Ubi Kayu
+	~	
+	~		|
+
+Penggunaan Ubi Kayu=Ubi Kayu Tercecer+Ubi Kayu Pakan+"Ubi Kayu Industri Non-Makanan"+\
+		Ubi Kayu Industri Makanan+Ubi Kayu Benih+Food Ubi Kayu
+	~	ton/tahun
+	~		|
+
+"Skor PPH Kacang-kacangan"=IF THEN ELSE(
+	    "Skor PPH Riil Kacang-kacangan" > "Skor PPH Max Kacang-kacangan",
+	    "Skor PPH Max Kacang-kacangan",
+	    "Skor PPH Riil Kacang-kacangan"
+	)
+	~	
+	~		~	:SUPPLEMENTARY 
+	|
+
+"Skor PPH Max Kacang-kacangan"=10
+	~	
+	~		|
+
+Penggunaan Jagung=Jagung Benih+Jagung Food+Jagung Industri Makanan+"Jagung Industri Non-Makanan"\
+		+Jagung Pakan+Jagung Tercecer
+	~	ton/tahun
+	~		|
+
+Kalori Kedelai=381
+	~	
+	~		|
+
+Nilai Produksi Kedelai=Harga Produsen Kedelai*Produksi Kedelai
+	~	rp
+	~		|
+
+Nilai Produksi Ubi Kayu=Harga Produsen Ubi Kayu*Produksi Ubi Kayu
+	~	rp
+	~		|
+
+Kalori Jagung=320
+	~	kkal/tahun
+	~		|
+
+Penyediaan Kedelai=Produksi Kedelai
+	~	ton
+	~		|
+
+Penyediaan Ubi Kayu=Produksi Ubi Kayu
+	~	ton
+	~		|
+
+K Benih Kacang Hijau=0
+	~	
+	~		|
+
+Penyediaan Kacang Hijau=Produksi Kacang Hijau
+	~	ton
+	~		|
+
+"AKE Kacang-kacangan"="Kontribusi Energi Kacang-kacangan"/Total Kalori Ideal Harian*100
+	~	
+	~		|
+
+Produksi Kacang Hijau=Luas Panen Kacang Hijau*Produktivitas Kacang Hijau
+	~	
+	~		|
+
+K Tercecer Kacang Hijau=5
+	~	
+	~		|
+
+BDD Kacang Hijau=100
+	~	
+	~		|
+
+Kacang Hijau Benih=Stok Kacang Hijau*K Benih Kacang Hijau
+	~	
+	~		|
+
+Kacang Hijau Industri Makanan=Stok Kacang Hijau*K Industri Makanan Kacang Hijau
+	~	
+	~		|
+
+"Kacang Hijau Industri Non-Makanan"=Stok Kacang Hijau*"K Industri Non-Makanan Kacang Hijau"
+	~	
+	~		|
+
+Kacang Hijau Pakan=Stok Kacang Hijau*K Pakan Kacang Hijau
+	~	
+	~		|
+
+Kacang Hijau Tercecer=Stok Kacang Hijau*K Tercecer Kacang Hijau
+	~	
+	~		|
+
+K Pakan Kacang Hijau=2
+	~	
+	~		|
+
+K Industri Makanan Kacang Hijau=0
+	~	
+	~		|
+
+"K Industri Non-Makanan Kacang Hijau"=0
+	~	
+	~		|
+
+"Skor PPH Riil Kacang-kacangan"="AKE Kacang-kacangan"*"Bobot Kacang-kacangan"
+	~	
+	~		|
+
+Nilai Produksi Kacang Hijau=Harga Produsen Kacang Hijau*Produksi Kacang Hijau*10
+	~	rp
+	~		|
+
+Kalori Kacang Hijau=337.3
+	~	kkal/tahun
+	~		|
+
+Nilai Produksi Kacang Tanah=Harga Produsen Kacang Tanah*Produksi Kacang Tanah Tanpa Kulit\
+		*10
+	~	rp
+	~		|
+
+Penyediaan Kacang Tanah=Produksi Kacang Tanah Tanpa Kulit
+	~	ton
+	~		|
+
+Penyediaan Ubi Jalar=Produksi Ubi Jalar
+	~	ton
+	~		|
+
+Nilai Produksi Ubi Jalar=Harga Produsen Ubi Jalar*Produksi Ubi Jalar*10
+	~	rp
+	~		|
+
+Total Produksi Bersih=Ubi Jalar Food+Kacang Tanah Food
+	~	
+	~		|
+
+BDD Kacang Tanah=100
+	~	
+	~		|
+
+K Luas Panen Kacang Tanah=0.00253
+	~	
+	~		|
+
+Produksi Kacang Tanah Tanpa Kulit=Produksi Kacang Tanah Berkulit*0.95
+	~	
+	~		|
+
+Produksi Ubi Jalar=Luas Panen Ubi Jalar*Produktivitas Ubi Jalar
+	~	
+	~		|
+
+Produksi Kacang Tanah Berkulit=Luas Panen Kacang Tanah*Produktivitas Kacang Tanah
+	~	
+	~		|
+
+Kalori Kacang Tanah=452
+	~	
+	~		|
+
+Kacang Tanah Industri Makanan=Stok Kacang Tanah*K Industri Makanan Kacang Tanah
+	~	
+	~		~	:SUPPLEMENTARY 
+	|
+
+Kacang Tanah Tercecer=Stok Kacang Tanah*K Tercecer Kacang Tanah
+	~	
+	~		|
+
+K Benih Kacang Tanah=0
+	~	
+	~		|
+
+K Pakan Kacang Tanah=0
+	~	
+	~		|
+
+K Industri Makanan Kacang Tanah=0.0851
+	~	
+	~		|
+
+K Tercecer Kacang Tanah=0.05
+	~	
+	~		|
+
+"K Industri Non-Makanan Kacang Tanah"=0
+	~	
+	~		|
+
+Kacang Tanah Benih=Stok Kacang Tanah*K Benih Kacang Tanah
+	~	
+	~		|
+
+"Kacang Tanah Industri Non-Makanan"=Stok Kacang Tanah*"K Industri Non-Makanan Kacang Tanah"
+	~	
+	~		|
+
+Kacang Tanah Pakan=Stok Kacang Tanah*K Pakan Kacang Tanah
+	~	
+	~		|
+
+Penggunaan Ubi Jalar=Ubi Jalar Benih+Ubi Jalar Food+Ubi Jalar Industri Makanan+"Ubi Jalar Industri Non-Makanan"\
+		+Ubi Jalar Pakan+Ubi Jalar Tercecer
+	~	ton/tahun
+	~		|
+
+Ubi Jalar Tercecer=Stok Ubi Jalar*K Tercecer Ubi Jalar
+	~	
+	~		|
+
+"AKE Umbi-umbian"="Kontribusi Energi Umbi-umbian"/Total Kalori Ideal Harian*100
+	~	persen
+	~		|
+
+BDD Ubi Jalar=85/100
+	~	
+	~		|
+
+Kebutuhan Normatif Total=(Jumlah Penduduk * 300 * 365) / 1e+06
+	~	
+	~		|
+
+Ubi Jalar Benih=Stok Ubi Jalar*K Benih Ubi Jalar
+	~	
+	~		|
+
+"Bobot Umbi-umbian"=0.5
+	~	
+	~		|
+
+"Skor PPH Riil Umbi-umbian"="AKE Umbi-umbian"*"Bobot Umbi-umbian"
+	~	
+	~		|
+
+Total Kalori Ideal Harian=2400
+	~	kkal/hari/kapita
+	~		|
+
+"Skor PPH Umbi-umbian"=IF THEN ELSE(
+	    "Skor PPH Riil Umbi-umbian" > "Skor PPH Max Umbi-umbian",
+	    "Skor PPH Max Umbi-umbian",
+	    "Skor PPH Riil Umbi-umbian"
+	)
+	~	
+	~		~	:SUPPLEMENTARY 
+	|
+
+"K Industri Non-Makanan Ubi Jalar"=0
+	~	
+	~		|
+
+Ubi Jalar Pakan=Stok Ubi Jalar*K Pakan Ubi Jalar
+	~	Pakan Ubi Jalar
+	~		|
+
+Ubi Jalar Industri Makanan=Stok Ubi Jalar*K Industri Makanan Ubi Jalar
+	~	
+	~		|
+
+"IKP (Aspek Ketersediaan Pangan)"=Kebutuhan Normatif Total/Total Produksi Bersih
+	~	indeks
+	~		~	:SUPPLEMENTARY 
+	|
+
+"Ubi Jalar Industri Non-Makanan"=Stok Ubi Jalar*"K Industri Non-Makanan Ubi Jalar"
+	~	
+	~		|
+
+K Industri Makanan Ubi Jalar=0
+	~	
+	~		|
+
+K Benih Ubi Jalar=0
+	~	
+	~		|
+
+"Skor PPH Max Umbi-umbian"=25
+	~	
+	~		|
+
+Kalori Ubi Jalar=110/100
+	~	
+	~		|
+
+Luas Panen Jagung=Luas Lahan Pertanian * K Luas Lahan Jagung*Faktor NDVI Jagung
+	~	hektar
+	~		|
+
+Luas Panen Kacang Tanah=Luas Lahan Pertanian*Estimator NDVI Kacang Tanah*K Luas Panen Kacang Tanah
+	~	ha
+	~		|
+
+Luas Panen Padi=Luas Lahan Pertanian *K Luas Panen Padi* Estimator NDVI Padi
+	~	ha
+	~		|
+
+Luas Panen Ubi Kayu=Luas Lahan Pertanian*K Luas Panen Ubi Kayu*Estimator NDVI Ubi Kayu
+	~	ha
+	~		|
+
+K Luas Panen Ubi Kayu=0.01963
+	~	
+	~		|
+
+K Luas Panen Kacang Hijau=0.00253
+	~	
+	~		|
+
+K Pakan Ubi Jalar=0.02
+	~	persen
+	~		|
+
+K Tercecer Ubi Jalar=0.0603
+	~	persen
+	~		|
+
+Luas Panen Ubi Jalar=Luas Lahan Pertanian*K Luas Panen Ubi Jalar*Estimator NDVI Ubi Jalar
+	~	ha
+	~		|
+
+Luas Panen Kacang Hijau=Luas Lahan Pertanian*K Luas Panen Kacang Hijau*Estimator NDVI Kacang Hijau
+	~	ha
+	~		|
+
+K Luas Lahan Jagung=0.03822
+	~	Dmnl
+	~		|
+
+K Luas Panen Kedelai=0.0147
+	~	
+	~		|
+
+Luas Panen Kedelai=Luas Lahan Pertanian*K Luas Panen Kedelai*Faktor NDVI Kedelai
+	~	ha
+	~		|
+
+K Luas Panen Ubi Jalar=0.01056
+	~	
+	~		|
+
+K Luas Panen Padi=0.66557
+	~	
+	~		|
+
+Data Historis Laju Pertumbuhan Penduduk = WITH LOOKUP (Time,
+		 ([(2018,1.49)-(2025,1.13)], (2018, 1.49),(2019,1.48),(2020,1.11),(2021,1.41),(2022\
+		,1.33),(2023,1.18),(2024,1.13)))
+	~	
+	~		|
+
+Laju Pertumbuhan Penduduk=IF THEN ELSE(Time < 2025, Data Historis Laju Pertumbuhan Penduduk\
+		, Laju Proyeksi Penduduk)
+	~	persen/tahun
+	~		|
+
+Laju Proyeksi Penduduk=1.3
+	~	
+	~		|
+
+PDRB Per Kapita Pertanian Tanaman Pangan=PDRB Pertanian Tanaman Pangan/Jumlah Penduduk
+	~	
+	~		~	:SUPPLEMENTARY 
+	|
+
+Laju Perubahan Pixel=(Pixel Akhir / Pixel Awal) ^ (1 / (Tahun Akhir - Tahun Awal)) - \
+		1
+	~	
+	~		|
+
+Pixel Awal= INITIAL(Data Historis Pixel)
+	~	
+	~		|
+
+Estimasi Luas Citra=Jumlah Pixel*Luas Pixel
+	~	ha
+	~		|
+
+Data Historis Pixel = WITH LOOKUP (Time,
+		([(2018,393204)-(2024,411201)],(2018,393204), (2019,376294), (2020,389955), (2021,389041\
+		), (2022,391818), (2023,389270
+		), (2024,411201)))
+	~	satuan
+	~		|
+
+Jumlah Pixel=IF THEN ELSE(
+	    Time <= Tahun Akhir, 
+	    Data Historis Pixel, 
+	    Pixel Akhir * (1 + Laju Perubahan Pixel) ^ (Time - Tahun Akhir)
+	)
+	~	
+	~		|
+
+Pixel Akhir=SAMPLE IF TRUE(Time = Tahun Akhir, Data Historis Pixel, 0)
+	~	
+	~		|
+
+Harga Total Dasar=(Harga Dasar Jagung+Harga Dasar Kacang Hijau+Harga dasar Kacang Tanah\
+		+Harga Dasar Kedelai+Harga Dasar Padi GKG+Harga Dasar Ubi Jalar+Harga Dasar Ubi Kayu\
+		)/7
+	~	
+	~		|
+
+Data Historis NDVI = WITH LOOKUP (Time,
+		( [(2018,0)-(2025,1)], (2018,0.630804),(2019,0.621201),(2020,0.627658),(2021,0.629935\
+		),(2022,0.628543),(2023,0.631985),(2024,0.647878),(2025,0.66964) ))
+	~	
+	~		|
+
+Indeks yang Dibayar Petani=IB Dasar * Tren Pengeluaran Makro * (Harga Total / Harga Total Dasar\
+		) * (1 - (0.05 * (Efek Subsidi Pupuk - 1)))
+	~	rp/ha
+	~		|
+
+Indeks yang Diterima Petani=IT Dasar * (Harga Total / Harga Total Dasar)*Faktor Kelangkaan
+	~	satuan
+	~		|
+
+IT Dasar=100
+	~	
+	~		|
+
+Tahun Awal=2018
+	~	
+	~		|
+
+Faktor Kelangkaan=(Faktor Kelangkaan Beras+Faktor Kelangkaan Jagung+Faktor kelangkaan Kacang Hijau\
+		+Faktor Kelangkaan Kacang Tanah+Faktor Kelangkaan Kedelai+Faktor Kelangkaan Ubi Jalar\
+		+Faktor Kelangkaan Ubi Kayu)/7
+	~	
+	~		|
+
+Tahun Akhir=2024
+	~	
+	~		|
+
+Laju Pertumbuhan NDVI=(NDVI Akhir / NDVI Awal) ^ (1 / (Tahun Akhir - Tahun Awal)) - 1
+	~	
+	~		|
+
+NDVI Awal= INITIAL(Data Historis NDVI)
+	~	
+	~		|
+
+NDVI Akhir=SAMPLE IF TRUE(Time = Tahun Akhir, Data Historis NDVI, 0)
+	~	
+	~		|
+
+NDVI=IF THEN ELSE(
+	    Time <= Tahun Akhir, 
+	    Data Historis NDVI, 
+	    NDVI Akhir * (1 + Laju Pertumbuhan NDVI) ^ (Time - Tahun Akhir)
+	)
+	~	satuan
+	~		|
+
+Tren Pengeluaran Makro = WITH LOOKUP (Time,
+		([(2018,1)-(2024,0.9786)],(2018,1), (2019,0.8509), (2020,0.8687), (2021,0.8864), (2022\
+		,0.9161), (2023,0.9486), (2024,0.9786
+		)))
+	~	
+	~		|
+
+Faktor Ekonomi Kedelai=(Harga Produsen Kedelai/Harga Dasar Kedelai)*Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+Faktor Ekonomi Padi=Harga Produsen Padi GKG/Harga Dasar Padi GKG*Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+Faktor Ekonomi Jagung=(Harga Produsen Jagung/Harga Dasar Jagung)*Faktor Ekonomi Pertanian
+	~	Dmnl
+	~		|
+
+Faktor Ekonomi Kacang Hijau=Harga Produsen Kacang Hijau/Harga Dasar Kacang Hijau*Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+Faktor Ekonomi Kacang Tanah=Harga Produsen Kacang Tanah/Harga dasar Kacang Tanah*Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+Faktor Ekonomi Ubi Kayu=(Harga Produsen Ubi Kayu/Harga Dasar Ubi Kayu)*Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+Harga Total=(Harga Produsen Jagung+Harga Produsen Kacang Hijau+Harga Produsen Kacang Tanah\
+		+Harga Produsen Kedelai+Harga Produsen Padi GKG
+	+Harga Produsen Ubi Jalar+Harga Produsen Ubi Kayu)/7
+	~	rp
+	~		|
+
+Faktor Ekonomi Ubi Jalar=(Harga Produsen Ubi Jalar/ Harga Dasar Ubi Jalar) * Faktor Ekonomi Pertanian
+	~	satuan
+	~		|
+
+PDRB Pertanian Tanaman Pangan=Nilai Produksi Jagung+Nilai Produksi Kacang Hijau+Nilai Produksi Kacang Tanah\
+		+Nilai Produksi Kedelai+Nilai Produksi Padi
+	+Nilai Produksi Ubi Kayu+Nilai Produksi Ubi Jalar
+	~	rp
+	~		|
+
+Penambahan Luas Sawah Irigasi=Efektivitas Irigasi*Luas Sawah Irigasi Dasar*Persentase Perubahan Irigasi
+	~	ha
+	~		|
+
+Perubahan Luas Citra=IF THEN ELSE(
+	Time = 2018,
+	Estimasi Luas Citra - Luas Lahan Pertanian,
+	Estimasi Luas Citra - DELAY1(Estimasi Luas Citra,1)
+	)
+	~	
+	~		|
+
+Luas Lahan Pertanian= INTEG (Laju Penambahan Lahan-Alih Fungsi Lahan,
+		2.41616e+06)
+	~	hektar
+	~		|
+
+Alih Fungsi Lahan=MAX(0, -Perubahan Luas Citra)
+	/ Efektivitas LP2B
+	~	
+	~		|
+
+Subsidi Pupuk=IF THEN ELSE( Time < 2025 , 
+	              Data Historis Subsidi Pupuk(Time) , 
+	              Subsidi Dasar * (1 + "% Kenaikan Subsidi" * Efek RAB) )
+	~	ton
+	~		|
+
+Data Historis Subsidi Pupuk([(0,0)-(10,10)],(2018,497.391), (2019,460.264), (2020,526.235\
+		), (2021,488.158), (2022,540.29), (2023,463.131), (2024,388.098))
+	~	
+	~		|
+
+Laju Penambahan Lahan=MAX(0, Perubahan Luas Citra)
+	~	
+	~		|
+
+Luas Pixel=6.25
+	~	ha
+	~		|
+
+"% LP2B"=0
+	~	ha
+	~		|
+
+Efektivitas LP2B=1 + "% LP2B"
+	~	persen
+	~		|
+
+Stok Kacang Hijau= INTEG (Penyediaan Kacang Hijau-Penggunaan Kacang Hijau,
+		10157.8)
+	~	ton
+	~		|
+
+Faktor Harga=556780/Harga Total
+	~	satuan
+	~		~	:SUPPLEMENTARY 
+	|
+
+Faktor kelangkaan Kacang Hijau=1+0.05*(Penggunaan Kacang Hijau/Stok Kacang Hijau-1)
+	~	satuan
+	~		|
+
+"% Kenaikan Subsidi"=0
+	~	
+	~		|
+
+Belanja Dasar=3.53211e+11
+	~	rp
+	~		|
+
+Nilai Tukar Petani=Indeks yang Diterima Petani/Indeks yang Dibayar Petani*100
+	~	satuan
+	~		|
+
+Efek RAB=1 + Sensitivitas RAB * (Belanja Pemerintah Sektor Pertanian/Belanja Dasar-1)
+	~	satuan
+	~		|
+
+Efek Subsidi Pupuk=1+Sensitivitas Subsidi Pupuk*(Subsidi Pupuk/Subsidi Dasar)
+	~	satuan
+	~		|
+
+IB Dasar=100
+	~	
+	~		|
+
+Subsidi Dasar=497391
+	~	ton
+	~		|
+
+Luas Sawah Irigasi= INTEG (Penambahan Luas Sawah Irigasi,
+		723636)
+	~	ha
+	~		|
+
+Faktor Irigasi=1 + 0.2 * (Luas Sawah Irigasi / Luas Sawah Irigasi Dasar)
+	~	satuan
+	~		|
+
+Efektivitas Irigasi=1 + 0.05 * ((Belanja Pemerintah Sektor Pertanian/ Belanja Dasar)-\
+		1)
+	~	satuan
+	~		|
+
+Belanja Pemerintah Sektor Pertanian=Belanja Dasar*(1+"% Penambahan RAB")
+	~	rp
+	~		|
+
+Harga Dasar Kacang Hijau=1.16455e+06
+	~	rp/ku
+	~		|
+
+Harga dasar Kacang Tanah=1.00583e+06
+	~	rp/ku
+	~		|
+
+Faktor Kelangkaan Kacang Tanah=1+0.05*(Penggunaan Kacang Tanah/Stok Kacang Tanah-1)
+	~	satuan
+	~		|
+
+Harga Dasar Padi GKG=586234
+	~	rp/kg
+	~		|
+
+Faktor Kelangkaan Beras=1+0.05*(Penggunaan padi/Stok Padi-1)
+	~	satuan
+	~		|
+
+Harga Produsen Kacang Tanah=SMOOTH ( Faktor Kelangkaan Kacang Tanah*Harga dasar Kacang Tanah\
+		 , 1 )
+	~	rp/ku
+	~		|
+
+Produksi Padi=(Produktivitas Padi*Luas Panen Padi)/10
+	~	ton/tahun
+	~		|
+
+Harga Produsen Padi GKG=SMOOTH (Harga Dasar Padi GKG * Faktor Kelangkaan Beras,1)
+	~	rp/kg
+	~		|
+
+Harga Produsen Kacang Hijau=SMOOTH ( Faktor kelangkaan Kacang Hijau*Harga Dasar Kacang Hijau\
+		 , 1 )
+	~	rp/ku
+	~		|
+
+Produktivitas Padi=Produktivitas Dasar Padi*Faktor Irigasi*Estimator NDVI Padi*Faktor Ekonomi Padi
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Kacang Hijau=Estimator NDVI Kacang Hijau*Produktivitas Dasar Kacang Hijau\
+		*Faktor Ekonomi Kacang Hijau
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Kacang Tanah=Produktivitas Dasar Kacang Tanah*Estimator NDVI Kacang Tanah\
+		*Faktor Ekonomi Kacang Tanah
+	~	kuintal/hektar
+	~		|
+
+Harga Produsen Ubi Jalar=SMOOTH ( Faktor Kelangkaan Ubi Jalar*Harga Dasar Ubi Jalar ,\
+		 1 )
+	~	satuan
+	~		|
+
+Harga Produsen Ubi Kayu=SMOOTH(Harga Dasar Ubi Kayu *Faktor Kelangkaan Ubi Kayu,1)
+	~	rp
+	~		|
+
+Harga Dasar Ubi Jalar=311024
+	~	rp
+	~		|
+
+Faktor Kelangkaan Ubi Jalar=1 + 0.05 * (Penggunaan Ubi Jalar / Stok Ubi Jalar - 1)
+	~	satuan
+	~		|
+
+Produktivitas Ubi Jalar=Estimator NDVI Ubi Jalar*Produktivitas Dasar Ubi Jalar*Faktor Ekonomi Ubi Jalar
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Ubi Kayu=Produktivitas Dasar Ubi Kayu*Estimator NDVI Ubi Kayu*Faktor Ekonomi Ubi Kayu
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Ubi Kayu=250
+	~	kuintal/hektar
+	~		|
+
+Harga Produsen Kedelai=DELAY1 ( Harga Dasar Kedelai*Faktor Kelangkaan Kedelai , 1 )
+	~	rp
+	~		|
+
+Faktor Ekonomi Pertanian=1+0.5*(Nilai Tukar Petani/NTP Dasar-1)
+	~	persen
+	~		|
+
+Faktor Kelangkaan Jagung=1 + 0.05 * (Penggunaan Jagung/Stok Jagung - 1)
+	~	Dmnl
+	~		|
+
+Faktor Kelangkaan Kedelai=1+0.05*(Penggunaan Kedelai/Stok Kedelai-1)
+	~	satuan
+	~		|
+
+Faktor Kelangkaan Ubi Kayu=1+0.05*(Penggunaan Ubi Kayu/Stok Ubi Kayu-1)
+	~	satuan
+	~		|
+
+Harga Dasar Jagung=403778
+	~	rupiah/kuintal
+	~		|
+
+Produktivitas Jagung=Produktivitas Dasar Jagung * Faktor NDVI Jagung * SMOOTHI(Faktor Ekonomi Jagung\
+		, 1, 1)
+	~	kuintal/hektar
+	~		|
+
+Harga Dasar Ubi Kayu=182261
+	~	rp/ku
+	~		|
+
+Harga Produsen Jagung=DELAY1I(Harga Dasar Jagung*Faktor Kelangkaan Jagung, 1, Harga Dasar Jagung\
+		)
+	~	rupiah/kuintal
+	~		|
+
+NTP Dasar=102.85
+	~	persen
+	~		|
+
+Produktivitas Kedelai=Produktivitas Dasar Kedelai*Faktor NDVI Kedelai*Faktor Ekonomi Kedelai
+	~	kuintal/hektar
+	~		|
+
+Harga Dasar Kedelai=887687
+	~	rp
+	~		|
+
+Stok Kacang Tanah= INTEG (Penyediaan Kacang Tanah-Penggunaan Kacang Tanah,
+		36243.3)
+	~	ton
+	~		|
+
+Stok Ubi Kayu= INTEG (Penyediaan Ubi Kayu-Penggunaan Ubi Kayu,
+		1.5988e+06)
+	~	ton
+	~		|
+
+Stok Jagung= INTEG (Penyediaan Jagung-Penggunaan Jagung,
+		100000)
+	~	ton
+	~		|
+
+Stok Kedelai= INTEG (Penyediaan Kedelai-Penggunaan Kedelai,
+		101545)
+	~	ton
+	~		|
+
+Stok Ubi Jalar= INTEG (Penyediaan Ubi Jalar-Penggunaan Ubi Jalar,
+		475971)
+	~	ton
+	~		|
+
+Stok Padi= INTEG (Penyediaan Padi-Penggunaan padi,
+		5.26921e+06)
+	~	ton
+	~		|
+
+Faktor NDVI Jagung=1 + 0.15 * (NDVI - 0.6)
+	~	Dmnl
+	~		|
+
+Estimator NDVI Kacang Hijau=1 + 0.1 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Estimator NDVI Kacang Tanah=1 + 0.12 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Faktor NDVI Kedelai=1 + 0.15 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Estimator NDVI Padi=1 + 0.2 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Estimator NDVI Ubi Jalar=1 + 0.1 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Estimator NDVI Ubi Kayu=1 + 0.1 * (NDVI - 0.6)
+	~	satuan
+	~		|
+
+Persentase Perubahan Irigasi=0
+	~	satuan
+	~		|
+
+Luas Sawah Irigasi Dasar=723636
+	~	ha
+	~		|
+
+Produktivitas Dasar Padi=57.4
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Kedelai=15.6
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Kacang Hijau=10.6
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Jagung=92
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Ubi Jalar=216.5
+	~	kuintal/hektar
+	~		|
+
+Produktivitas Dasar Kacang Tanah=15.4
+	~	kuintal/hektar
+	~		|
+
+Sensitivitas RAB=0.3
+	~	konst
+	~		|
+
+"% Penambahan RAB"=0
+	~	persen
+	~		|
+
+Sensitivitas Subsidi Pupuk=0.2
+	~	konst
+	~		|
+
+Jumlah Penduduk= INTEG ((Pertumbuhan Penduduk),
+		4.67096e+07)
+	~	jiwa
+	~		|
+
+Pertumbuhan Penduduk=Laju Pertumbuhan Penduduk /100 * Jumlah Penduduk
+	~	jiwa
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 2030
+	~	Year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 2018
+	~	Year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Year [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,78,2
+1,1,7,134,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,2,Luas Lahan Pertanian,-795,-817,74,26,3,3,0,1,-1,0,0,0,17-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,3,142,40,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,4,Luas Panen Kacang Hijau,-2786,1175,52,26,3,3,0,39,-1,0,0,0,255-85-85,255-128-128,Verdana|||0-0-0,0,0,0,0,0,0
+1,5,7,146,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,6,"% LP2B",-470,-886,55,34,3,3,0,62,-1,0,0,0,0-0-0,17-0-0,Verdana|16|B|255-255-255,0,0,0,0,0,0
+10,7,NDVI,-970,-1085,38,38,2,3,0,39,-1,0,0,0,64-128-128,64-128-128,Verdana|||255-255-255,0,0,0,0,0,0
+10,8,Luas Panen Padi,-3339,361,61,26,3,3,0,39,-1,0,0,0,255-255-0,255-255-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,9,Produktivitas Padi,-3492,491,66,26,3,3,0,39,-1,0,0,0,255-255-0,255-255-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,10,Nilai Tukar Petani,-675,760,54,54,2,3,0,63,-1,0,0,0,64-0-64,255-0-0,Verdana|16|B|255-255-255,0,0,0,0,0,0
+10,11,Belanja Pemerintah Sektor Pertanian,-920,992,77,32,3,3,0,38,-1,0,0,0,0-0-0,255-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,12,Subsidi Pupuk,-512,942,56,26,3,3,0,38,-1,0,0,0,0-0-0,255-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,13,Indeks yang Dibayar Petani,-499,751,56,26,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,14,Jumlah Penduduk,-670,-465,66,26,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,15,48,-949,-478,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,16,18,15,100,0,0,22,0,192,0,-1--1--1,,1|(-887,-478)|
+1,17,18,14,4,0,0,22,0,192,0,-1--1--1,,1|(-779,-478)|
+11,18,0,-829,-478,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,19,Pertumbuhan Penduduk,-829,-444,56,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,20,"IKP (Aspek Ketersediaan Pangan)",-663,-226,75,75,2,3,0,63,-1,0,0,0,0-0-64,255-0-0,Verdana|16|B|255-255-255,0,0,0,0,0,0
+1,21,14,19,1,0,0,0,0,192,0,-1--1--1,,1|(-773,-445)|
+10,22,Laju Pertumbuhan Penduduk,-826,-543,69,26,3,3,0,39,-1,0,0,0,17-0-0,255-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+1,23,22,19,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,24,Time,-808,-988,53,24,3,2,0,35,-1,0,0,0,128-128-128,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,25,24,7,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-868,-1079)|
+10,26,"% Penambahan RAB",-894,1118,85,34,3,3,0,63,-1,0,0,0,17-0-0,17-0-0,Verdana|16|B|255-255-255,0,0,0,0,0,0
+10,27,Efek Subsidi Pupuk,-495,849,47,26,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,28,12,27,1,0,0,0,0,192,0,-1--1--1,,1|(-520,882)|
+1,29,27,13,1,0,0,0,0,192,0,-1--1--1,,1|(-498,805)|
+10,30,Efek RAB,-704,952,46,26,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,31,Sensitivitas Subsidi Pupuk,-649,856,54,26,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,32,Sensitivitas RAB,-709,1046,60,26,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,33,Produktivitas Jagung,335,-458,50,26,3,3,0,39,-1,0,0,0,255-128-192,255-128-192,Verdana|||0-0-0,0,0,0,0,0,0
+10,34,Luas Panen Jagung,488,-567,46,26,3,3,0,39,-1,0,0,0,255-128-192,255-128-192,Verdana|||0-0-0,0,0,0,0,0,0
+10,35,Produktivitas Kedelai,463,417,50,26,3,3,0,39,-1,0,0,0,255-128-64,255-128-64,Verdana|||0-0-0,0,0,0,0,0,0
+10,36,Luas Panen Kedelai,607,317,46,26,3,3,0,39,-1,0,0,0,255-128-64,255-128-64,Verdana|||0-0-0,0,0,0,0,0,0
+10,37,Produktivitas Kacang Tanah,418,1143,54,26,3,3,0,39,-1,0,0,0,128-255-255,128-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,38,Luas Panen Kacang Tanah,583,1039,56,26,3,3,0,39,-1,0,0,0,128-255-255,128-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,39,Produktivitas Ubi Jalar,-2833,-430,63,26,3,3,0,39,-1,0,0,0,128-255-0,128-255-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,40,Luas Panen Ubi Jalar,-2662,-521,58,26,3,3,0,39,-1,0,0,0,128-255-0,128-255-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,41,Produktivitas Kacang Hijau,-2945,1273,50,26,3,3,0,39,-1,0,0,0,255-85-85,255-128-128,Verdana|||0-0-0,0,0,0,0,0,0
+10,42,Stok Padi,-3008,476,58,24,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,43,48,-3240,464,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,44,46,43,100,0,0,22,0,192,0,-1--1--1,,1|(-3195,464)|
+1,45,46,42,4,0,0,22,0,192,0,-1--1--1,,1|(-3107,464)|
+11,46,0,-3155,464,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,47,Penyediaan Padi,-3155,498,62,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,48,Stok Ubi Jalar,-2347,-451,64,26,3,3,0,38,-1,0,0,0,0-0-0,255-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+12,49,48,-2561,-456,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,50,52,49,100,0,0,22,0,192,0,-1--1--1,,1|(-2531,-456)|
+1,51,52,48,4,0,0,22,0,192,0,-1--1--1,,1|(-2455,-456)|
+11,52,0,-2505,-456,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,53,Penyediaan Ubi Jalar,-2505,-422,66,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,54,48,-2770,471,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,55,57,42,100,0,0,22,0,192,0,-1--1--1,,1|(-2914,471)|
+1,56,57,54,4,0,0,22,0,192,0,-1--1--1,,1|(-2823,471)|
+11,57,0,-2873,471,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,58,Penggunaan padi,-2873,505,66,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,59,48,-2098,-448,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,60,62,48,100,0,0,22,0,192,0,-1--1--1,,1|(-2239,-448)|
+1,61,62,59,4,0,0,22,0,192,0,-1--1--1,,1|(-2146,-448)|
+11,62,0,-2190,-448,6,8,34,3,0,3,1,0,0,0,17-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,63,Penggunaan Ubi Jalar,-2190,-414,63,26,40,3,0,35,-1,0,0,0,17-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,64,Stok Kacang Hijau,-2499,1234,51,26,3,3,0,38,-1,0,0,0,0-0-0,255-255-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,65,Stok Ubi Kayu,-826,1722,64,26,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,66,48,-563,1720,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,67,69,65,100,0,0,22,0,192,0,-1--1--1,,1|(-723,1720)|
+1,68,69,66,4,0,0,22,0,192,0,-1--1--1,,1|(-623,1720)|
+11,69,0,-679,1720,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,70,Penggunaan Ubi Kayu,-679,1754,58,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,71,48,-1057,1717,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,72,74,71,100,0,0,22,0,192,0,-1--1--1,,1|(-1014,1717)|
+1,73,74,65,4,0,0,22,0,192,0,-1--1--1,,1|(-929,1717)|
+11,74,0,-975,1717,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,75,Penyediaan Ubi Kayu,-975,1751,49,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,76,Luas Panen Ubi Kayu,-1159,1674,58,26,3,3,0,39,-1,0,0,0,255-128-255,255-128-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,77,Produktivitas Ubi Kayu,-1327,1760,63,26,3,3,0,39,-1,0,0,0,255-128-255,255-128-255,Verdana|||0-0-0,0,0,0,0,0,0
+10,78,Stok Kacang Tanah,996,1190,54,26,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,79,48,1269,1179,10,6,8,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,80,82,78,100,0,0,22,0,192,0,-1--1--1,,1|(1095,1179)|
+1,81,82,79,4,0,0,22,0,192,0,-1--1--1,,1|(1205,1179)|
+11,82,0,1146,1179,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,83,Penggunaan Kacang Tanah,1146,1213,66,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,84,48,729,1186,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,85,87,84,100,0,0,22,0,192,0,-1--1--1,,1|(776,1186)|
+1,86,87,78,4,0,0,22,0,192,0,-1--1--1,,1|(883,1186)|
+11,87,0,819,1186,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,88,Penyediaan Kacang Tanah,819,1220,64,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,89,Stok Kedelai,907,378,51,26,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,90,48,1113,380,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,91,93,89,100,0,0,22,0,192,0,-1--1--1,,1|(991,380)|
+1,92,93,90,4,0,0,22,0,192,0,-1--1--1,,1|(1070,380)|
+11,93,0,1031,380,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,94,Penggunaan Kedelai,1031,414,66,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,95,48,692,378,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,96,98,95,100,0,0,22,0,192,0,-1--1--1,,1|(732,378)|
+1,97,98,89,4,0,0,22,0,192,0,-1--1--1,,1|(815,378)|
+11,98,0,768,378,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,99,Penyediaan Kedelai,768,412,62,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,100,Stok Jagung,803,-483,68,35,3,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,101,48,1040,-487,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,102,104,100,100,0,0,22,0,192,0,-1--1--1,,1|(906,-487)|
+1,103,104,101,4,0,0,22,0,192,0,-1--1--1,,1|(992,-487)|
+11,104,0,948,-487,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,105,Penggunaan Jagung,948,-453,64,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+12,106,48,575,-494,10,8,0,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+1,107,109,106,100,0,0,22,0,192,0,-1--1--1,,1|(621,-494)|
+1,108,109,100,4,0,0,22,0,192,0,-1--1--1,,1|(702,-494)|
+11,109,0,664,-494,6,8,34,3,0,2,1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,110,Penyediaan Jagung,664,-460,60,26,40,3,0,34,-1,0,0,0,0-0-0,0-0-0,Verdana|||0-0-0,0,0,0,0,0,0
+10,111,Luas Sawah Irigasi,-3839,598,60,30,3,3,0,23,-1,0,0,0,17-0-0,255-255-255,|||17-0-0,0,0,0,0,0,0
+10,112,Estimator NDVI Ubi Kayu,-1330,1670,59,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+10,113,Produktivitas Dasar Ubi Kayu,-1487,1750,58,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,114,7,112,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,115,112,77,1,0,0,0,0,192,0,-1--1--1,,1|(-1340,1701)|
+1,116,113,77,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,117,Faktor NDVI Jagung,335,-569,46,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,118,7,117,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,119,117,33,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,120,Produktivitas Dasar Jagung,194,-457,51,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,121,120,33,1,0,0,0,0,192,0,-1--1--1,,1|(264,-455)|
+10,122,Faktor NDVI Kedelai,462,319,46,26,3,3,0,7,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,123,122,35,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,124,Produktivitas Dasar Kedelai,308,418,56,25,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,125,124,35,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,126,7,122,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,127,Estimator NDVI Kacang Tanah,415,1035,54,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,128,7,127,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,129,127,37,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,130,Produktivitas Dasar Kacang Tanah,250,1134,71,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,131,130,37,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,132,Produktivitas Dasar Padi,-3626,563,50,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,133,132,9,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,134,Estimator NDVI Padi,-3494,362,62,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,135,134,9,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,136,Faktor Irigasi,-3843,490,49,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,137,111,136,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,138,136,9,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,139,Luas Sawah Irigasi Dasar,-4029,488,48,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+10,140,Persentase Perubahan Irigasi,-4196,492,91,40,3,3,0,31,-1,0,0,0,64-0-64,17-0-0,|16|B|255-255-255,0,0,0,0,0,0
+10,141,Produktivitas Dasar Ubi Jalar,-3002,-428,56,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+10,142,Estimator NDVI Ubi Jalar,-2828,-521,59,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+1,143,7,142,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,144,142,39,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,145,141,39,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,146,Estimator NDVI Kacang Hijau,-2948,1171,50,26,3,3,0,5,-1,0,0,0,255-85-85,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,147,146,41,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,148,Produktivitas Dasar Kacang Hijau,-3102,1274,71,26,3,3,0,5,-1,0,0,0,255-85-85,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,149,148,41,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,150,13,10,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,151,Faktor Ekonomi Pertanian,-836,775,57,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,152,10,151,1,0,0,0,0,192,0,-1--1--1,,1|(-755,763)|
+10,153,Harga Produsen Jagung,486,-256,60,26,3,3,0,5,-1,0,0,0,255-128-192,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,154,Faktor Kelangkaan Jagung,718,-358,68,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,155,154,153,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,156,Harga Dasar Jagung,335,-253,48,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,157,105,154,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,158,156,153,1,0,0,0,0,192,0,-1--1--1,,1|(414,-250)|
+10,159,Faktor Ekonomi Jagung,335,-366,57,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+10,160,NTP Dasar,-838,864,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,161,160,151,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,162,153,159,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,163,156,159,1,0,0,0,0,192,0,-1--1--1,,1|(332,-299)|
+1,164,159,33,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,165,117,34,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,166,Faktor Kelangkaan Kedelai,764,501,68,26,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+10,167,Harga Produsen Kedelai,612,613,60,26,3,3,0,5,-1,0,0,0,255-128-64,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,168,Harga Dasar Kedelai,462,614,48,26,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,169,94,166,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,170,166,167,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,171,Faktor Ekonomi Kedelai,464,502,57,26,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,172,168,167,1,0,0,0,0,192,0,-1--1--1,,1|(524,612)|
+1,173,168,171,1,0,0,0,0,192,0,-1--1--1,,1|(460,563)|
+1,174,167,171,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,175,171,35,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,176,122,36,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,177,Faktor Kelangkaan Ubi Kayu,-965,1837,59,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+10,178,Harga Produsen Ubi Kayu,-1166,1949,60,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+10,179,Harga Dasar Ubi Kayu,-1332,1952,61,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,180,100,154,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,181,89,166,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,182,70,177,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,183,65,177,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,184,177,178,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,185,179,178,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,186,Faktor Ekonomi Ubi Kayu,-1332,1856,57,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,187,178,186,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,188,179,186,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,189,112,76,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,190,186,77,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,191,Harga Dasar Ubi Jalar,-2832,-226,61,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+10,192,Harga Produsen Ubi Jalar,-2660,-231,60,26,3,3,0,5,-1,0,0,0,128-255-0,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,193,Faktor Ekonomi Ubi Jalar,-2832,-331,57,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+1,194,191,192,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,195,191,193,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,196,192,193,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,197,Faktor Kelangkaan Ubi Jalar,-2490,-334,68,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+1,198,63,197,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,199,48,197,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,200,197,192,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,201,193,39,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,202,Faktor Ekonomi Kacang Tanah,411,1272,57,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+10,203,Harga Produsen Kacang Tanah,586,1413,60,26,3,3,0,5,-1,0,0,0,128-255-255,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,204,Harga dasar Kacang Tanah,411,1407,54,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+10,205,Faktor Kelangkaan Kacang Tanah,841,1303,64,24,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,206,83,205,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,207,78,205,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,208,127,38,1,0,0,0,0,192,0,-1--1--1,,1|(487,1027)|
+1,209,205,203,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,210,203,202,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,211,202,37,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,212,204,203,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,213,204,202,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,214,Harga Produsen Kacang Hijau,-2790,1472,60,26,3,3,0,5,-1,0,0,0,255-85-85,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,215,Harga Dasar Kacang Hijau,-2946,1469,50,26,3,3,0,5,-1,0,0,0,255-85-85,255-128-128,|||0-0-0,0,0,0,0,0,0
+10,216,Faktor Ekonomi Kacang Hijau,-2946,1370,57,26,3,3,0,5,-1,0,0,0,255-85-85,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,217,215,214,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,218,215,216,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,219,Faktor kelangkaan Kacang Hijau,-2637,1350,67,26,3,3,0,5,-1,0,0,0,255-85-85,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,220,64,219,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,221,219,214,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,222,216,41,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,223,214,216,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,224,146,4,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,225,Harga Produsen Padi GKG,-3328,723,65,24,3,3,0,5,-1,0,0,0,255-255-0,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,226,Harga Dasar Padi GKG,-3503,719,69,22,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+10,227,Faktor Ekonomi Padi,-3498,624,57,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+10,228,Faktor Kelangkaan Beras,-3159,587,68,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,229,226,225,1,0,0,0,0,192,0,-1--1--1,,1|(-3414,727)|
+1,230,226,227,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,231,225,227,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,232,228,225,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,233,42,228,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,234,58,228,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,235,227,9,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,236,Produksi Padi,-3338,502,52,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,237,8,236,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,238,9,236,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,239,134,8,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,240,139,136,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,241,Indeks yang Diterima Petani,-678,640,58,26,3,3,0,5,-1,0,0,0,17-0-0,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,242,IB Dasar,-411,610,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,243,242,13,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,244,Belanja Dasar,-988,912,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,245,244,11,1,0,0,0,0,192,0,-1--1--1,,1|(-941,940)|
+1,246,26,11,1,0,0,0,0,192,0,-1--1--1,,1|(-900,1061)|
+10,247,Subsidi Dasar,-411,896,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,248,"% Kenaikan Subsidi",-576,1084,62,33,3,3,0,31,-1,0,0,0,0-0-0,0-0-0,|16|B|255-255-255,0,0,0,0,0,0
+1,249,247,12,1,0,0,0,0,192,0,-1--1--1,,1|(-425,933)|
+1,250,248,12,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,251,Efektivitas Irigasi,-1057,983,51,24,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,252,11,251,1,0,0,0,0,192,0,-1--1--1,,1|(-999,1036)|
+12,253,48,-4187,583,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,254,256,253,100,0,0,22,0,192,0,-1--1--1,,1|(-4106,583)|
+1,255,256,111,4,0,0,22,0,192,0,-1--1--1,,1|(-3961,583)|
+11,256,0,-4029,583,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,257,Penambahan Luas Sawah Irigasi,-4029,617,68,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,258,139,257,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,259,140,257,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,260,244,251,1,0,0,0,0,192,0,-1--1--1,,1|(-1020,921)|
+1,261,32,30,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,262,244,30,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,263,30,12,1,0,0,0,0,192,0,-1--1--1,,1|(-616,955)|
+1,264,11,30,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,265,247,27,1,0,0,0,0,192,0,-1--1--1,,1|(-442,852)|
+1,266,241,10,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,267,31,27,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,268,Nilai Produksi Jagung,488,-362,53,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,269,153,268,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,270,Nilai Produksi Ubi Kayu,-1163,1855,66,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,271,178,270,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,272,Nilai Produksi Ubi Jalar,-2664,-332,66,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+1,273,192,272,1,0,0,0,0,192,0,-1--1--1,,1|(-2667,-269)|
+10,274,Nilai Produksi Padi,-3330,620,53,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+1,275,225,274,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,276,Nilai Produksi Kacang Hijau,-2784,1371,53,26,3,3,0,5,-1,0,0,0,255-128-128,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,277,214,276,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,278,Nilai Produksi Kacang Tanah,587,1315,54,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,279,203,278,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,280,PDRB Pertanian Tanaman Pangan,-1364,993,70,70,2,3,0,30,-1,0,0,0,0-0-0,255-0-0,|16|B|255-255-255,0,0,0,0,0,0
+10,281,Nilai Produksi Kedelai,615,504,53,26,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,282,167,281,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,283,Ketersediaan Kalori Ubi Jalar,-1859,-306,77,29,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+10,284,Kalori Jagung,1245,-272,31,31,2,3,0,13,-1,0,0,0,255-128-192,255-255-255,|10||0-0-0,0,0,0,0,0,0
+10,285,Kalori Ubi Kayu,-378,1934,40,40,2,3,0,5,-1,0,0,0,255-128-255,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,286,Kalori Kacang Hijau,-2090,1426,34,34,2,3,0,13,-1,0,0,0,255-128-128,255-255-255,|10||0-0-0,0,0,0,0,0,0
+12,287,48,-2701,1231,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,288,290,287,100,0,0,22,0,192,0,-1--1--1,,1|(-2660,1231)|
+1,289,290,64,4,0,0,22,0,192,0,-1--1--1,,1|(-2584,1231)|
+11,290,0,-2624,1231,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,291,Penyediaan Kacang Hijau,-2624,1265,62,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,292,48,-2302,1232,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,293,295,64,100,0,0,22,0,192,0,-1--1--1,,1|(-2421,1232)|
+1,294,295,292,4,0,0,22,0,192,0,-1--1--1,,1|(-2347,1232)|
+11,295,0,-2389,1232,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,296,Penggunaan Kacang Hijau,-2389,1266,46,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,297,296,219,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,298,Efektivitas LP2B,-647,-888,58,26,3,3,0,4,-1,0,0,0,0-0-0,255-255-255,|||0-0-0,0,0,0,0,0,0
+1,299,6,298,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+12,300,48,-1073,-820,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,301,303,300,100,0,0,22,0,192,0,-1--1--1,,1|(-1020,-820)|
+1,302,303,2,4,0,0,22,0,192,0,-1--1--1,,1|(-917,-820)|
+11,303,0,-972,-820,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,304,Laju Penambahan Lahan,-972,-786,67,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,305,Estimasi Luas Citra,-985,-898,52,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,306,Data Historis Pixel,-1256,-1090,59,32,3,3,0,7,-1,0,0,0,0-0-255,255-255-255,|||17-0-0,0,0,0,0,0,0
+10,307,Luas Pixel,-1121,-903,30,30,2,3,0,7,-1,0,0,0,64-128-128,64-128-128,|||255-255-255,0,0,0,0,0,0
+1,308,307,305,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+12,309,48,-525,-823,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,310,312,2,100,0,0,22,0,192,0,-1--1--1,,1|(-682,-823)|
+1,311,312,309,4,0,0,22,0,192,0,-1--1--1,,1|(-583,-823)|
+11,312,0,-638,-823,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,313,Alih Fungsi Lahan,-638,-789,66,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,314,298,313,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,315,Perubahan Luas Citra,-806,-905,61,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,316,305,315,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,317,315,304,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-938,-899)|
+1,318,315,313,1,0,0,0,0,192,0,-1--1--1,,1|(-711,-834)|
+1,319,2,315,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-806,-850)|
+1,320,24,315,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-812,-965)|
+10,321,Data Historis Subsidi Pupuk,-453,1074,54,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,322,321,12,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,323,Time,-402,1032,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,324,323,12,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,325,Tren Pengeluaran Makro,-503,656,57,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,326,PDRB Pertanian Tanaman Pangan,-2161,763,36,36,2,2,1,7,-1,0,0,0,128-128-128,255-0-0,|||255-255-255,0,0,0,0,0,0
+1,327,325,13,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,328,Time,-510,568,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,329,328,325,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,330,Nilai Produksi Jagung,-1202,967,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,331,Nilai Produksi Kacang Hijau,-1221,1058,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,332,Nilai Produksi Kedelai,-1502,1044,46,25,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,333,Nilai Produksi Padi,-1503,963,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,334,Nilai Produksi Ubi Kayu,-1466,900,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,335,Nilai Produksi Ubi Jalar,-1362,882,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,336,Nilai Produksi Kacang Tanah,-1251,902,58,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,337,335,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,338,336,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,339,330,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,340,331,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,341,332,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,342,334,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,343,333,280,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,344,Efektivitas Irigasi,-4028,719,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,345,344,257,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,346,Faktor Ekonomi Pertanian,247,1282,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,347,346,202,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,348,Faktor Ekonomi Pertanian,301,502,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,349,348,171,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,350,Faktor Ekonomi Pertanian,183,-370,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,351,350,159,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,352,Faktor Ekonomi Pertanian,-1491,1854,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,353,352,186,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,354,Faktor Ekonomi Pertanian,-3000,-278,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,355,354,193,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,356,Faktor Ekonomi Pertanian,-3668,622,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,357,356,227,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,358,Faktor Ekonomi Pertanian,-3107,1366,61,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,359,358,216,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,360,Time,-957,-547,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,361,360,22,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,362,Luas Lahan Pertanian,-2852,1081,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,363,362,4,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,364,Luas Lahan Pertanian,-3411,247,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,365,364,8,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,366,Luas Lahan Pertanian,-2743,-599,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,367,366,40,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,368,Luas Lahan Pertanian,-1220,1586,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,369,368,76,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,370,Luas Lahan Pertanian,418,-643,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,371,370,34,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,372,Luas Lahan Pertanian,558,233,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,373,372,36,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,374,Jumlah Penduduk,1272,-451,40,29,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+10,375,Luas Lahan Pertanian,507,951,48,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,376,375,38,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,377,Kalori Kedelai,1298,590,31,31,2,3,0,5,-1,0,0,0,255-128-64,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,378,Harga Total Dasar,-294,763,66,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,379,378,13,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,380,Harga Dasar Jagung,-269,670,52,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,381,Harga Dasar Kacang Hijau,-141,823,54,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,382,Harga dasar Kacang Tanah,-148,759,58,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,383,Harga Dasar Kedelai,-254,845,52,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,384,Harga Dasar Padi GKG,-357,827,52,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,385,Harga Dasar Ubi Jalar,-375,692,65,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,386,Harga Dasar Ubi Kayu,-165,691,65,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,387,385,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,388,384,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,389,383,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,390,381,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,391,382,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,392,386,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,393,380,378,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,394,Harga Total,-609,573,42,17,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,395,394,13,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,396,IT Dasar,-786,573,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,397,396,241,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,398,394,241,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,399,Harga Total Dasar,-697,561,49,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,400,399,241,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,401,Faktor Kelangkaan,-978,644,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,402,Faktor Kelangkaan Beras,-1090,631,60,25,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,403,Faktor Kelangkaan Jagung,-1090,694,63,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,404,Faktor kelangkaan Kacang Hijau,-978,728,51,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,405,Faktor Kelangkaan Kacang Tanah,-1042,576,59,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,406,Faktor Kelangkaan Ubi Jalar,-850,631,54,25,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,407,Faktor Kelangkaan Ubi Kayu,-860,708,61,25,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,408,402,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,409,403,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,410,404,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,411,407,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,412,406,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,413,405,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,414,Faktor Kelangkaan Kedelai,-929,578,58,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,415,414,401,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,416,401,241,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,417,Data Historis NDVI,-812,-1082,49,26,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,418,24,417,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,419,417,7,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,420,Tahun Akhir,-977,-1247,47,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,421,Tahun Awal,-646,-1249,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,422,NDVI Awal,-747,-1152,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,423,NDVI Akhir,-877,-1159,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,424,420,423,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,425,417,423,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,426,417,422,0,0,0,0,0,192,1,-1--1--1,,1|(0,0)|
+10,427,Laju Pertumbuhan NDVI,-818,-1248,69,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,428,423,427,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,429,422,427,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,430,420,427,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,431,421,427,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,432,427,7,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-936,-1147)|
+1,433,420,7,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,434,423,7,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,435,24,423,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-891,-1125)|
+10,436,Jumlah Pixel,-1072,-1082,41,41,2,3,0,7,-1,0,0,0,64-128-128,64-128-128,|||255-255-255,0,0,0,0,0,0
+1,437,306,436,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,438,Pixel Awal,-1136,-1170,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,439,Pixel Akhir,-1407,-1168,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,440,306,439,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,441,306,438,0,0,0,2,1,192,1,192-192-192,|||0-0-0,1|(0,0)|
+10,442,Tahun Akhir,-1410,-1247,55,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,443,Tahun Awal,-1096,-1243,54,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,444,442,439,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,445,Time,-1407,-1094,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,446,445,306,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,447,445,439,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,448,Laju Perubahan Pixel,-1264,-1237,59,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,449,442,448,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,450,443,448,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,451,439,448,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,452,438,448,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,453,448,436,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,454,436,305,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,455,445,436,1,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(-1230,-1043)|
+1,456,420,436,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,457,439,436,0,0,0,2,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+12,458,0,-241,947,80,40,3,7,0,1,-1,0,0,0,255-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+Aspek Nilai Tukar Petani
+12,459,0,-953,-1385,80,40,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+NDVI sbg estimator
+10,460,Faktor Harga,-919,-26,57,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,461,PDRB Per Kapita Pertanian Tanaman Pangan,-1368,1189,69,69,2,3,0,1,-1,0,0,0,255-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,462,280,461,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,463,Jumlah Penduduk,-1212,1203,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,464,463,461,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,465,Kebutuhan Normatif Total,-670,-373,55,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,466,Total Produksi Bersih,-944,-225,54,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,467,Data Historis Laju Pertumbuhan Penduduk,-727,-633,65,36,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,468,Time,-584,-648,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,469,468,467,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,470,467,22,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,471,Laju Proyeksi Penduduk,-915,-629,44,44,2,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,472,471,22,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,473,Ubi Jalar Food,-2017,-413,53,26,3,3,0,1,-1,1,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,474,473,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,475,Ubi Jalar Pakan,-2014,-532,57,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,476,Ubi Jalar Tercecer,-2349,-531,66,26,3,3,0,1,-1,0,0,0,128-128-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,477,K Pakan Ubi Jalar,-2012,-621,29,29,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,478,K Tercecer Ubi Jalar,-2350,-620,30,30,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,479,475,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,480,477,475,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,481,478,476,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,482,48,476,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,483,476,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,484,Ubi Jalar Industri Makanan,-2345,-293,66,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,485,Ubi Jalar Benih,-2191,-529,56,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,486,K Luas Panen Ubi Jalar,-2593,-601,38,38,2,3,0,1,-1,0,0,0,128-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,487,486,40,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,488,K Luas Panen Padi,-3256,239,43,43,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,489,488,8,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,490,K Luas Panen Kacang Hijau,-2723,1084,51,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,491,490,4,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,492,K Luas Panen Ubi Kayu,-1085,1584,38,38,2,3,0,9,-1,0,0,0,128-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,493,492,76,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,494,K Luas Panen Kacang Tanah,625,947,38,38,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,495,494,38,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,496,K Luas Panen Kedelai,668,237,34,34,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,497,496,36,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,498,K Luas Lahan Jagung,554,-643,51,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,499,498,34,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,500,Stok Ubi Jalar,-2101,-606,55,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,501,500,475,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,502,"Ubi Jalar Industri Non-Makanan",-2196,-291,63,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,503,484,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,504,502,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,505,K Industri Makanan Ubi Jalar,-2362,-208,37,37,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,506,"K Industri Non-Makanan Ubi Jalar",-2165,-207,42,42,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,507,505,484,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,508,485,63,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,509,500,485,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,510,K Benih Ubi Jalar,-2194,-623,26,26,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,511,510,485,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,512,506,502,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,513,Stok Ubi Jalar,-2262,-206,55,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,514,513,502,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,515,513,484,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,516,BDD Ubi Jalar,-1827,-187,30,30,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,517,Kalori Ubi Jalar,-1898,-188,29,29,2,3,0,9,-1,0,0,0,128-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,518,517,283,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,519,516,283,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,520,Ubi Jalar Food,-1066,-302,47,22,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,521,520,466,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,522,466,20,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,523,465,20,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,524,"Kontribusi Energi Umbi-umbian",-1324,-1,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,525,Ketersediaan Kalori Ubi Jalar,-1154,-2,60,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,526,525,524,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,527,"AKE Umbi-umbian",-1324,90,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,528,524,527,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,529,Total Kalori Ideal Harian,-1167,93,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,530,529,527,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,531,"Bobot Umbi-umbian",-1158,180,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,532,"Skor PPH Riil Umbi-umbian",-1323,179,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,533,531,532,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,534,527,532,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,535,"Skor PPH Umbi-umbian",-1324,333,89,89,2,3,0,31,-1,0,0,0,255-0-0,255-0-0,|16|B|255-255-255,0,0,0,0,0,0
+10,536,"Skor PPH Max Umbi-umbian",-1498,311,53,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,537,532,535,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,538,536,535,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,539,14,465,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,540,Kacang Tanah Tercecer,998,1111,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,541,Kacang Tanah Benih,1147,1111,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,542,Kacang Tanah Pakan,1286,1110,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,543,Kacang Tanah Food,1368,1211,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,544,Kacang Tanah Industri Makanan,1064,1317,66,28,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,545,"Kacang Tanah Industri Non-Makanan",1234,1319,77,29,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,546,K Tercecer Kacang Tanah,1000,1010,40,40,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,547,K Benih Kacang Tanah,1148,1022,37,37,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,548,K Pakan Kacang Tanah,1289,1016,34,34,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,549,K Industri Makanan Kacang Tanah,1019,1422,49,49,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,550,"K Industri Non-Makanan Kacang Tanah",1268,1428,45,45,2,3,0,9,-1,0,0,0,128-255-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,551,Ketersediaan Kalori Kacang Tanah,1553,1274,72,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,552,540,83,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,553,541,83,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,554,542,83,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,555,546,540,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,556,547,541,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,557,548,542,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,558,545,83,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,559,549,544,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,560,550,545,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,561,543,83,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,562,Stok Kacang Tanah,1150,1399,51,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+10,563,Stok Kacang Tanah,1221,1055,51,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,564,78,540,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,565,562,545,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,566,562,544,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,567,563,541,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,568,563,542,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,569,Jumlah Penduduk,1539,1207,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,570,Kalori Kacang Tanah,1495,1365,41,41,2,3,0,1,-1,0,0,0,0-255-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,571,BDD Kacang Tanah,1604,1363,37,37,2,3,0,1,-1,0,0,0,0-255-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,572,570,551,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,573,571,551,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,574,Produksi Kacang Tanah Berkulit,587,1137,62,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,575,37,574,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,576,Produksi Kacang Tanah Tanpa Kulit,587,1226,68,26,3,3,0,5,-1,0,0,0,128-255-255,128-255-255,|||0-0-0,0,0,0,0,0,0
+1,577,574,576,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,578,576,88,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,579,Produksi Ubi Jalar,-2667,-428,66,26,3,3,0,5,-1,0,0,0,128-255-0,128-255-0,|||0-0-0,0,0,0,0,0,0
+1,580,40,579,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,581,579,53,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,582,579,272,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,583,39,579,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,584,38,574,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,585,576,278,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,586,Kacang Tanah Food,-952,-322,58,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,587,586,466,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,588,"Kontribusi Energi Kacang-kacangan",-753,6,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,589,Ketersediaan Kalori Kacang Tanah,-580,8,76,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,590,"AKE Kacang-kacangan",-758,96,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,591,"Skor PPH Riil Kacang-kacangan",-761,194,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,592,"Bobot Kacang-kacangan",-585,188,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,593,Total Kalori Ideal Harian,-592,94,51,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,594,589,588,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,595,588,590,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,596,590,591,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,597,593,590,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,598,592,591,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,599,"Skor PPH Kacang-kacangan",-762,353,91,91,2,3,0,31,-1,0,0,0,255-0-0,255-0-0,|16|B|255-255-255,0,0,0,0,0,0
+1,600,591,599,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,601,Produksi Kacang Hijau,-2790,1267,62,26,3,3,0,5,-1,0,0,0,255-128-128,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,602,601,276,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,603,4,601,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,604,Kacang Hijau Tercecer,-2500,1154,50,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,605,Kacang Hijau Benih,-2390,1154,50,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,606,Kacang Hijau Pakan,-2267,1154,50,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,607,K Tercecer Kacang Hijau,-2501,1034,35,35,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,608,K Benih Kacang Hijau,-2392,1031,35,35,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,609,K Pakan Kacang Hijau,-2266,1031,34,34,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,610,607,604,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,611,608,605,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,612,609,606,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,613,604,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,614,605,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,615,606,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,616,64,604,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,617,Stok Kacang Hijau,-2324,1087,51,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,618,617,605,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,619,617,606,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,620,Kacang Hijau Industri Makanan,-2480,1371,57,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,621,"Kacang Hijau Industri Non-Makanan",-2341,1371,59,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,622,620,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,623,621,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,624,K Industri Makanan Kacang Hijau,-2508,1463,39,39,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,625,"K Industri Non-Makanan Kacang Hijau",-2305,1473,42,42,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,626,624,620,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,627,625,621,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,628,Stok Kacang Hijau,-2407,1447,51,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,629,Kacang Hijau Food,-2225,1262,50,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,630,Ketersediaan Kalori Kacang Hijau,-2046,1341,72,26,3,3,0,5,-1,0,0,0,255-128-128,255-128-128,|||0-0-0,0,0,0,0,0,0
+1,631,286,630,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,632,BDD Kacang Hijau,-2001,1427,31,31,2,3,0,9,-1,0,0,0,255-128-128,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,633,632,630,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,634,Jumlah Penduduk,-2090,1262,39,25,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,635,628,620,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,636,628,621,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,637,41,601,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,638,601,291,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,639,"Skor PPH Max Kacang-kacangan",-933,338,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,640,639,599,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,641,Produksi Jagung,489,-459,60,26,3,3,0,5,-1,0,0,0,255-128-128,255-128-192,|||0-0-0,0,0,0,0,0,0
+1,642,33,641,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,643,641,110,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,644,34,641,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,645,641,268,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,646,Jagung Tercecer,662,-591,60,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,647,Jagung Benih,874,-585,51,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,648,Jagung Pakan,1034,-583,51,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,649,K Tercecer Jagung,655,-673,33,33,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,650,K Benih Jagung,875,-671,33,33,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,651,K Pakan Jagung,1034,-667,32,32,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,652,649,646,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,653,650,647,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,654,651,648,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,655,646,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,656,647,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,657,648,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,658,Jagung Industri Makanan,879,-336,58,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,659,"Jagung Industri Non-Makanan",1029,-337,58,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,660,Jagung Food,1141,-452,47,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,661,658,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,662,659,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,663,660,105,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,664,Ketersediaan Kalori Jagung,1277,-365,51,26,3,3,0,5,-1,0,0,0,255-128-192,255-128-192,|||0-0-0,0,0,0,0,0,0
+10,665,BDD Jagung,1332,-271,31,31,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,666,284,664,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,667,665,664,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,668,K Industri Makanan Jagung,874,-234,38,38,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,669,"K Industri Non-Makanan Jagung",1035,-224,44,44,2,3,0,9,-1,0,0,0,255-128-192,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,670,668,658,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,671,669,659,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,672,Produksi Kedelai,613,414,62,26,3,3,0,5,-1,0,0,0,255-128-0,255-128-64,|||0-0-0,0,0,0,0,0,0
+1,673,36,672,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,674,672,281,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,675,35,672,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,676,672,99,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,677,Kedelai Tercecer,900,290,62,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,678,Kedelai Benih,1032,291,53,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,679,Kedelai Pakan,1162,291,53,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,680,K Tercecer Kedelai,897,202,28,28,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,681,K Benih Kedelai,1031,171,30,30,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,682,K Pakan Kedelai,1160,172,30,30,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,683,680,677,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,684,681,678,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,685,682,679,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,686,677,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,687,678,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,688,679,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,689,Kedelai Industri Makanan,950,502,60,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,690,"Kedelai Industri Non-Makanan",1109,504,60,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,691,689,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,692,690,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,693,K Industri Makanan Kedelai,947,619,37,37,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,694,"K Industri Non-Makanan Kedelai",1107,620,44,44,2,3,0,9,-1,0,0,0,255-128-64,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,695,693,689,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,696,694,690,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,697,Kedelai Food,1215,413,49,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,698,Ketersediaan Kalori Kedelai,1348,499,53,26,3,3,0,5,-1,0,0,0,255-128-64,255-128-64,|||0-0-0,0,0,0,0,0,0
+10,699,BDD Kedelai,1401,596,33,33,2,3,0,1,-1,0,0,0,255-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,700,377,698,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,701,699,698,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,702,Jumlah Penduduk,1349,411,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,703,Produksi Ubi Kayu,-1160,1765,49,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,704,703,75,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,705,77,703,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,706,703,270,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,707,Ubi Kayu Tercecer,-828,1625,49,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,708,Ubi Kayu Benih,-686,1624,58,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,709,Ubi Kayu Pakan,-544,1628,58,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,710,65,707,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,711,708,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,712,707,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,713,709,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,714,K Tercecer Ubi Kayu,-826,1520,36,36,2,3,0,9,-1,0,0,0,255-128-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,715,K Benih Ubi Kayu,-683,1519,37,37,2,3,0,9,-1,0,0,0,255-128-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,716,K Pakan Ubi Kayu,-546,1523,34,34,2,3,0,9,-1,0,0,0,255-128-255,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,717,714,707,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,718,715,708,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,719,716,709,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,720,Ubi Kayu Industri Makanan,-779,1864,67,31,3,3,0,5,-1,0,0,0,128-128-64,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,721,"Ubi Kayu Industri Non-Makanan",-615,1863,71,29,3,3,0,5,-1,0,0,0,128-128-64,255-255-255,|||0-0-0,0,0,0,0,0,0
+1,722,720,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,723,721,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,724,Stok Ubi Kayu,-613,1559,37,25,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,725,Stok Ubi Kayu,-696,1934,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,726,724,708,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,727,724,709,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,728,725,721,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,729,725,720,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,730,K Industri Makanan Ubi Kayu,-832,1980,39,39,2,3,0,5,-1,0,0,0,255-128-255,255-255-255,|||0-0-0,0,0,0,0,0,0
+10,731,"K Industri Non-Makanan Ubi Kayu",-555,1999,51,51,2,3,0,5,-1,0,0,0,255-128-255,255-255-255,|||0-0-0,0,0,0,0,0,0
+1,732,730,720,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,733,731,721,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,734,Food Ubi Kayu,-474,1753,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,735,734,70,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,736,Ketersediaan Kalori Ubi Kayu,-323,1842,58,26,3,3,0,5,-1,0,0,0,255-128-255,255-128-255,|||0-0-0,0,0,0,0,0,0
+1,737,285,736,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,738,BDD Ubi Kayu,-255,1932,34,34,2,3,0,1,-1,0,0,0,255-128-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,739,738,736,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,740,Jumlah Penduduk,-333,1753,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,741,Ketersediaan Kalori Ubi Kayu,-1499,-1,62,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,742,741,524,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,743,Ketersediaan Kalori Kacang Hijau,-757,-71,76,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,744,743,588,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,745,"Kontribusi Energi Padi-padian",-202,10,65,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,746,"AKE Padi-padian",-193,98,62,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,747,"Skor PPH Riil Padi-padian",-190,197,48,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,748,"Bobot Padi-padian",-23,199,47,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,749,745,746,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,750,746,747,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,751,748,747,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,752,"Skor PPH Padi-padian",-187,359,90,90,2,3,0,31,-1,0,0,0,255-0-0,255-0-0,|16|B|255-255-255,0,0,0,0,0,0
+1,753,747,752,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,754,Ketersediaan Kalori Jagung,-44,10,55,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,755,Total Kalori Ideal Harian,-53,104,51,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,756,754,745,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,757,755,746,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,758,"Skor PPH Max Padi-padian",-366,361,52,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,759,758,752,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,760,236,274,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,761,236,47,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,762,Padi Tercecer,-3013,375,52,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,763,Padi Benih,-2875,370,46,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,764,Padi Pakan,-2739,376,46,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,765,Beras,-2674,504,46,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,766,Padi Industri Non Makanan,-2871,598,65,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,767,K Tercecer Padi,-3017,284,35,35,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,768,K Benih Padi,-2881,282,32,32,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,769,K Pakan Padi,-2740,277,31,31,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,770,"K Industri Non-Makanan Padi",-2873,711,50,50,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,771,42,762,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,772,762,58,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,773,763,58,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,774,764,58,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,775,766,58,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,776,765,58,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,777,767,762,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,778,768,763,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,779,769,764,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,780,764,765,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,781,766,765,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,782,Padi Benih,-2620,583,32,17,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,783,Padi Tercecer,-2654,435,35,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,784,770,766,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,785,783,765,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,786,782,765,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,787,Stok Beras,-2383,480,46,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,788,48,-2587,470,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,789,791,788,100,0,0,22,0,192,0,-1--1--1,,1|(-2551,470)|
+1,790,791,787,4,0,0,22,0,192,0,-1--1--1,,1|(-2471,470)|
+11,791,0,-2519,470,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,792,Penyediaan Beras,-2519,504,66,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,793,48,-2173,465,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,794,796,787,100,0,0,22,0,192,0,-1--1--1,,1|(-2303,465)|
+1,795,796,793,4,0,0,22,0,192,0,-1--1--1,,1|(-2220,465)|
+11,796,0,-2263,465,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,797,Penggunaan Beras,-2263,499,48,26,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,798,765,792,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,799,Beras Tercecer,-2391,387,52,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,800,Beras Benih,-2253,382,47,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,801,Beras Pakan,-2117,382,46,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,802,K Tercecer Beras,-2395,296,35,35,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,803,K Benih Beras,-2259,294,32,32,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,804,K Pakan Beras,-2118,289,31,31,2,3,0,1,-1,0,0,0,255-255-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,805,802,799,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,806,803,800,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,807,804,801,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,808,787,799,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,809,799,797,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,810,800,796,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,811,801,797,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,812,Beras Industri Makanan,-2342,575,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,813,"Beras Industri Non-Makanan",-2192,571,54,26,3,3,0,1,-1,0,0,0,128-128-64,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,814,K Industri Makanan Beras,-2360,689,39,39,2,3,0,9,-1,0,0,0,255-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+10,815,"K Industri Non-Makanan Beras",-2168,698,43,43,2,3,0,9,-1,0,0,0,255-255-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,816,812,797,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,817,813,797,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,818,814,812,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,819,815,813,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,820,Beras Food,-2081,495,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,821,Ketersediaan Kalori Beras,-1924,576,51,26,3,3,0,5,-1,0,0,0,255-255-0,255-255-0,|||0-0-0,0,0,0,0,0,0
+10,822,Stok Beras,-2181,317,38,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,823,822,800,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,824,822,801,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,825,Kalori Beras,-1981,659,47,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,826,BDD Beras,-1878,656,46,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,827,825,821,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,828,826,821,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,829,Jumlah Penduduk,-1931,494,44,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,830,Stok Beras,-2271,645,49,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,831,830,813,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,832,830,812,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,833,Ketersediaan Kalori Beras,-363,7,55,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,834,833,745,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,835,Ketersediaan Kalori Kedelai,-910,13,57,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,836,835,588,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,837,Stok Padi,-2810,299,37,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,838,837,763,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,839,837,764,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,840,Stok Padi,-2730,600,45,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,841,840,766,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,842,840,765,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,843,Time,-1946,95,29,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+12,844,0,-299,-551,135,120,8,7,0,8,-1,0,0,0,0-0-0,0-0-0,|18||0-0-0,0,0,256,0,0,0
+Jagung -> pink|<<NnN>>|Kedelai -> Orange|<<NnN>>|Kacang tanah -> Biru tosca|<<NnN>>|Ubi Kayu -> Ungu|<<NnN>>|Kacang hijau -> Merah|<<NnN>>|Padi -> Kuning|<<NnN>>|Ubi Jalar -> Hijau
+1,845,76,703,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,846,Konversi Ton Kuintal,599,-386,31,31,2,3,0,9,-1,0,0,0,192-192-192,0-0-0,|8||0-0-0,0,0,0,0,0,0
+1,847,846,268,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,848,846,110,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,849,Konversi Ton Kilogram,1141,-363,31,31,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|8||0-0-0,0,0,0,0,0,0
+10,850,Data Historis Konsumsi Perkapita Jagung,1416,-565,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,851,Time,1415,-650,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,852,851,850,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,853,Konsumsi Perkapita Jagung,1222,-560,63,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,854,850,853,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,855,Proyeksi Konsumsi Perkapita Jagung,1227,-671,47,47,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,856,855,853,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,857,853,660,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,858,374,660,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,859,Tahun Awal,1307,-736,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,860,Tahun Akhir,1167,-745,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,861,860,855,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,862,859,855,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,863,851,853,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,864,849,660,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,865,660,664,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,866,Data Historis Konsumsi Perkapita Kedelai,1514,284,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,867,Time,1513,199,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,868,867,866,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,869,Konsumsi Perkapita Kedelai,1320,289,55,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,870,866,869,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,871,Proyeksi Konsumsi Perkapita Kedelai,1325,178,47,47,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,872,871,869,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,873,Tahun Awal,1405,113,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,874,Tahun Akhir,1265,104,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,875,874,871,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,876,873,871,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,877,867,869,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,878,697,94,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,879,702,697,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,880,869,697,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,881,697,698,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,882,Konversi Ton Kilogram,1214,496,39,27,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,883,882,697,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,884,Data Historis Konsumsi Perkapita Kacang Tanah,1638,1102,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,885,Time,1637,1017,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,886,885,884,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,887,Konsumsi Perkapita Kacang Tanah,1444,1107,76,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,888,884,887,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,889,Proyeksi Konsumsi Perkapita Kacang Tanah,1441,1000,51,51,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,890,889,887,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,891,Tahun Awal,1515,927,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,892,Tahun Akhir,1362,922,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,893,892,889,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,894,891,889,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,895,885,887,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,896,887,543,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,897,543,551,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,898,569,543,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,899,Konversi Ton Kilogram,1370,1292,45,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,900,899,543,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,901,Data Historis Konsumsi Perkapita Ubi Kayu,-180,1623,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,902,Time,-181,1538,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,903,902,901,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,904,Konsumsi Perkapita Ubi Kayu,-374,1628,76,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,905,901,904,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,906,Proyeksi Konsumsi Perkapita Ubi Kayu,-374,1522,51,51,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,907,906,904,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,908,Tahun Awal,-298,1448,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,909,Tahun Akhir,-456,1443,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,910,909,906,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,911,908,906,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,912,902,904,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,913,740,734,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,914,Konversi Ton Kilogram,-473,1830,54,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,915,914,734,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,916,734,736,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,917,904,734,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,918,Data Historis Konsumsi Perkapita Kacang Hijau,-1890,1157,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,919,Time,-1894,1064,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,920,919,918,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,921,Konsumsi Perkapita Kacang Hijau,-2087,1154,76,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,922,918,921,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,923,Proyeksi Konsumsi Perkapita Kacang Hijau,-2087,1048,51,51,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,924,923,921,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,925,Tahun Awal,-2035,963,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,926,Tahun Akhir,-2136,962,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,927,926,923,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,928,925,923,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,929,919,921,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,930,629,296,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,931,634,629,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,932,629,630,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,933,Konversi Ton Kilogram,-2222,1342,36,27,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,934,933,629,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,935,921,629,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,936,Data Historis Konsumsi Perkapita Beras,-1771,385,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,937,Time,-1775,292,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,938,937,936,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,939,Konsumsi Perkapita Beras,-1968,382,76,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,940,936,939,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,941,Proyeksi Konsumsi Perkapita Beras,-1968,276,51,51,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,942,941,939,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,943,Tahun Awal,-1916,191,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,944,Tahun Akhir,-2017,190,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,945,944,941,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,946,943,941,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,947,937,939,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,948,820,797,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,949,829,820,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,950,820,821,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,951,939,820,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,952,Konversi Ton Kilogram,-2082,579,35,27,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,953,952,820,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,954,Data Historis Konsumsi Perkapita Ubi Jalar,-1654,-530,75,35,3,3,0,1,-1,0,0,0,0-0-255,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,955,Time,-1658,-623,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,956,955,954,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+10,957,Konsumsi Perkapita Ubi Jalar,-1851,-533,76,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,958,954,957,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,959,Proyeksi Konsumsi Perkapita Ubi Jalar,-1851,-639,51,51,2,3,0,8,-1,0,0,0,0-0-0,0-0-0,|10||0-0-0,0,0,0,0,0,0
+1,960,959,957,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,961,Tahun Awal,-1799,-724,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,962,Tahun Akhir,-1900,-725,37,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,963,962,959,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,964,961,959,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,965,955,957,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,966,957,473,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,967,473,283,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,968,Konversi Ton Kilogram,-2021,-331,35,28,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+10,969,Jumlah Penduduk,-1874,-414,44,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,970,968,473,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,971,969,473,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,972,110,646,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,973,Penyediaan Jagung,951,-645,49,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,974,973,647,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,975,973,648,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,976,Penyediaan Jagung,956,-251,49,26,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,977,976,659,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,978,976,658,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,979,Time,1228,-766,31,16,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,980,979,855,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,981,Penyediaan Kedelai,1094,226,49,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,982,99,677,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,983,Penyediaan Kedelai,1027,574,49,26,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|10||128-128-128,0,0,0,0,0,0
+1,984,983,690,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,985,983,689,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,986,981,678,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,987,981,679,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+///---\\\
+:L<%^E!@
+1:current.vdfx
+4:Time
+5:Penyediaan Kedelai
+9:current
+19:78,0
+24:2018
+25:2030
+26:2030
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:0
+72:0
+73:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:1
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Vensim Sans|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1

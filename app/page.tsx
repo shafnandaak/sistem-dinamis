@@ -148,7 +148,7 @@ export default function Home() {
           {/* Alur eksplorasi 6 tahap (lib/explorationSteps.ts): tahap 1-2 di Dashboard, tahap 3-6 di halaman masing-masing. */}
           <div className="fade-up space-y-3 pt-1" style={{ animationDelay: "320ms" }}>
             <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Alur eksplorasi</p>
-            <ol className="grid gap-2 text-left sm:grid-cols-2 lg:grid-cols-3">
+            <ol className="grid grid-cols-1 gap-2 text-left sm:grid-cols-2 lg:grid-cols-3">
               {EXPLORATION_STEPS.map((step) => {
                 const inner = (
                   <>
@@ -254,7 +254,7 @@ export default function Home() {
           </div>
         </Reveal>
 
-        <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
           <Reveal>
             <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
               {concepts.map((concept) => {

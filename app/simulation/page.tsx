@@ -290,7 +290,9 @@ export default function SimulationPage() {
 
       <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
         {/* ===== 1. Input: simulasi bebas ===== */}
-        <aside className="space-y-5 self-start rounded-2xl border border-lime-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+        {/* Panel kiri: isi bisa digulir, tombol simpan di kaki panel selalu terlihat (layar besar: panel sticky; ponsel: kaki sticky). */}
+        <aside className="self-start rounded-2xl border border-lime-200 bg-white shadow-sm lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100vh-7rem)] lg:flex-col">
+          <div className="space-y-5 p-5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
           <div className="flex items-start gap-2.5">
             <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-lime-700 text-xs font-bold text-white">1</span>
             <div>
@@ -347,6 +349,20 @@ export default function SimulationPage() {
             {POLICY_ORDER.map((key) => (
               <PolicySlider key={key} policyKey={key} value={values[key]} onChange={(v) => setValues((prev) => ({ ...prev, [key]: v }))} />
             ))}
+          </div>
+          </div>
+
+          <div className="sticky bottom-0 z-10 rounded-b-2xl border-t border-lime-100 bg-white/95 p-4 backdrop-blur">
+            <button
+              type="button"
+              onClick={saveSnapshot}
+              disabled={!ready || snapshots.length >= MAX_SNAPSHOTS}
+              className="w-full rounded-xl border-2 border-dashed border-lime-500 bg-lime-50 px-3 py-2 text-sm font-semibold text-lime-800 transition hover:bg-lime-100 disabled:cursor-not-allowed disabled:opacity-50"
+              title="Simpan hasil slider saat ini sebagai pembanding, lalu ubah slider untuk mencoba kebijakan lain"
+            >
+              + Simpan simulasi saat ini {snapshots.length < MAX_SNAPSHOTS ? `sebagai P${SNAPSHOT_COLORS.findIndex((c) => !snapshots.some((snap) => snap.color === c)) + 1}` : `(maks. ${MAX_SNAPSHOTS})`}
+            </button>
+            <p className="mt-1.5 text-center text-[11px] text-lime-900/55">Tersimpan sebagai pembanding di kanan; lalu ubah slider lagi.</p>
           </div>
         </aside>
 
@@ -419,15 +435,6 @@ export default function SimulationPage() {
                       </button>
                     </span>
                   ))}
-                  <button
-                    type="button"
-                    onClick={saveSnapshot}
-                    disabled={snapshots.length >= MAX_SNAPSHOTS}
-                    className="inline-flex items-center gap-1 rounded-full border border-dashed border-lime-500 px-3 py-1 text-xs font-semibold text-lime-800 transition hover:bg-lime-50 disabled:cursor-not-allowed disabled:opacity-50"
-                    title="Simpan hasil slider saat ini sebagai pembanding, lalu ubah slider untuk mencoba kebijakan lain"
-                  >
-                    + Simpan simulasi saat ini {snapshots.length < MAX_SNAPSHOTS ? `sebagai P${SNAPSHOT_COLORS.findIndex((c) => !snapshots.some((snap) => snap.color === c)) + 1}` : `(maks. ${MAX_SNAPSHOTS})`}
-                  </button>
                 </div>
               </section>
 
