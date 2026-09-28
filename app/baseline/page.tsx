@@ -22,6 +22,7 @@ import Toast from "@/components/Toast";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Chart from "@/components/Chart";
 import Reveal from "@/components/Reveal";
+import NextStep from "@/components/NextStep";
 
 type DataRow = Record<string, number | string | null | undefined>;
 
@@ -310,10 +311,10 @@ export default function BaselinePage() {
         <section className="grid gap-4 xl:grid-cols-[1.7fr_1fr]">
           <div className="space-y-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm">
             <div>
-              <p className="text-xs uppercase tracking-wide text-lime-700">Baseline Model · Jawa Barat</p>
+              <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model (tanpa Kebijakan) · Jawa Barat</p>
               <h1 className="text-2xl font-bold text-lime-900 md:text-3xl">Model Sistem Dinamis Kebijakan Pertanian Tanaman Pangan</h1>
               <p className="mt-2 text-sm text-lime-900/75">
-                Halaman ini terdiri dari dua tahap. <strong>Simulasi</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji
+                Halaman ini terdiri dari dua bagian. <strong>Simulasi</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji
                 seberapa dekat model dengan data aktual melalui MAPE. Setelah itu, <strong>Forecasting</strong> ({FORECAST_START_YEAR}–
                 {FORECAST_END_YEAR}) memproyeksikan kondisi ke depan tanpa intervensi kebijakan.
               </p>
@@ -406,14 +407,14 @@ export default function BaselinePage() {
 
       {notification && <Toast type={notification.type} message={notification.message} onClose={() => setNotification(null)} />}
 
-      {/* ===== Tahap 1: Simulasi ===== */}
+      {/* ===== Bagian 1: Simulasi ===== */}
       {stage >= 1 && baselineRows.length > 0 && (
         <div ref={baselineRef} className="space-y-6 scroll-mt-24">
           <Reveal>
             <div className="flex items-center gap-3 rounded-2xl border border-lime-200 bg-lime-100 p-5">
               <StepBadge n={1} active done={stage > 1} />
               <div>
-                <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 1</p>
+                <p className="text-xs uppercase tracking-wide text-lime-700">Bagian 1</p>
                 <h2 className="text-xl font-bold text-lime-900 md:text-2xl">
                   Simulasi {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h2>
@@ -434,7 +435,7 @@ export default function BaselinePage() {
             <div className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <h3 className="text-lg font-semibold text-lime-900">
-                  Grafik Baseline {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
+                  Grafik Simulasi {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h3>
                 <select
                   className="rounded-lg border border-lime-300 bg-white px-3 py-1.5 text-sm"
@@ -517,14 +518,14 @@ export default function BaselinePage() {
         </div>
       )}
 
-      {/* ===== Tahap 2: Forecasting ===== */}
+      {/* ===== Bagian 2: Forecasting ===== */}
       {stage >= 2 && forecastRows.length > 0 && (
         <div ref={forecastRef} className="space-y-6 scroll-mt-24">
           <Reveal>
             <div className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-100 p-5">
               <StepBadge n={2} active done={false} />
               <div>
-                <p className="text-xs uppercase tracking-wide text-amber-800">Tahap 2</p>
+                <p className="text-xs uppercase tracking-wide text-amber-800">Bagian 2</p>
                 <h2 className="text-xl font-bold text-amber-950 md:text-2xl">
                   Forecasting {FORECAST_START_YEAR}–{FORECAST_END_YEAR}
                 </h2>
@@ -574,7 +575,7 @@ export default function BaselinePage() {
                   yAxisLabel={forecastMetricUnit}
                   points={toPoints(results, forecastMetric)}
                   series={[
-                    { name: `Baseline ${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, points: toPoints(baselineRows, forecastMetric), lineColor: "#3f7d20" },
+                    { name: `Simulasi ${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, points: toPoints(baselineRows, forecastMetric), lineColor: "#3f7d20" },
                     {
                       name: `Forecast ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}`,
                       // sertakan titik terakhir baseline agar garis tersambung
@@ -600,20 +601,7 @@ export default function BaselinePage() {
           </Reveal>
 
           <Reveal>
-            <div className="flex flex-col gap-3 rounded-2xl border border-lime-200 bg-lime-50 p-5 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="font-semibold text-lime-900">Langkah berikutnya</p>
-                <p className="text-sm text-lime-900/75">Bandingkan skenario kebijakan atau atur parameter kebijakan sendiri.</p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Link href="/scenario" className="rounded-xl bg-lime-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-lime-800">
-                  Bandingkan Skenario
-                </Link>
-                <Link href="/simulation" className="rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-700">
-                  Simulasi Kebijakan
-                </Link>
-              </div>
-            </div>
+            <NextStep current={3} />
           </Reveal>
         </div>
       )}
