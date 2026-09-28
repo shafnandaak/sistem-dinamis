@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Reveal from "@/components/Reveal";
 import PolicyExplorer from "@/components/PolicyExplorer";
+import SatelliteNovelty from "@/components/SatelliteNovelty";
 import CausalLoopDiagram, { CausalLoopLegend } from "@/components/CausalLoopDiagram";
 import { CLD_SOURCE } from "@/lib/cldData";
 import StockFlowLegend from "@/components/StockFlowLegend";
@@ -126,7 +127,8 @@ export default function Home() {
         <div className="blob blob-b" aria-hidden="true" />
         <div className="blob blob-c" aria-hidden="true" />
 
-        <div className="relative max-w-3xl space-y-5">
+        <div className="relative grid items-center gap-8 xl:grid-cols-[1.2fr_1fr] xl:gap-10">
+        <div className="max-w-3xl space-y-5">
           <p className="fade-up inline-flex items-center gap-2 rounded-full border border-lime-300 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-lime-800 backdrop-blur">
             <span className="h-2 w-2 animate-pulse rounded-full bg-lime-600" />
             Dashboard Penelitian · Jawa Barat
@@ -171,6 +173,8 @@ export default function Home() {
               Lihat Peta Jawa Barat
             </button>
           </div>
+        </div>
+        <SatelliteNovelty />
         </div>
 
         <button
@@ -446,7 +450,11 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <fieldset
+            disabled={!RASTER_IMAGE}
+            title={RASTER_IMAGE ? undefined : "Data raster belum tersedia (pengembangan lanjutan)"}
+            className="flex flex-wrap items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
             <label className="text-sm text-lime-900 flex items-center gap-2">
               Tahun
               <select
@@ -477,8 +485,21 @@ export default function Home() {
                 onChange={(e) => setRasterOpacity(Number(e.target.value))}
               />
             </label>
-          </div>
+          </fieldset>
         </div>
+
+        {!RASTER_IMAGE && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <span className="mt-0.5 shrink-0 rounded-full bg-amber-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-900">
+              Pengembangan lanjutan
+            </span>
+            <p>
+              Data raster (citra satelit tutupan lahan per tahun) <span className="font-semibold">belum tersedia</span> di aplikasi ini. Saat ini
+              peta hanya menampilkan basemap Jawa Barat; pengaturan tahun, tampil/sembunyi, dan opacity raster akan aktif setelah data raster
+              ditambahkan.
+            </p>
+          </div>
+        )}
 
         <div className="relative overflow-hidden rounded-2xl border border-lime-200" style={{ height: 420 }}>
           <iframe
@@ -517,7 +538,7 @@ export default function Home() {
           </button>
 
           <div className="absolute left-3 bottom-3 rounded-md bg-white/90 px-3 py-2 text-xs text-lime-900 border border-lime-200">
-            Layer raster: {!RASTER_IMAGE ? "belum tersedia" : showRaster ? `aktif (${selectedYear})` : "nonaktif"}
+            Layer raster: {!RASTER_IMAGE ? "belum tersedia (pengembangan lanjutan)" : showRaster ? `aktif (${selectedYear})` : "nonaktif"}
           </div>
         </div>
 
