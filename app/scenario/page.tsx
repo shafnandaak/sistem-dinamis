@@ -160,22 +160,10 @@ export default function ScenarioPage() {
   return (
     <div className="space-y-6">
       <Reveal>
-        <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
+        <header className="space-y-1 pt-2">
           <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 5 · Skenario kebijakan</p>
-          <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">Tiga Skenario Terbaik</h1>
-          <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
-            Hasil analisis kombinasi empat kebijakan pada tingkat tinggi. Setiap skenario dijalankan dengan model yang sama, mulai
-            berlaku tahun {FORECAST_START}, lalu dibandingkan dengan baseline (tanpa kebijakan) pada tahun {FINAL_YEAR}.
-          </p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {POLICY_ORDER.map((key) => (
-              <div key={key} className="rounded-xl border border-lime-100 bg-lime-50 px-3 py-2">
-                <p className="text-xs font-semibold text-lime-800">{POLICIES[key].label}</p>
-                <p className="text-sm text-lime-900">{POLICIES[key].detail(POLICIES[key].high)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+          <h1 className="text-center text-3xl font-bold text-lime-900 md:text-4xl">Tiga Skenario Terbaik</h1>
+        </header>
       </Reveal>
 
       {error && <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">Gagal menjalankan model: {error}</p>}
