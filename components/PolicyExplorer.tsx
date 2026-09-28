@@ -181,7 +181,7 @@ export default function PolicyExplorer() {
             })}
           </div>
           <p className="text-[11px] leading-relaxed text-lime-900/55">
-            Dihitung langsung dari model saat halaman dibuka. NCPR dan Ib: makin kecil makin baik. Kombinasi kebijakan ada di halaman Scenario.
+            Dihitung langsung dari model saat halaman dibuka. NCPR dan Ib: makin kecil makin baik. Kombinasi kebijakan ada di halaman Skenario.
           </p>
           <div className="flex flex-wrap gap-2 pt-1">
             <Link href="/simulation" className="rounded-lg bg-lime-700 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-lime-800">

@@ -1,4 +1,4 @@
-// Kartu "Kebaruan penelitian" di hero Dashboard: data citra satelit untuk mengatasi jeda (lag) publikasi
+// Kartu "Kebaruan penelitian" di Langkah 3 Dashboard: data citra satelit untuk mengatasi jeda (lag) publikasi
 // statistik resmi. Ikon berupa path SVG 24x24 bergaya garis.
 
 const SOURCES = [
@@ -32,9 +32,9 @@ function Icon({ d }: { d: string }) {
   );
 }
 
-export default function SatelliteNovelty() {
+export default function SatelliteNovelty({ onExplore }: { onExplore?: () => void }) {
   return (
-    <aside className="fade-up rounded-3xl border border-lime-200 bg-white/80 p-5 shadow-sm backdrop-blur md:p-6" style={{ animationDelay: "200ms" }}>
+    <aside className="rounded-2xl border border-lime-200 bg-lime-50/40 p-5 md:p-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Kebaruan penelitian</p>
       <h2 className="mt-1 text-lg font-bold leading-snug text-lime-950 md:text-xl">Mengatasi jeda data statistik resmi dengan citra satelit</h2>
       <p className="mt-2 text-sm leading-relaxed text-lime-900/75">
@@ -64,7 +64,7 @@ export default function SatelliteNovelty() {
       </div>
 
       <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-lime-700">Data citra satelit yang digunakan</p>
-      <ul className="grid gap-2 sm:grid-cols-2">
+      <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {SOURCES.map((s) => (
           <li key={s.name} className="flex gap-2.5 rounded-xl border border-lime-100 bg-white p-2.5">
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-lime-100 text-lime-700">
@@ -77,6 +77,15 @@ export default function SatelliteNovelty() {
           </li>
         ))}
       </ul>
+      {onExplore && (
+        <button
+          type="button"
+          onClick={onExplore}
+          className="mt-3 w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
+        >
+          Lihat data citra satelit ↓
+        </button>
+      )}
     </aside>
   );
 }

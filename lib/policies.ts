@@ -1,4 +1,4 @@
-// Definisi kebijakan, skenario terbaik, dan indikator yang dipakai bersama oleh halaman Scenario dan Simulation.
+// Definisi kebijakan, skenario terbaik, dan indikator yang dipakai bersama oleh halaman Skenario dan Simulasi.
 
 export type DataRow = Record<string, number | string | null | undefined>;
 
