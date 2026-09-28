@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "@/components/ThemeToggle";
+import ViewModeToggle from "@/components/ViewModeToggle";
 import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 
 const menuItems = [
@@ -68,9 +69,7 @@ export default function Navbar() {
 
           {/* Right side: status + profile + burger */}
           <div className="flex items-center gap-3">
-            <span className="hidden sm:block text-sm text-lime-800/60 dark:text-lime-300/60">
-              Status: <span className="text-lime-700 dark:text-lime-400 font-semibold">Ready</span>
-            </span>
+            <ViewModeToggle className="hidden sm:inline-flex" />
 
             <ThemeToggle />
 
@@ -129,6 +128,10 @@ export default function Navbar() {
         }`}
       >
         <nav className="px-4 pt-2 pb-4 space-y-1 border-t border-lime-100 dark:border-lime-900 bg-white dark:bg-gray-950">
+          <div className="flex items-center justify-between px-4 py-2 sm:hidden">
+            <span className="text-xs font-semibold text-lime-800 dark:text-lime-300">Tampilan</span>
+            <ViewModeToggle />
+          </div>
           {visibleItems.map((item) => {
             const isActive = pathname === item.href;
             return (
