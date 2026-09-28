@@ -7,6 +7,7 @@ import { buildModelFunctions } from "@/lib/modelFunctions";
 import Chart from "@/components/Chart";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Reveal from "@/components/Reveal";
+import NextStep from "@/components/NextStep";
 import AnalysisDetail from "@/components/AnalysisDetail";
 import { useViewMode } from "@/lib/viewMode";
 
@@ -160,7 +161,7 @@ export default function ScenarioPage() {
     <div className="space-y-6">
       <Reveal>
         <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
-          <p className="text-xs uppercase tracking-wide text-lime-700">Skenario kebijakan</p>
+          <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 5 · Skenario kebijakan</p>
           <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">Tiga Skenario Terbaik</h1>
           <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
             Hasil analisis kombinasi empat kebijakan pada tingkat tinggi. Setiap skenario dijalankan dengan model yang sama, mulai
@@ -393,6 +394,10 @@ export default function ScenarioPage() {
 
           <Reveal>
             <ModelPrintNotice onPrint={() => window.print()} />
+          </Reveal>
+
+          <Reveal>
+            <NextStep current={5} />
           </Reveal>
         </>
       )}

@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import NextStep from "@/components/NextStep";
+import { EXPLORATION_STEPS } from "@/lib/explorationSteps";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Reveal from "@/components/Reveal";
@@ -136,59 +138,46 @@ export default function Home() {
           </p>
 
           <div className="fade-up flex flex-wrap justify-center gap-2" style={{ animationDelay: "240ms" }}>
-            {["7 komoditas pangan", "Baseline 2018–2025", "Forecast hingga 2035"].map((chip) => (
+            {["7 komoditas pangan", "Simulasi (2018–2025)", "Forecast hingga 2035"].map((chip) => (
               <span key={chip} className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-lime-800 backdrop-blur">
                 {chip}
               </span>
             ))}
           </div>
 
-          {/* Alur eksplorasi: konsep -> struktur model -> baseline (tanpa kebijakan) -> kebijakan. */}
+          {/* Alur eksplorasi 6 tahap (lib/explorationSteps.ts): tahap 1-2 di Dashboard, tahap 3-6 di halaman masing-masing. */}
           <div className="fade-up space-y-3 pt-1" style={{ animationDelay: "320ms" }}>
             <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Alur eksplorasi</p>
-            <ol className="grid gap-2 text-left sm:grid-cols-2">
-              {[
-                { n: 1, label: "Konsep sistem dinamis", hint: "Stock, flow, dan feedback loop", onClick: scrollToLearn },
-                { n: 2, label: "Struktur model kebijakan", hint: "CLD, SFD, dan rumus model", onClick: scrollToModel },
-              ].map((step) => (
-                <li key={step.n}>
-                  <button
-                    type="button"
-                    onClick={step.onClick}
-                    className="group flex w-full items-center gap-3 rounded-xl border border-lime-200 bg-white/80 px-3 py-2.5 text-left backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
-                  >
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-100 text-xs font-bold text-lime-800">{step.n}</span>
-                    <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-lime-950">{step.label}</span>
+            <ol className="grid gap-2 text-left sm:grid-cols-2 lg:grid-cols-3">
+              {EXPLORATION_STEPS.map((step) => {
+                const inner = (
+                  <>
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-100 text-xs font-bold text-lime-800 transition group-hover:bg-lime-700 group-hover:text-white">
+                      {step.n}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold leading-snug text-lime-950">{step.label}</span>
                       <span className="block truncate text-xs text-lime-900/60">{step.hint}</span>
                     </span>
-                  </button>
-                </li>
-              ))}
-              <li>
-                <Link
-                  href="/baseline"
-                  className="group flex w-full items-center gap-3 rounded-xl border border-lime-300 bg-lime-50/90 px-3 py-2.5 text-left backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-50 hover:shadow-md"
-                >
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-600 text-xs font-bold text-white">3</span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-lime-950">Baseline Model (tanpa Kebijakan) →</span>
-                    <span className="block truncate text-xs text-lime-900/60">Validasi dengan data resmi dan proyeksi hingga 2035</span>
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/kebijakan"
-                  className="group flex w-full items-center gap-3 rounded-xl bg-lime-700 px-3 py-2.5 text-left text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-800 hover:shadow-lg"
-                >
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/20 text-xs font-bold">4</span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold">Pelajari Kebijakan Pertanian Tanaman Pangan →</span>
-                    <span className="block truncate text-xs text-white/75">Empat tuas kebijakan, lalu skenario dan simulasi</span>
-                  </span>
-                </Link>
-              </li>
+                  </>
+                );
+                const cls =
+                  "group flex h-full w-full items-center gap-3 rounded-xl border border-lime-200 bg-white/80 px-3 py-2.5 text-left backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-lime-400 hover:bg-white hover:shadow-md";
+                const scroll = step.n === 1 ? scrollToLearn : step.n === 2 ? scrollToModel : null;
+                return (
+                  <li key={step.n}>
+                    {scroll ? (
+                      <button type="button" onClick={scroll} className={cls}>
+                        {inner}
+                      </button>
+                    ) : (
+                      <Link href={step.href} className={cls}>
+                        {inner}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ol>
           </div>
         </div>
@@ -212,7 +201,7 @@ export default function Home() {
         <Reveal>
           <div className="grid gap-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Langkah 1 · Mengenal pendekatan</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Tahap 1 · Mengenal pendekatan</p>
               <h2 className="text-2xl font-bold text-lime-950 md:text-3xl">Apa itu Sistem Dinamis?</h2>
               <p className="text-sm leading-relaxed text-gray-700 md:text-base">
                 Sistem dinamis adalah pendekatan pemodelan untuk memahami bagaimana hubungan sebab-akibat,{" "}
@@ -336,7 +325,7 @@ export default function Home() {
                     onClick={scrollToModel}
                     className="rounded-lg bg-lime-700 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-lime-800"
                   >
-                    Lanjut ke 2. Struktur Model Kebijakan →
+                    Lanjut ke Tahap 2 →
                   </button>
                 ) : (
                   <button
@@ -351,12 +340,13 @@ export default function Home() {
             </article>
           </Reveal>
         </div>
+        <NextStep current={1} onClick={scrollToModel} />
       </section>
 
       <Reveal id="model-kebijakan">
       <section className="scroll-mt-24 space-y-4 rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Langkah 2 · Struktur model</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Tahap 2 · Struktur model</p>
           <h2 className="text-xl font-bold text-lime-900 md:text-2xl">Model Kebijakan Tanaman Pangan</h2>
           <p className="mt-1 max-w-3xl text-sm text-lime-900/75">
             Causal Loop Diagram menunjukkan hubungan sebab-akibat antarvariabel, sedangkan Stock Flow Diagram menunjukkan struktur stok,
@@ -396,6 +386,9 @@ export default function Home() {
             </span>
           </button>
         </figure>
+      </div>
+      <div className="mt-5">
+        <NextStep current={2} />
       </div>
       </section>
       </Reveal>

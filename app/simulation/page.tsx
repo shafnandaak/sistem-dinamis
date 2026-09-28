@@ -284,14 +284,7 @@ export default function SimulationPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
-        <p className="text-xs uppercase tracking-wide text-lime-700">Ruang simulasi</p>
-        <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">Simulasi Kebijakan Interaktif</h1>
-        <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
-          Geser slider kebijakan dan lihat dampaknya langsung. Model dijalankan ulang setiap kali nilai berubah; kebijakan mulai
-          berlaku tahun {FORECAST_START} dan hasilnya dibandingkan dengan baseline (tanpa kebijakan).
-        </p>
-      </section>
+      <h1 className="pt-2 text-center text-3xl font-bold text-lime-900 md:text-4xl">Simulasi Kebijakan Interaktif</h1>
 
       {error && <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">Gagal memuat model: {error}</p>}
 
