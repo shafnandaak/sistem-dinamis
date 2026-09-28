@@ -311,7 +311,7 @@ export default function BaselinePage() {
         <section className="grid gap-4 xl:grid-cols-[1.7fr_1fr]">
           <div className="space-y-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm">
             <div>
-              <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model (tanpa Kebijakan) · Jawa Barat</p>
+              <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model · Jawa Barat</p>
               <h1 className="text-2xl font-bold text-lime-900 md:text-3xl">Model Sistem Dinamis Kebijakan Pertanian Tanaman Pangan</h1>
               <p className="mt-2 text-sm text-lime-900/75">
                 Halaman ini terdiri dari dua bagian. <strong>Simulasi</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji

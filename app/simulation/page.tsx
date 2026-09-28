@@ -362,7 +362,6 @@ export default function SimulationPage() {
             >
               + Simpan simulasi saat ini {snapshots.length < MAX_SNAPSHOTS ? `sebagai P${SNAPSHOT_COLORS.findIndex((c) => !snapshots.some((snap) => snap.color === c)) + 1}` : `(maks. ${MAX_SNAPSHOTS})`}
             </button>
-            <p className="mt-1.5 text-center text-[11px] text-lime-900/55">Tersimpan sebagai pembanding di kanan; lalu ubah slider lagi.</p>
           </div>
         </aside>
 
