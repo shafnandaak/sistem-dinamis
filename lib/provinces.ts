@@ -1,0 +1,52 @@
+export const PROVINCES = [
+  "Aceh",
+  "Sumatera Utara",
+  "Sumatera Barat",
+  "Riau",
+  "Kepulauan Riau",
+  "Jambi",
+  "Sumatera Selatan",
+  "Kepulauan Bangka Belitung",
+  "Bengkulu",
+  "Lampung",
+  "DKI Jakarta",
+  "Banten",
+  "Jawa Barat",
+  "Jawa Tengah",
+  "DI Yogyakarta",
+  "Jawa Timur",
+  "Bali",
+  "Nusa Tenggara Barat",
+  "Nusa Tenggara Timur",
+  "Kalimantan Barat",
+  "Kalimantan Tengah",
+  "Kalimantan Selatan",
+  "Kalimantan Timur",
+  "Kalimantan Utara",
+  "Sulawesi Utara",
+  "Sulawesi Tengah",
+  "Sulawesi Selatan",
+  "Sulawesi Tenggara",
+  "Gorontalo",
+  "Sulawesi Barat",
+  "Maluku",
+  "Maluku Utara",
+  "Papua",
+  "Papua Barat",
+  "Papua Tengah",
+  "Papua Pegunungan",
+  "Papua Selatan",
+  "Papua Barat Daya",
+] as const;
+
+export type ProvinceName = (typeof PROVINCES)[number];
+
+export const PROVINCE_INITIAL_FIELDS = [
+  { key: "jumlahPenduduk", label: "Jumlah penduduk awal" },
+  { key: "luasLahanPertanian", label: "Luas lahan pertanian awal (ha)" },
+  { key: "luasSawahIrigasi", label: "Luas sawah irigasi awal (ha)" },
+  { key: "ndviAwal", label: "NDVI awal" },
+  { key: "pixelAwal", label: "Jumlah pixel awal" },
+] as const;
+
+export type ProvinceInitialFieldKey = (typeof PROVINCE_INITIAL_FIELDS)[number]["key"];

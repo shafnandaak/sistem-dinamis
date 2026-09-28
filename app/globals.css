@@ -35,18 +35,109 @@
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(189, 224, 94, 0.15), transparent 32%),
-    radial-gradient(circle at 85% 0%, rgba(251, 226, 125, 0.18), transparent 28%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
 .dark body {
-  background:
-    radial-gradient(circle at 10% 20%, rgba(74, 120, 30, 0.15), transparent 32%),
-    radial-gradient(circle at 85% 0%, rgba(100, 80, 10, 0.15), transparent 28%),
-    var(--background);
+  background: var(--background);
+}
+
+/* ---------- Interaksi & animasi halus ---------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* agar anchor tidak tertutup navbar sticky */
+}
+
+/* Transisi masuk halaman */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: page-enter 0.35s ease-out both;
+}
+
+/* Muncul saat di-scroll (dipakai komponen Reveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Kartu interaktif: sedikit terangkat saat disorot */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -12px rgba(63, 125, 32, 0.35);
+}
+
+/* Umpan balik saat tombol ditekan */
+button:not(:disabled):active,
+a:active {
+  transform: scale(0.98);
+}
+
+/* Hero lembut dengan gumpalan warna yang bergerak pelan */
+.hero-soft {
+  background: #ecf7d4;
+}
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(48px);
+  opacity: 0.55;
+  animation: blob-float 16s ease-in-out infinite;
+  pointer-events: none;
+}
+.blob-a { width: 18rem; height: 18rem; top: -5rem; right: -4rem; background: #bef264; }
+.blob-b { width: 15rem; height: 15rem; bottom: -5rem; left: -3rem; background: #fde68a; animation-delay: -5s; }
+.blob-c { width: 12rem; height: 12rem; top: 35%; right: 25%; background: #d9f99d; opacity: 0.4; animation-delay: -10s; }
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-18px, 14px) scale(1.06); }
+  66% { transform: translate(14px, -10px) scale(0.96); }
+}
+
+/* Teks hero muncul berurutan */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Petunjuk gulir */
+@keyframes scroll-hint {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.6; }
+  50% { transform: translate(-50%, 6px); opacity: 1; }
+}
+.scroll-hint { animation: scroll-hint 2s ease-in-out infinite; }
+
+/* Ilustrasi stock-flow: aliran bergerak, isi stok naik-turun */
+@keyframes flow-dash { to { stroke-dashoffset: -28; } }
+.flow-line { stroke-dasharray: 8 6; animation: flow-dash 1.2s linear infinite; }
+@keyframes stock-fill {
+  0%, 100% { transform: scaleY(0.7); }
+  50% { transform: scaleY(1.15); }
+}
+.stock-fill { transform-box: fill-box; transform-origin: bottom; animation: stock-fill 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .fade-up, .scroll-hint, .flow-line, .stock-fill { animation: none; }
+  html { scroll-behavior: auto; }
+  .page-enter, .reveal, .card-hover { animation: none; transition: none; transform: none; opacity: 1; }
+}
+
+@media print {
+  .reveal { opacity: 1; transform: none; }
 }
