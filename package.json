@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:sfd": "node scripts/build-sfd.mjs \"model/sfd-model-fix-2 model 17.mdl\" lib/sfdData.ts",
+    "build:sfd": "node scripts/build-sfd.mjs \"model/FIX-SFD-19.mdl\" lib/sfdData.ts",
     "build:cld":"node scripts/build-cld.mjs model/CLD_fix-1.mdl lib/cldData.ts",
-    "build:model":"node scripts/build-model.mjs \"model/sfd-model-fix-2 model 17.mdl\" lib/sfd-model-fix-2.js"
+    "build:model":"node scripts/build-model.mjs \"model/FIX-SFD-19.mdl\" lib/sfd-model-fix-2.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",

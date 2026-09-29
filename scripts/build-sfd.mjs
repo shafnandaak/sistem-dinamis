@@ -2,11 +2,11 @@
 // Hanya informasi sketsa yang diambil (posisi, stok, aliran, panah); simulasinya tetap memakai lib/<model>.js.
 //
 // Pemakaian:
-//   node scripts/build-sfd.mjs "model/sfd-model-fix-2 model 17.mdl" lib/sfdData.ts
+//   node scripts/build-sfd.mjs "model/FIX-SFD-19.mdl" lib/sfdData.ts
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 
-const [, , mdlArg = "model/sfd-model-fix-2 model 17.mdl", outArg = "lib/sfdData.ts"] = process.argv;
+const [, , mdlArg = "model/FIX-SFD-19.mdl", outArg = "lib/sfdData.ts"] = process.argv;
 const root = resolve(import.meta.dirname, "..");
 const text = readFileSync(resolve(root, mdlArg), "utf8").replace(/\r/g, "");
 

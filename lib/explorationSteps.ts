@@ -6,6 +6,6 @@ export const EXPLORATION_STEPS: ExplorationStep[] = [
   { n: 2, label: "Struktur Model Kebijakan", hint: "CLD, SFD, dan rumus model", href: "/#model-kebijakan" },
   { n: 3, label: "Baseline Model", hint: "Validasi dengan data resmi dan proyeksi hingga 2035", href: "/baseline" },
   { n: 4, label: "Pelajari Kebijakan Pertanian Tanaman Pangan", hint: "Empat tuas kebijakan dan jalur pengaruhnya", href: "/kebijakan" },
-  { n: 5, label: "Skenario", hint: "Tiga kombinasi kebijakan terbaik", href: "/scenario" },
-  { n: 6, label: "Simulasi", hint: "Atur sendiri nilai tiap kebijakan", href: "/simulation" },
+  { n: 5, label: "Simulasi Skenario", hint: "Tiga kombinasi kebijakan terbaik", href: "/scenario" },
+  { n: 6, label: "Simulasi Kebijakan", hint: "Atur sendiri nilai tiap kebijakan", href: "/simulation" },
 ];

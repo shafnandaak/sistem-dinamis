@@ -34,7 +34,7 @@ const VariableExplorer = dynamic(() => import("@/components/VariableExplorer"), 
 
 type Stage = 0 | 1 | 2;
 
-// Periode forecasting: setelah baseline hingga FINAL TIME model sfd-model-fix-2 model 17 (2035)
+// Periode forecasting: setelah baseline hingga FINAL TIME model FIX-SFD-19 (2035)
 const FORECAST_START_YEAR = BASELINE_END_YEAR + 1;
 const FORECAST_END_YEAR = 2035;
 
@@ -300,8 +300,8 @@ export default function BaselinePage() {
   };
 
   const steps = [
-    { n: 1, title: "Simulasi", period: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, desc: "Validasi model terhadap data aktual (MAPE)." },
-    { n: 2, title: "Forecasting", period: `${FORECAST_START_YEAR}–${FORECAST_END_YEAR}`, desc: "Proyeksi tanpa intervensi kebijakan." },
+    { n: 1, title: "Simulasi Historis", period: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, desc: "Validasi model terhadap data aktual (MAPE)." },
+    { n: 2, title: "Model Baseline", period: `${BASELINE_START_YEAR}–${FORECAST_END_YEAR}`, desc: "Tanpa intervensi kebijakan." },
   ];
 
   return (
@@ -314,9 +314,9 @@ export default function BaselinePage() {
               <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model · Jawa Barat</p>
               <h1 className="text-2xl font-bold text-lime-900 md:text-3xl">Model Sistem Dinamis Kebijakan Pertanian Tanaman Pangan</h1>
               <p className="mt-2 text-sm text-lime-900/75">
-                Halaman ini terdiri dari dua bagian. <strong>Simulasi</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji
-                seberapa dekat model dengan data aktual melalui MAPE. Setelah itu, <strong>Forecasting</strong> ({FORECAST_START_YEAR}–
-                {FORECAST_END_YEAR}) memproyeksikan kondisi ke depan tanpa intervensi kebijakan.
+                <strong>Simulasi Historis</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji kedekatan model dengan data
+                aktual melalui MAPE. <strong>Model Baseline</strong> ({BASELINE_START_YEAR}–{FORECAST_END_YEAR}) menjalankan model tanpa
+                intervensi kebijakan.
               </p>
             </div>
 
@@ -366,7 +366,7 @@ export default function BaselinePage() {
 
           <div className="rounded-3xl border border-lime-200 bg-white p-6 shadow-sm">
             <p className="text-xs uppercase tracking-wide text-lime-700">Identitas Model</p>
-            <h2 className="mt-2 text-xl font-semibold text-lime-900">sfd-model-fix-2 model 17</h2>
+            <h2 className="mt-2 text-xl font-semibold text-lime-900">FIX-SFD-19</h2>
             <p className="mt-1 flex items-center gap-2 text-xs text-lime-900/70">
               <span className={`h-2 w-2 rounded-full ${loading ? "animate-pulse bg-yellow-400" : "bg-lime-600"}`} />
               {loading ? "Model sedang dijalankan..." : "Model berhasil dijalankan · Jawa Barat"}
@@ -416,7 +416,7 @@ export default function BaselinePage() {
               <div>
                 <p className="text-xs uppercase tracking-wide text-lime-700">Bagian 1</p>
                 <h2 className="text-xl font-bold text-lime-900 md:text-2xl">
-                  Simulasi {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
+                  Simulasi Historis {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h2>
                 <p className="text-sm text-lime-900/75">Hasil model dibandingkan dengan data aktual Jawa Barat.</p>
               </div>
@@ -435,7 +435,7 @@ export default function BaselinePage() {
             <div className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <h3 className="text-lg font-semibold text-lime-900">
-                  Grafik Simulasi {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
+                  Grafik Simulasi Historis {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h3>
                 <select
                   className="rounded-lg border border-lime-300 bg-white px-3 py-1.5 text-sm"
@@ -500,9 +500,9 @@ export default function BaselinePage() {
             <Reveal>
               <div className="flex flex-col items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-5 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="font-semibold text-amber-900">Baseline sudah dipelajari?</p>
+                  <p className="font-semibold text-amber-900">Lanjut ke Model Baseline</p>
                   <p className="text-sm text-amber-900/80">
-                    Lanjutkan ke proyeksi {FORECAST_START_YEAR}–{FORECAST_END_YEAR} tanpa intervensi kebijakan.
+                    {BASELINE_START_YEAR}–{FORECAST_END_YEAR}, tanpa intervensi kebijakan.
                   </p>
                 </div>
                 <button
@@ -510,7 +510,7 @@ export default function BaselinePage() {
                   onClick={() => goTo(2)}
                   className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-amber-700 hover:shadow-md"
                 >
-                  Lanjut ke Forecasting <span aria-hidden="true">→</span>
+                  Lanjut <span aria-hidden="true">→</span>
                 </button>
               </div>
             </Reveal>
@@ -527,9 +527,9 @@ export default function BaselinePage() {
               <div>
                 <p className="text-xs uppercase tracking-wide text-amber-800">Bagian 2</p>
                 <h2 className="text-xl font-bold text-amber-950 md:text-2xl">
-                  Forecasting {FORECAST_START_YEAR}–{FORECAST_END_YEAR}
+                  Model Baseline {BASELINE_START_YEAR}–{FORECAST_END_YEAR}
                 </h2>
-                <p className="text-sm text-amber-900/80">Proyeksi tanpa intervensi kebijakan, melanjutkan kondisi baseline.</p>
+                <p className="text-sm text-amber-900/80">Tanpa intervensi kebijakan.</p>
               </div>
             </div>
           </Reveal>
@@ -555,12 +555,12 @@ export default function BaselinePage() {
           <Reveal>
             <div className="space-y-4 rounded-2xl border border-amber-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <h3 className="text-lg font-semibold text-amber-950">Grafik Simulasi vs Forecasting</h3>
+                <h3 className="text-lg font-semibold text-amber-950">Grafik Model Baseline</h3>
                 <select
                   className="rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-sm"
                   value={forecastMetric}
                   onChange={(e) => setForecastMetric(e.target.value)}
-                  aria-label="Pilih variabel grafik forecasting"
+                  aria-label="Pilih variabel grafik model baseline"
                 >
                   {METRICS.map((m) => (
                     <option key={m.variable} value={m.variable}>
@@ -575,9 +575,9 @@ export default function BaselinePage() {
                   yAxisLabel={forecastMetricUnit}
                   points={toPoints(results, forecastMetric)}
                   series={[
-                    { name: `Simulasi ${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, points: toPoints(baselineRows, forecastMetric), lineColor: "#3f7d20" },
+                    { name: `Simulasi historis ${BASELINE_START_YEAR}–${BASELINE_END_YEAR}`, points: toPoints(baselineRows, forecastMetric), lineColor: "#3f7d20" },
                     {
-                      name: `Forecast ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}`,
+                      name: `Tanpa intervensi ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}`,
                       // sertakan titik terakhir baseline agar garis tersambung
                       points: toPoints([...baselineRows.slice(-1), ...forecastRows], forecastMetric),
                       lineColor: "#d97706",
@@ -594,8 +594,8 @@ export default function BaselinePage() {
             <AnalysisDetail title="Tabel proyeksi per tahun" description="Nilai seluruh indikator utama tiap tahun hingga 2035, dapat diekspor ke CSV.">
               <ResultsTable
                 rows={forecastRows}
-                title={`Proyeksi model Jawa Barat ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
-                filename={`forecast-${FORECAST_START_YEAR}-${FORECAST_END_YEAR}.csv`}
+                title={`Model baseline Jawa Barat ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
+                filename={`model-baseline-${FORECAST_START_YEAR}-${FORECAST_END_YEAR}.csv`}
               />
             </AnalysisDetail>
           </Reveal>
