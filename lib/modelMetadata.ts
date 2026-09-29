@@ -1,8 +1,8 @@
-// Nilai awal & konstanta dasar Jawa Barat, disamakan dengan model/sfd-model-fix-2 model 17.mdl
+// Nilai awal & konstanta dasar Jawa Barat, disamakan dengan model/FIX-SFD-19.mdl
 export const MODEL_BASELINES = {
   belanjaDasar: 353211000000,
   subsidiDasar: 497391,
-  luasLahanPertanian: 1655940,
+  luasLahanPertanian: 1643307,
   luasSawahIrigasi: 723636,
   luasSawahIrigasiDasar: 723636,
   jumlahPenduduk: 46709600,

@@ -1,4 +1,4 @@
-// Fungsi bantu yang dibutuhkan model hasil SDEverywhere (lib/sfd-model-fix-2.js, dari model/sfd-model-fix-2 model 17.mdl).
+// Fungsi bantu yang dibutuhkan model hasil SDEverywhere (lib/sfd-model-fix-2.js, dari model/FIX-SFD-19.mdl).
 // Dipakai bersama oleh halaman Baseline, Forecast, Skenario, dan Simulasi.
 export function buildModelFunctions() {
   const createLookup = (_dimensionCount: number, data: number[]) => {

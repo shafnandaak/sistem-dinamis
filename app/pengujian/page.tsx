@@ -14,7 +14,7 @@ import { SFD } from "@/lib/sfdData";
 import { exportCsv, formatValue, num, rowAt, type DataRow } from "@/lib/policies";
 import { LOOKUP_APE_LIMIT, POLICY_OUTPUTS, REFERENCE_TOLERANCE, VENSIM_REFERENCES } from "@/lib/verification";
 
-const MODEL_FILE = "sfd-model-fix-2 model 17.mdl";
+const MODEL_FILE = "FIX-SFD-19.mdl";
 const FIRST_YEAR = BASELINE_YEARS[0];
 const LAST_YEAR = BASELINE_YEARS[BASELINE_YEARS.length - 1];
 

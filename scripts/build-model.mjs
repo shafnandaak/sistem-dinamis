@@ -1,7 +1,7 @@
 // Kompilasi model Vensim (.mdl) menjadi lib/<nama>.js dengan SDEverywhere.
 //
 // Pemakaian:
-//   node scripts/build-model.mjs "model/sfd-model-fix-2 model 17.mdl" lib/sfd-model-fix-2.js
+//   node scripts/build-model.mjs "model/FIX-SFD-19.mdl" lib/sfd-model-fix-2.js
 //
 // Kenapa perlu pra-proses: SDEverywhere salah mengompilasi DELAY1I yang berada di
 // dalam ekspresi yang lebih besar, mis.

@@ -48,7 +48,12 @@ export default function SatelliteNovelty({ onExplore }: { onExplore?: () => void
           <span className="font-medium text-lime-900/80">Statistik resmi</span>
           <div className="flex h-3 items-center">
             <div className="h-full w-[68%] rounded-l-full bg-amber-400" />
-            <div className="h-0 flex-1 border-t-2 border-dashed border-amber-400/70" />
+            <div className="relative flex h-full flex-1 items-center">
+              <div className="h-0 w-full border-t-2 border-dashed border-amber-400/70" />
+              <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-amber-100 px-1.5 text-[11px] font-semibold leading-4 text-amber-800">
+                jeda (lag)
+              </span>
+            </div>
           </div>
           <span className="font-medium text-lime-900/80">Citra satelit</span>
           <div className="h-3 w-full rounded-full bg-lime-600" />
@@ -57,7 +62,6 @@ export default function SatelliteNovelty({ onExplore }: { onExplore?: () => void
           <span />
           <div className="flex items-center justify-between gap-1 whitespace-nowrap">
             <span>data lama</span>
-            <span className="rounded bg-amber-100 px-1.5 font-semibold text-amber-800">jeda (lag)</span>
             <span className="font-semibold text-lime-800">sekarang</span>
           </div>
         </div>

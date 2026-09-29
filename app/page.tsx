@@ -17,7 +17,7 @@ const StockFlowDiagram = dynamic(() => import("@/components/StockFlowDiagram"), 
   ssr: false,
   loading: () => <div className="grid h-full place-items-center text-sm text-lime-900/60">Memuat diagram…</div>,
 });
-const SFD_SOURCE = "sfd-model-fix-2 model 17.mdl";
+const SFD_SOURCE = "FIX-SFD-19.mdl";
 
 const concepts = [
   {
@@ -72,7 +72,7 @@ const concepts = [
     subtitle: "Alat pemodelan",
     description:
       "Vensim digunakan untuk menyusun Causal Loop Diagram (CLD) dan Stock Flow Diagram (SFD), lalu menjalankan simulasi. Model Vensim tersebut dikonversi agar dapat dijalankan langsung di website ini.",
-    examples: ["Causal Loop Diagram", "Stock Flow Diagram", "sfd-model-fix-2 model 17.mdl"],
+    examples: ["Causal Loop Diagram", "Stock Flow Diagram", "FIX-SFD-19.mdl"],
   },
 ];
 
@@ -138,7 +138,7 @@ export default function Home() {
           </p>
 
           <div className="fade-up flex flex-wrap justify-center gap-2" style={{ animationDelay: "240ms" }}>
-            {["7 komoditas pangan", "Simulasi (2018–2025)", "Forecast hingga 2035"].map((chip) => (
+            {["Simulasi Historis (2018–2025)", "Model Baseline (2018–2035, tanpa intervensi)", "Simulasi Kebijakan", "Simulasi Skenario"].map((chip) => (
               <span key={chip} className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-lime-800 backdrop-blur">
                 {chip}
               </span>

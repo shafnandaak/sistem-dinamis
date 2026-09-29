@@ -1,4 +1,4 @@
-// Daftar lookup (data historis) yang dipakai model sfd-model-fix-2 model 17 untuk periode 2018-2025.
+// Daftar lookup (data historis) yang dipakai model FIX-SFD-19 untuk periode 2018-2025.
 //
 // Variabel yang digerakkan lookup BUKAN variabel validasi: nilainya s.d. 2025 berasal langsung dari
 // data historis, sehingga kecocokannya dengan data resmi hanya menunjukkan konsistensi input.

@@ -13,8 +13,8 @@ export type ReferenceValue = {
 export const REFERENCE_TOLERANCE = 1;
 
 export const VENSIM_REFERENCES: ReferenceValue[] = [
-  { variable: "Produksi Padi", year: 2019, value: 9_257_044, unit: "ton", source: "Keluaran Vensim, sfd-model-fix-2 model 17" },
-  { variable: "Produksi Padi", year: 2025, value: 9_014_182, unit: "ton", source: "Keluaran Vensim, sfd-model-fix-2 model 17" },
+  { variable: "Produksi Padi", year: 2019, value: 9_298_311, unit: "ton", source: "Keluaran Vensim, FIX-SFD-19" },
+  { variable: "Produksi Padi", year: 2025, value: 9_034_009, unit: "ton", source: "Keluaran Vensim, FIX-SFD-19" },
 ];
 
 /** Variabel kebijakan yang harus bernilai 0 pada run baseline. */
