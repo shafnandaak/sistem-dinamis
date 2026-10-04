@@ -9,7 +9,7 @@
 // Arus keluar stok delay seharusnya stok/T, tetapi SDE memakai variabel utuh
 // (sudah dikali Indeks Harga Umum), sehingga stok terkuras terlalu cepat dan hasil
 // berbeda dari Vensim. Solusinya: DELAY1I dipindah ke variabel tersendiri
-// ("<nama> Tertunda") lalu variabel asal mengalikannya. Secara matematis identik
+// ("<nama> Tertunda") lalu variabel asal mengalikan. Secara matematis identik
 // di Vensim; file .mdl asli tidak diubah.
 import { execFileSync } from "node:child_process";
 import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -29,7 +29,7 @@ const name = basename(outPath, ".js");
 
 let text = readFileSync(mdlPath, "utf8");
 
-// Pisahkan setiap "X = DELAY1I(...) <operator> <sisa>" menjadi dua persamaan.
+// Memisahkan setiap "X = DELAY1I(...) <operator> <sisa>" menjadi dua persamaan.
 const delayEq = /^([^\n=~|{}]+?)=\s*DELAY1I\(([^()]*?)\)(\s*[*/+-][^\n]*)\n/gm;
 let count = 0;
 text = text.replace(delayEq, (_match, rawName, args, rest) => {
@@ -44,7 +44,8 @@ text = text.replace(delayEq, (_match, rawName, args, rest) => {
 console.log(`DELAY1I yang dipisah: ${count}`);
 
 // Agar data provinsi lain bisa dimasukkan saat runtime (setLookup/setConstant), dua bentuk
-// berikut dipisah. SDE menjadikan tabel WITH LOOKUP dan nilai awal INTEG berupa angka sebagai
+// berikut dipisah:
+// SDE menjadikan tabel WITH LOOKUP dan nilai awal INTEG berupa angka sebagai
 // nilai internal yang tidak bisa diubah dari luar. Keduanya identik secara matematis.
 //
 // 1. "X = WITH LOOKUP(input, tabel)" -> lookup "X Tabel" + "X = X Tabel(input)".
@@ -107,7 +108,7 @@ try {
   rmSync(work, { recursive: true, force: true });
 }
 
-// ---- Daftar input model (nilai awal stok, lookup, konstanta) untuk fitur data provinsi ----
+// Daftar input model (nilai awal stok, lookup, konstanta) untuk fitur data provinsi
 // Dibaca dari persamaan hasil pra-proses; id dicocokkan dengan modelListing hasil kompilasi.
 const compiled = readFileSync(outPath, "utf8");
 const knownIds = new Set([...compiled.matchAll(/id: '([^']+)'/g)].map((m) => m[1]));

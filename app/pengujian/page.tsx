@@ -13,7 +13,15 @@ import { LOOKUP_ITEMS } from "@/lib/lookupData";
 import { getActiveDataset } from "@/lib/provinceDataset";
 import { SFD } from "@/lib/sfdData";
 import { exportCsv, formatValue, num, rowAt, type DataRow } from "@/lib/policies";
-import { LOOKUP_APE_LIMIT, POLICY_OUTPUTS, REFERENCE_TOLERANCE, VENSIM_REFERENCES } from "@/lib/verification";
+import {
+  EXTRA_INFO,
+  LOOKUP_APE_LIMIT,
+  POLICY_OUTPUTS,
+  REFERENCE_TOLERANCE,
+  VENSIM_REFERENCES,
+  extraOrigin,
+  type ExtraOrigin,
+} from "@/lib/verification";
 
 const MODEL_FILE = "FIX-SFD-19.mdl";
 const FIRST_YEAR = BASELINE_YEARS[0];
@@ -43,6 +51,8 @@ type Entry = {
   /** "validasi" = dibandingkan untuk MAPE; "konsistensi" = variabel yang digerakkan lookup. */
   actualRole: "validasi" | "konsistensi" | null;
   actualNote?: string;
+  /** Diisi bila variabel tidak termasuk daftar variabel model Vensim. */
+  extra: ExtraOrigin | null;
   ape: (number | null)[];
   mape: number | null;
 };
@@ -60,14 +70,14 @@ function lookupPoints(equation: string): Map<number, number> {
   return new Map([...body.matchAll(/\((-?[\d.]+)\s*,\s*(-?[\d.e+-]+)\)/gi)].map((m) => [Number(m[1]), Number(m[2])]));
 }
 
-function withActual(entry: Omit<Entry, "ape" | "mape">): Entry {
+function withActual(entry: Omit<Entry, "ape" | "mape" | "extra">): Entry {
   const ape = BASELINE_YEARS.map((_, i) => {
     const a = entry.actual?.[i] ?? null;
     const m = entry.model[i];
     return a !== null && m !== null && a !== 0 ? (Math.abs(m - a) / Math.abs(a)) * 100 : null;
   });
   const valid = ape.filter((v): v is number => v !== null);
-  return { ...entry, ape, mape: valid.length ? valid.reduce((s, v) => s + v, 0) / valid.length : null };
+  return { ...entry, extra: extraOrigin(entry.name), ape, mape: valid.length ? valid.reduce((s, v) => s + v, 0) / valid.length : null };
 }
 
 function buildEntries(rows: DataRow[]): Entry[] {
@@ -131,8 +141,8 @@ function buildEntries(rows: DataRow[]): Entry[] {
 
   // Variabel turunan yang divalidasi tetapi bukan variabel model (mis. Produksi Beras).
   for (const v of MAPE_VARIABLES.filter((x) => x.derive && x.actual.some((a) => a !== null))) {
-    entries.push(
-      withActual({
+    entries.push({
+      ...withActual({
         name: v.label,
         kind: "endogen",
         sub: "Turunan",
@@ -144,7 +154,8 @@ function buildEntries(rows: DataRow[]): Entry[] {
         actualRole: "validasi",
         actualNote: v.note,
       }),
-    );
+      extra: "turunan",
+    });
   }
 
   const rank = (e: Entry) => (e.actualRole === "validasi" ? 0 : e.actualRole === "konsistensi" ? 1 : 2);
@@ -236,6 +247,21 @@ function runTests(rows: DataRow[], entries: Entry[]): TestResult[] {
       (missing.length ? `; data aktual belum ada: ${missing.join(", ")}` : ""),
     status: "info",
   });
+
+  const extras = entries.filter((e) => e.extra);
+  const byOrigin = (o: ExtraOrigin) => extras.filter((e) => e.extra === o).map((e) => e.name);
+  tests.push({
+    name: "Variabel di luar model Vensim",
+    expected: "ditandai beserta alasannya di tabel variabel",
+    obtained:
+      `${entries.length - extras.length} variabel model Vensim; ${extras.length} tambahan: ` +
+      [
+        `${byOrigin("aplikasi").length} pemisahan DELAY1I`,
+        `${byOrigin("turunan").length} turunan validasi (${byOrigin("turunan").join(", ")})`,
+        `${byOrigin("waktu").length} pengaturan waktu`,
+      ].join(", "),
+    status: "info",
+  });
   return tests;
 }
 
@@ -254,6 +280,85 @@ function formatPrecise(value: number): string {
 function Cell({ value, precise = false }: { value: number | null; precise?: boolean }) {
   if (value === null) return <span className="text-gray-400">–</span>;
   return <>{precise ? formatPrecise(value) : formatValue(value)}</>;
+}
+
+const EXTRA_STYLE: Record<ExtraOrigin, string> = {
+  aplikasi: "border-amber-300 bg-amber-50 text-amber-800",
+  turunan: "border-amber-300 bg-amber-50 text-amber-800",
+  waktu: "border-gray-300 bg-gray-50 text-gray-700",
+};
+
+function ExtraNote({ origin }: { origin: ExtraOrigin | null }) {
+  if (!origin) return null;
+  return (
+    <div className="mt-1 space-y-0.5">
+      <span className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-semibold ${EXTRA_STYLE[origin]}`}>{EXTRA_INFO[origin].label}</span>
+      <p className="max-w-xs text-[11px] text-lime-900/60">{EXTRA_INFO[origin].reason}</p>
+    </div>
+  );
+}
+
+/** Kategori variabel model menurut rangkuman variabel skripsi, untuk tiap tab di aplikasi. */
+function modelCategory(kind: Kind, list: Entry[]): string {
+  if (kind === "endogen") return `${list.length} Endogen`;
+  if (kind === "lookup") return `${list.length} Eksogen`;
+  const decisions = list.filter((e) => POLICY_OUTPUTS.includes(e.name)).length;
+  return `${list.length - decisions} Parameter + ${decisions} Keputusan`;
+}
+
+/** Jumlah variabel per tab = variabel model Vensim + variabel tambahan aplikasi. */
+function VariableReconciliation({ entries }: { entries: Entry[] }) {
+  const rows = KINDS.map((k) => {
+    const list = entries.filter((e) => e.kind === k);
+    const model = list.filter((e) => !e.extra);
+    const extras = list.filter((e) => e.extra);
+    return { k, total: list.length, model, extras };
+  });
+  const extraTotal = rows.reduce((n, r) => n + r.extras.length, 0);
+  return (
+    <div className="overflow-x-auto rounded-xl border border-lime-200">
+      <table className="min-w-full text-sm">
+        <thead className="bg-lime-50">
+          <tr className="border-b border-lime-200 text-xs uppercase text-lime-800">
+            <th className="px-3 py-2 text-left">Tab</th>
+            <th className="px-3 py-2 text-right">Ditampilkan</th>
+            <th className="px-3 py-2 text-left">Variabel model Vensim</th>
+            <th className="px-3 py-2 text-right">Tambahan</th>
+            <th className="px-3 py-2 text-left">Variabel tambahan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.k} className="border-b border-lime-100 align-top">
+              <td className="px-3 py-2 font-medium text-lime-950">{KIND_INFO[r.k].label}</td>
+              <td className="px-3 py-2 text-right tabular-nums">{r.total}</td>
+              <td className="px-3 py-2 text-lime-900">{modelCategory(r.k, r.model)}</td>
+              <td className="px-3 py-2 text-right tabular-nums font-semibold text-amber-800">{r.extras.length || "–"}</td>
+              <td className="px-3 py-2 text-xs text-lime-900/80">
+                {(["aplikasi", "turunan", "waktu"] as ExtraOrigin[]).map((o) => {
+                  const names = r.extras.filter((e) => e.extra === o).map((e) => e.name);
+                  if (!names.length) return null;
+                  return (
+                    <p key={o}>
+                      <span className={`mr-1 inline-flex rounded-full border px-1.5 text-[11px] font-semibold ${EXTRA_STYLE[o]}`}>{EXTRA_INFO[o].label}</span>
+                      {names.join(", ")}
+                    </p>
+                  );
+                })}
+              </td>
+            </tr>
+          ))}
+          <tr className="bg-lime-50 font-semibold text-lime-950">
+            <td className="px-3 py-2">Total</td>
+            <td className="px-3 py-2 text-right tabular-nums">{entries.length}</td>
+            <td className="px-3 py-2">{entries.length - extraTotal} variabel</td>
+            <td className="px-3 py-2 text-right tabular-nums text-amber-800">{extraTotal}</td>
+            <td />
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 function EndogenTable({ entries }: { entries: Entry[] }) {
@@ -283,6 +388,7 @@ function EndogenTable({ entries }: { entries: Entry[] }) {
                     {e.sub}
                     {e.unit ? ` · ${e.unit}` : ""}
                   </p>
+                  <ExtraNote origin={e.extra} />
                   {e.actualRole === "konsistensi" && <p className="mt-1 text-[11px] text-sky-700">{e.actualNote}</p>}
                   {e.actualRole === "validasi" && e.actualNote && <p className="mt-1 text-[11px] text-lime-900/50">{e.actualNote}</p>}
                   {!e.actual && <p className="mt-1 text-[11px] text-lime-900/40">Tidak ada data aktual</p>}
@@ -387,7 +493,10 @@ function ConstantTable({ entries }: { entries: Entry[] }) {
           const ok = value !== null && Math.abs(value - expected) <= Math.abs(expected) * 1e-9 + 1e-12;
           return (
             <tr key={e.name} className="border-b border-lime-100 align-top last:border-none">
-              <td className="min-w-[220px] px-3 py-2 font-semibold text-lime-950">{e.name}</td>
+              <td className="min-w-[220px] px-3 py-2">
+                <p className="font-semibold text-lime-950">{e.name}</p>
+                <ExtraNote origin={e.extra} />
+              </td>
               <td className="px-3 py-2 text-right font-mono text-xs text-lime-900">{e.equation}</td>
               <td className="px-3 py-2 text-right tabular-nums text-lime-900">
                 <Cell value={value} precise />
@@ -433,6 +542,7 @@ function PengujianContent() {
   const [kind, setKind] = useState<Kind>("endogen");
   const [query, setQuery] = useState("");
   const [onlyActual, setOnlyActual] = useState(false);
+  const [onlyExtra, setOnlyExtra] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -454,8 +564,13 @@ function PengujianContent() {
   const judged = tests.filter((t) => t.status !== "info").length;
 
   const q = query.trim().toLowerCase();
+  const extraInKind = entries.filter((e) => e.kind === kind && e.extra).length;
   const visible = entries.filter(
-    (e) => e.kind === kind && (!q || e.name.toLowerCase().includes(q)) && (kind !== "endogen" || !onlyActual || e.actual !== null),
+    (e) =>
+      e.kind === kind &&
+      (!q || e.name.toLowerCase().includes(q)) &&
+      (kind !== "endogen" || !onlyActual || e.actual !== null) &&
+      (!onlyExtra || extraInKind === 0 || e.extra !== null),
   );
   const withActual = entries.filter((e) => e.kind === "endogen" && e.actual).length;
 
@@ -581,6 +696,7 @@ function PengujianContent() {
                 Seluruh variabel model dari run baseline, dikelompokkan menurut jenisnya. APE = |model − aktual| / aktual × 100%.
               </p>
             </div>
+            <VariableReconciliation entries={entries} />
             <div className="flex flex-wrap gap-2" role="tablist">
               {KINDS.map((k) => (
                 <button
@@ -609,6 +725,12 @@ function PengujianContent() {
                 <label className="inline-flex items-center gap-2 text-sm text-lime-900">
                   <input type="checkbox" checked={onlyActual} onChange={(e) => setOnlyActual(e.target.checked)} />
                   Hanya yang punya data aktual ({withActual})
+                </label>
+              )}
+              {extraInKind > 0 && (
+                <label className="inline-flex items-center gap-2 text-sm text-lime-900">
+                  <input type="checkbox" checked={onlyExtra} onChange={(e) => setOnlyExtra(e.target.checked)} />
+                  Hanya variabel tambahan ({extraInKind})
                 </label>
               )}
               <span className="text-xs text-lime-900/60">{visible.length} variabel ditampilkan</span>
