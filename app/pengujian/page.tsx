@@ -10,6 +10,7 @@ import Link from "next/link";
 import { canAccessPengujian } from "@/lib/access";
 import { BASELINE_YEARS, MAPE_VARIABLES, getModelValue, mapeCategory } from "@/lib/historicalActuals";
 import { LOOKUP_ITEMS } from "@/lib/lookupData";
+import { getActiveDataset } from "@/lib/provinceDataset";
 import { SFD } from "@/lib/sfdData";
 import { exportCsv, formatValue, num, rowAt, type DataRow } from "@/lib/policies";
 import { LOOKUP_APE_LIMIT, POLICY_OUTPUTS, REFERENCE_TOLERANCE, VENSIM_REFERENCES } from "@/lib/verification";
@@ -171,14 +172,18 @@ function runTests(rows: DataRow[], entries: Entry[]): TestResult[] {
     status: nonZero.length === 0 ? "pass" : "fail",
   });
 
+  // Acuan Vensim dan nilai konstanta di file model berlaku untuk data Jawa Barat bawaan.
+  const otherProvince = getActiveDataset()?.province;
+  const jabarOnly = (status: TestStatus): TestStatus => (otherProvince ? "info" : status);
+
   for (const ref of VENSIM_REFERENCES) {
     const value = num(rowAt(rows, ref.year)[ref.variable]);
     const diff = Math.abs(value - ref.value);
     tests.push({
       name: `${ref.variable} ${ref.year} sama dengan Vensim`,
       expected: `${fmt(ref.value)} ${ref.unit} (${ref.source})`,
-      obtained: `${fmt(value)} ${ref.unit} (selisih ${fmt(diff)})`,
-      status: diff <= REFERENCE_TOLERANCE ? "pass" : "fail",
+      obtained: `${fmt(value)} ${ref.unit} (selisih ${fmt(diff)})${otherProvince ? ` · data ${otherProvince}` : ""}`,
+      status: jabarOnly(diff <= REFERENCE_TOLERANCE ? "pass" : "fail"),
     });
   }
 
@@ -191,7 +196,7 @@ function runTests(rows: DataRow[], entries: Entry[]): TestResult[] {
     name: "Konstanta di aplikasi sama dengan nilai di file model",
     expected: `${constants.length} konstanta bernilai sama dengan ${MODEL_FILE} di semua tahun`,
     obtained: mismatched.length === 0 ? `${constants.length} konstanta sesuai` : `berbeda: ${mismatched.map((e) => e.name).slice(0, 4).join(", ")}`,
-    status: mismatched.length === 0 ? "pass" : "fail",
+    status: jabarOnly(mismatched.length === 0 ? "pass" : "fail"),
   });
 
   const columns = Object.keys(rows[0] ?? {});

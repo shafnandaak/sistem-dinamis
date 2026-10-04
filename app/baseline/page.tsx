@@ -5,6 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import initModel from "@/lib/sfd-model-fix-2.js";
 import { runSimulation } from "@/lib/engine";
+import { useProvinceName } from "@/lib/useProvinceName";
 import { buildModelFunctions } from "@/lib/modelFunctions";
 import {
   BASELINE_END_YEAR,
@@ -216,6 +217,7 @@ const KEY_FORECAST = ["Produksi Padi", "NTP Tanaman Pangan", "Luas Lahan Pertani
 
 export default function BaselinePage() {
   const viewMode = useViewMode();
+  const provinceName = useProvinceName();
   const [results, setResults] = useState<DataRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [stage, setStage] = useState<Stage>(0);
@@ -311,7 +313,7 @@ export default function BaselinePage() {
         <section className="grid gap-4 xl:grid-cols-[1.7fr_1fr]">
           <div className="space-y-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm">
             <div>
-              <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model · Jawa Barat</p>
+              <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 3 · Baseline Model · {provinceName}</p>
               <h1 className="text-2xl font-bold text-lime-900 md:text-3xl">Model Sistem Dinamis Kebijakan Pertanian Tanaman Pangan</h1>
               <p className="mt-2 text-sm text-lime-900/75">
                 <strong>Simulasi Historis</strong> ({BASELINE_START_YEAR}–{BASELINE_END_YEAR}) menguji kedekatan model dengan data
@@ -356,10 +358,10 @@ export default function BaselinePage() {
                 {!loading && <span aria-hidden="true">→</span>}
               </button>
               <Link
-                href="/baseline/provinsi-lain"
+                href="/provinsi"
                 className="rounded-xl border border-dashed border-amber-400 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
               >
-                Provinsi Lain <span className="text-[10px] uppercase tracking-wide text-amber-800/80">· Pengembangan Lanjutan</span>
+                Provinsi Lain
               </Link>
             </div>
           </div>
@@ -369,7 +371,7 @@ export default function BaselinePage() {
             <h2 className="mt-2 text-xl font-semibold text-lime-900">FIX-SFD-19</h2>
             <p className="mt-1 flex items-center gap-2 text-xs text-lime-900/70">
               <span className={`h-2 w-2 rounded-full ${loading ? "animate-pulse bg-yellow-400" : "bg-lime-600"}`} />
-              {loading ? "Model sedang dijalankan..." : "Model berhasil dijalankan · Jawa Barat"}
+              {loading ? "Model sedang dijalankan..." : `Model berhasil dijalankan · ${provinceName}`}
             </p>
             <dl className="mt-4 grid grid-cols-2 gap-2">
               {[
@@ -418,7 +420,7 @@ export default function BaselinePage() {
                 <h2 className="text-xl font-bold text-lime-900 md:text-2xl">
                   Simulasi Historis {BASELINE_START_YEAR}–{BASELINE_END_YEAR}
                 </h2>
-                <p className="text-sm text-lime-900/75">Hasil model dibandingkan dengan data aktual Jawa Barat.</p>
+                <p className="text-sm text-lime-900/75">Hasil model dibandingkan dengan data aktual {provinceName}.</p>
               </div>
             </div>
           </Reveal>
@@ -594,7 +596,7 @@ export default function BaselinePage() {
             <AnalysisDetail title="Tabel proyeksi per tahun" description="Nilai seluruh indikator utama tiap tahun hingga 2035, dapat diekspor ke CSV.">
               <ResultsTable
                 rows={forecastRows}
-                title={`Model baseline Jawa Barat ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
+                title={`Model baseline ${provinceName} ${FORECAST_START_YEAR}–${FORECAST_END_YEAR}.`}
                 filename={`model-baseline-${FORECAST_START_YEAR}-${FORECAST_END_YEAR}.csv`}
               />
             </AnalysisDetail>

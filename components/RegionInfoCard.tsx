@@ -22,17 +22,14 @@ export default function RegionInfoCard({ title, description }: RegionInfoCardPro
         </div>
 
         <Link
-          href="/baseline/provinsi-lain"
+          href="/provinsi"
           className="rounded-xl border border-dashed border-amber-300 bg-amber-50/60 p-4 hover:bg-amber-50 transition"
         >
           <div className="flex items-center gap-2">
             <p className="text-xs uppercase tracking-wide text-amber-800">Provinsi lain</p>
-            <span className="rounded-full bg-amber-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-900">
-              Pengembangan Lanjutan
-            </span>
           </div>
           <p className="mt-1 text-sm text-amber-900/80">
-            Penerapan model untuk provinsi selain Jawa Barat belum tersedia pada versi ini.
+            Unggah data provinsi untuk menjalankan model.
           </p>
         </Link>
       </div>
