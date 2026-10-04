@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "build:sfd": "node scripts/build-sfd.mjs \"model/FIX-SFD-19.mdl\" lib/sfdData.ts",
-    "build:cld":"node scripts/build-cld.mjs model/CLD_fix-1.mdl lib/cldData.ts",
-    "build:model":"node scripts/build-model.mjs \"model/FIX-SFD-19.mdl\" lib/sfd-model-fix-2.js"
+    "build:cld": "node scripts/build-cld.mjs model/CLD_fix-1.mdl lib/cldData.ts",
+    "build:model": "node scripts/build-model.mjs \"model/FIX-SFD-19.mdl\" lib/sfd-model-fix-2.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",
@@ -17,7 +17,8 @@
     "next-auth": "^4.24.13",
     "next-themes": "^0.4.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

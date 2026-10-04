@@ -9,6 +9,8 @@ import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "@/components/ThemeToggle";
 import ViewModeToggle from "@/components/ViewModeToggle";
 import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
+import { DEFAULT_PROVINCE } from "@/lib/provinceDataset";
+import { useProvinceName } from "@/lib/useProvinceName";
 
 const menuItems = [
   { name: "Dashboard", href: "/" },
@@ -23,6 +25,7 @@ const menuItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const provinceName = useProvinceName();
   const { data: session } = useSession();
 
   // Menu Pengujian hanya tampil untuk akun yang berhak (lihat lib/access.ts).
@@ -70,6 +73,19 @@ export default function Navbar() {
 
           {/* Right side: status + profile + burger */}
           <div className="flex items-center gap-3">
+            <Link
+              href="/provinsi"
+              title="Data provinsi"
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                provinceName === DEFAULT_PROVINCE
+                  ? "border-lime-200 text-lime-800 hover:bg-lime-50 dark:border-lime-800 dark:text-lime-200 dark:hover:bg-lime-900/50"
+                  : "border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100"
+              }`}
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+              {provinceName}
+            </Link>
+
             {/* Dibungkus agar kelas "hidden" tidak kalah oleh "inline-flex" bawaan komponen. */}
             <div className="hidden sm:block">
               <ViewModeToggle />
@@ -128,7 +144,7 @@ export default function Navbar() {
       {/* Mobile dropdown menu */}
       <div
         className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <nav className="px-4 pt-2 pb-4 space-y-1 border-t border-lime-100 dark:border-lime-900 bg-white dark:bg-gray-950">
@@ -136,6 +152,14 @@ export default function Navbar() {
             <span className="text-xs font-semibold text-lime-800 dark:text-lime-300">Tampilan</span>
             <ViewModeToggle />
           </div>
+          <Link
+            href="/provinsi"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center justify-between px-4 py-2 sm:hidden text-xs font-semibold text-lime-800 dark:text-lime-300"
+          >
+            <span>Provinsi</span>
+            <span>{provinceName}</span>
+          </Link>
           {visibleItems.map((item) => {
             const isActive = pathname === item.href;
             return (

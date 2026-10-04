@@ -1,21 +1,24 @@
 // Fungsi bantu yang dibutuhkan model hasil SDEverywhere (lib/sfd-model-fix-2.js, dari model/FIX-SFD-19.mdl).
 // Dipakai bersama oleh halaman Baseline, Forecast, Skenario, dan Simulasi.
 export function buildModelFunctions() {
+  const toPoints = (data: ArrayLike<number> | undefined) => {
+    const points: Array<{ x: number; y: number }> = [];
+    if (!data) return points;
+    for (let index = 0; index + 1 < data.length; index += 2) {
+      const x = Number(data[index]);
+      const y = Number(data[index + 1]);
+      if (Number.isFinite(x) && Number.isFinite(y)) {
+        points.push({ x, y });
+      }
+    }
+    return points;
+  };
+
+  // setData dipanggil oleh setLookup model (data provinsi lain); tanpa titik = kembali ke tabel bawaan.
   const createLookup = (_dimensionCount: number, data: number[]) => {
-    return (time: number) => {
-      if (!Array.isArray(data) || data.length < 2) {
-        return 0;
-      }
-
-      const points: Array<{ x: number; y: number }> = [];
-      for (let index = 0; index < data.length; index += 2) {
-        const x = Number(data[index]);
-        const y = Number(data[index + 1]);
-        if (Number.isFinite(x) && Number.isFinite(y)) {
-          points.push({ x, y });
-        }
-      }
-
+    const original = toPoints(data);
+    let points = original;
+    const lookup = (time: number) => {
       if (points.length === 0) {
         return 0;
       }
@@ -41,6 +44,10 @@ export function buildModelFunctions() {
 
       return points[points.length - 1].y;
     };
+    lookup.setData = (_size: number, data?: ArrayLike<number>) => {
+      points = data ? toPoints(data) : original;
+    };
+    return lookup;
   };
 
   return {

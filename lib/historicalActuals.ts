@@ -5,6 +5,8 @@
 // Satuan harus sama dengan satuan variabel di model (lihat `unit`).
 // MAPE hanya dihitung dari tahun yang datanya terisi.
 
+import { withActualOverrides } from "@/lib/provinceDataset";
+
 type DataRow = Record<string, number | string | null | undefined>;
 
 export const BASELINE_START_YEAR = 2018;
@@ -53,7 +55,7 @@ const LUAS_PANEN_JAGUNG = [135671, 130659, 56598, 68214, 95690, 76901, 77993, 90
 const PRODUKSI_JAGUNG = [1001927, 981204, 565980, 664899, 983518, 780770, 763327, 1038518.98];
 const HARGA_GKG_PER_KG = [5600.12, 5440.54, 5460.84, 4987.84, 5270.59, 6624.0, 7423.0, 5829.56];
 
-export const ACTUAL: Record<string, (number | null)[]> = {
+export const ACTUAL_JABAR: Record<string, (number | null)[]> = {
   "luas-panen-padi": [1707253.81, 1578835.7, 1586888.63, 1604109.31, 1662403.96, 1583656.28, 1475362.09, 1755300],
   "luas-panen-jagung": LUAS_PANEN_JAGUNG,
   "luas-panen-kedelai": [76357, 36238, 53273, 18291, 26226, 27611, 8397, 34610.07],
@@ -95,6 +97,9 @@ export const ACTUAL: Record<string, (number | null)[]> = {
 
   // Belum tersedia di data sumber: kontribusi energi per komoditas dan It.
 };
+
+/** Data aktual yang dipakai aplikasi: data provinsi aktif (upload pengguna) bila ada, selain itu Jawa Barat. */
+export const ACTUAL: Record<string, (number | null)[]> = withActualOverrides(ACTUAL_JABAR);
 
 export const MAPE_VARIABLES: MapeVariable[] = [
   // Luas panen komoditas lain tidak divalidasi: s.d. 2025 nilainya diturunkan dari luas lahan x
