@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import initModel from "@/lib/sfd-model-fix-2.js";
 import { runSimulation } from "@/lib/engine";
 import { buildModelFunctions } from "@/lib/modelFunctions";
@@ -19,8 +20,43 @@ import {
 import { SHEETS, buildWorkbook, jabarDataset, parseNumber, parseWorkbook, type ParseResult } from "@/lib/provinceTemplate";
 
 type DataRow = Record<string, number>;
+/** Langkah di halaman yang dituju tombol "Perbaiki data". */
+type Step = 1 | 2 | 3;
 
 const formatNumber = (value: number) => value.toLocaleString("id-ID", { maximumFractionDigits: 6 });
+
+/** Pop-up saat data provinsi belum sesuai struktur: perbaiki dulu atau tinggalkan dan kembali ke Jawa Barat. */
+function InvalidDataDialog({ problems, onFix, onLeave }: { problems: string[]; onFix: () => void; onLeave: () => void }) {
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="invalid-data-title">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+        <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Data belum sesuai</p>
+        <h2 id="invalid-data-title" className="mt-1 text-lg font-bold text-lime-950">
+          Data provinsi belum dapat dijalankan
+        </h2>
+        <ul className="mt-3 max-h-48 list-disc space-y-1 overflow-y-auto pl-5 text-sm text-red-800">
+          {problems.slice(0, 12).map((p) => (
+            <li key={p}>{p}</li>
+          ))}
+          {problems.length > 12 && <li>dan {problems.length - 12} lainnya</li>}
+        </ul>
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
+          <button type="button" onClick={onFix} className="rounded-lg bg-lime-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-lime-800">
+            Perbaiki data
+          </button>
+          <button
+            type="button"
+            onClick={onLeave}
+            className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
+          >
+            Tinggalkan, pakai Jawa Barat
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
 
 function StepTitle({ n, title }: { n: number; title: string }) {
   return (
@@ -38,6 +74,8 @@ export default function ProvinsiPage() {
   const [upload, setUpload] = useState<(ParseResult & { fileName: string }) | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ tone: "error" | "info"; text: string } | null>(null);
+  const [problems, setProblems] = useState<{ list: string[]; step: Step } | null>(null);
+  const stepRefs = useRef<Record<Step, HTMLElement | null>>({ 1: null, 2: null, 3: null });
 
   // Data aktif dibaca setelah mount (localStorage tidak ada saat render di server).
   useEffect(() => {
@@ -83,19 +121,34 @@ export default function ProvinsiPage() {
     [paramText],
   );
 
+  const showProblems = (list: string[], step: Step) => {
+    setMessage(null);
+    setProblems({ list, step });
+  };
+
+  const fix = () => {
+    const step = problems?.step ?? 2;
+    setProblems(null);
+    stepRefs.current[step]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const save = async () => {
     const province = draft.province.trim();
     if (!province || province === DEFAULT_PROVINCE) {
-      setMessage({ tone: "error", text: "Pilih provinsi selain Jawa Barat." });
+      showProblems(["Provinsi belum dipilih. Pilih provinsi selain Jawa Barat."], 1);
       return;
     }
     // Tanpa file Excel tidak ada data provinsi (kecuali mengubah parameter provinsi yang sudah aktif).
     if (!upload && active?.province !== province) {
-      setMessage({ tone: "error", text: `Unggah file Excel data ${province} terlebih dahulu (langkah 2).` });
+      showProblems([`File Excel data ${province} belum diunggah.`], 2);
+      return;
+    }
+    if (upload && upload.errors.length > 0) {
+      showProblems([`File ${upload.fileName} belum sesuai struktur template:`, ...upload.errors], 2);
       return;
     }
     if (paramErrors.length > 0) {
-      setMessage({ tone: "error", text: `Parameter belum valid: ${paramErrors.slice(0, 3).join(", ")}${paramErrors.length > 3 ? ", …" : ""}.` });
+      showProblems(paramErrors.map((name) => `Parameter "${name}" belum berupa angka.`), 3);
       return;
     }
     const params = Object.fromEntries(EDITABLE_PARAMS.map((p) => [p.name, parseNumber(paramText[p.name]) as number]));
@@ -108,13 +161,20 @@ export default function ProvinsiPage() {
       const model = await initModel();
       model.setModelFunctions(buildModelFunctions());
       const rows = runSimulation(model, { useProvince: false, ...datasetOverrides(dataset) }) as unknown as DataRow[];
-      const broken = rows.length === 0 || rows.some((r) => Object.values(r).some((v) => typeof v === "number" && !Number.isFinite(v)));
-      if (broken) {
-        setMessage({ tone: "error", text: "Model menghasilkan nilai tidak valid (NaN/tak hingga). Periksa kembali data." });
+      const brokenVars = new Set<string>();
+      for (const r of rows) for (const [name, v] of Object.entries(r)) if (typeof v === "number" && !Number.isFinite(v)) brokenVars.add(name);
+      if (rows.length === 0 || brokenVars.size > 0) {
+        showProblems(
+          [
+            "Model menghasilkan nilai tidak valid (kosong, NaN, atau tak hingga) dengan data ini.",
+            ...[...brokenVars].slice(0, 8).map((name) => `Variabel bermasalah: ${name}`),
+          ],
+          2,
+        );
         return;
       }
     } catch {
-      setMessage({ tone: "error", text: "Model gagal dijalankan dengan data ini." });
+      showProblems(["Model gagal dijalankan dengan data ini."], 2);
       return;
     } finally {
       setBusy(false);
@@ -160,7 +220,7 @@ export default function ProvinsiPage() {
       </section>
 
       {/* 1. Provinsi + template */}
-      <section className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
+      <section ref={(el) => { stepRefs.current[1] = el; }} className="scroll-mt-20 space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
         <StepTitle n={1} title="Pilih provinsi dan unduh template" />
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <label className="flex-1 space-y-1 text-sm">
@@ -188,7 +248,7 @@ export default function ProvinsiPage() {
       </section>
 
       {/* 2. Upload */}
-      <section className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
+      <section ref={(el) => { stepRefs.current[2] = el; }} className="scroll-mt-20 space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
         <StepTitle n={2} title="Unggah file isian" />
         <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-lime-300 bg-lime-50/50 px-4 py-8 text-center text-sm transition hover:bg-lime-50">
           <span className="font-semibold text-lime-800">{busy ? "Membaca file…" : "Pilih file .xlsx"}</span>
@@ -239,7 +299,7 @@ export default function ProvinsiPage() {
       </section>
 
       {/* 3. Parameter */}
-      <section className="space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
+      <section ref={(el) => { stepRefs.current[3] = el; }} className="scroll-mt-20 space-y-4 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <StepTitle n={3} title="Periksa parameter" />
           <span className="text-xs text-lime-900/60">{changedParams} diubah dari Jawa Barat</span>
@@ -304,7 +364,7 @@ export default function ProvinsiPage() {
           </p>
         )}
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={save} disabled={busy || (upload?.errors.length ?? 0) > 0} className={buttonPrimary}>
+          <button type="button" onClick={save} disabled={busy} className={buttonPrimary}>
             Simpan &amp; jalankan {draft.province || "model"}
           </button>
           <button type="button" onClick={backToJabar} className={buttonOutline}>
@@ -312,6 +372,8 @@ export default function ProvinsiPage() {
           </button>
         </div>
       </section>
+
+      {problems && <InvalidDataDialog problems={problems.list} onFix={fix} onLeave={backToJabar} />}
     </div>
   );
 }
