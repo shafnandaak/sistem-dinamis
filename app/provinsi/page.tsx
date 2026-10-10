@@ -138,13 +138,18 @@ export default function ProvinsiPage() {
       showProblems(["Provinsi belum dipilih. Pilih provinsi selain Jawa Barat."], 1);
       return;
     }
-    // Tanpa file Excel tidak ada data provinsi (kecuali mengubah parameter provinsi yang sudah aktif).
-    if (!upload && active?.province !== province) {
+    // File isian wajib diunggah setiap kali menyimpan, termasuk untuk provinsi yang sudah aktif.
+    if (!upload) {
       showProblems([`File Excel data ${province} belum diunggah.`], 2);
       return;
     }
     if (upload && upload.errors.length > 0) {
       showProblems([`File ${upload.fileName} belum sesuai struktur template:`, ...upload.errors], 2);
+      return;
+    }
+    // Isian kosong diganti data Jawa Barat saat dibaca; tidak boleh tersimpan diam-diam sebagai data provinsi lain.
+    if (upload.warnings.length > 0) {
+      showProblems([`File ${upload.fileName} belum lengkap:`, ...upload.warnings], 2);
       return;
     }
     if (paramErrors.length > 0) {
