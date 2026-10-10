@@ -158,7 +158,7 @@ export function parseWorkbook(xlsx: XLSX, buffer: ArrayBuffer, base: ProvinceDat
 
   // Nilai Awal
   const initials = rowsOf(SHEETS.initials);
-  if (!initials) warnings.push(`Sheet "${SHEETS.initials}" tidak ada; nilai awal tidak diubah.`);
+  if (!initials) errors.push(`Sheet "${SHEETS.initials}" tidak ada. Gunakan file dari "Unduh template".`);
   else {
     const byName = new Map(initials.slice(1).map((r) => [String(r[0] ?? "").trim(), r]));
     counts[SHEETS.initials] = 0;
@@ -178,7 +178,7 @@ export function parseWorkbook(xlsx: XLSX, buffer: ArrayBuffer, base: ProvinceDat
 
   // Lookup
   const lookups = rowsOf(SHEETS.lookups);
-  if (!lookups) warnings.push(`Sheet "${SHEETS.lookups}" tidak ada; lookup tidak diubah.`);
+  if (!lookups) errors.push(`Sheet "${SHEETS.lookups}" tidak ada. Gunakan file dari "Unduh template".`);
   else {
     const cols = yearColumns(lookups[0] ?? []);
     if (cols.every((c) => c < 0)) errors.push(`${SHEETS.lookups}: judul kolom tahun ${DATA_YEARS[0]}–${DATA_YEARS.at(-1)} tidak ditemukan.`);
@@ -199,7 +199,7 @@ export function parseWorkbook(xlsx: XLSX, buffer: ArrayBuffer, base: ProvinceDat
 
   // Data Aktual
   const actual = rowsOf(SHEETS.actual);
-  if (!actual) warnings.push(`Sheet "${SHEETS.actual}" tidak ada; tidak ada data pembanding.`);
+  if (!actual) errors.push(`Sheet "${SHEETS.actual}" tidak ada. Gunakan file dari "Unduh template".`);
   else {
     const cols = yearColumns(actual[0] ?? []);
     const byKey = new Map(actual.slice(1).map((r) => [String(r[0] ?? "").trim(), r]));
