@@ -9,7 +9,9 @@ import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Reveal from "@/components/Reveal";
 import NextStep from "@/components/NextStep";
 import AnalysisDetail from "@/components/AnalysisDetail";
+import TargetScenarios from "@/components/TargetScenarios";
 import { useViewMode } from "@/lib/viewMode";
+import { useSessionState } from "@/lib/sessionState";
 
 import {
   FINAL_YEAR,
@@ -18,6 +20,7 @@ import {
   POLICIES,
   POLICY_ORDER,
   SCENARIOS,
+  TARGET_SCENARIOS,
   changeTone,
   exportCsv,
   formatPct,
@@ -68,11 +71,12 @@ export default function ScenarioPage() {
   const [baseline, setBaseline] = useState<DataRow[]>([]);
   const [results, setResults] = useState<Record<string, DataRow[]>>({});
   const [error, setError] = useState("");
-  const [selectedMetric, setSelectedMetric] = useState(METRICS[0].key);
+  const [selectedMetric, setSelectedMetric] = useSessionState("skenario.indikator", METRICS[0].key);
   // Skenario yang ditampilkan di grafik (bisa 1, 2, atau 3), plus garis baseline.
-  const [shown, setShown] = useState<string[]>(SCENARIOS.map((sc) => sc.id));
-  const [showBaseline, setShowBaseline] = useState(true);
+  const [shown, setShown] = useSessionState<string[]>("skenario.tampil", SCENARIOS.map((sc) => sc.id));
+  const [showBaseline, setShowBaseline] = useSessionState("skenario.baseline", true);
   const allShown = shown.length === SCENARIOS.length && showBaseline;
+  const [tab, setTab] = useSessionState<"terbaik" | "target">("skenario.tab", "terbaik");
   const toggleShown = (id: string) => setShown((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   // Jalankan baseline dan ketiga skenario sekali saat halaman dibuka.
@@ -86,6 +90,9 @@ export default function ScenarioPage() {
         for (const scenario of SCENARIOS) {
           next[scenario.id] = runSimulation(model, { constants: toModelConstants(scenarioValues(scenario)) }) as unknown as DataRow[];
         }
+        for (const scenario of TARGET_SCENARIOS) {
+          next[scenario.id] = runSimulation(model, { constants: toModelConstants(scenario.values) }) as unknown as DataRow[];
+        }
         setBaseline(base);
         setResults(next);
       } catch (err) {
@@ -95,7 +102,7 @@ export default function ScenarioPage() {
     void run();
   }, []);
 
-  const ready = baseline.length > 0 && Object.keys(results).length === SCENARIOS.length;
+  const ready = baseline.length > 0 && [...SCENARIOS, ...TARGET_SCENARIOS].every((sc) => results[sc.id]);
 
   // Perubahan terhadap baseline: nilai tahun 2035 dan rata-rata 2026-2035.
   const summary = useMemo(() => {
@@ -162,14 +169,41 @@ export default function ScenarioPage() {
       <Reveal>
         <header className="space-y-1 pt-2">
           <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 5 · Skenario kebijakan</p>
-          <h1 className="text-center text-3xl font-bold text-lime-900 md:text-4xl">Tiga Skenario Terbaik</h1>
+          <h1 className="text-center text-3xl font-bold text-lime-900 md:text-4xl">
+            {tab === "terbaik" ? "Tiga Skenario Terbaik" : "Skenario Berbasis Target"}
+          </h1>
+          <div className="flex justify-center pt-3" role="tablist" aria-label="Jenis skenario">
+            <div className="inline-flex rounded-full border border-lime-200 bg-white p-1 shadow-sm">
+              {(
+                [
+                  ["terbaik", "Skenario terbaik"],
+                  ["target", "Skenario berbasis target"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === id}
+                  onClick={() => setTab(id)}
+                  className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                    tab === id ? "bg-lime-700 text-white shadow-sm" : "text-lime-900 hover:bg-lime-50"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
         </header>
       </Reveal>
 
       {error && <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">Gagal menjalankan model: {error}</p>}
-      {!ready && !error && <p className="text-sm text-lime-900/70">Menjalankan model untuk baseline dan tiga skenario…</p>}
+      {!ready && !error && <p className="text-sm text-lime-900/70">Menjalankan model untuk baseline dan skenario…</p>}
 
-      {ready && (
+      {ready && tab === "target" && <TargetScenarios baseline={baseline} results={results} />}
+
+      {ready && tab === "terbaik" && (
         <>
           <div className="grid gap-4 lg:grid-cols-3">
             {SCENARIOS.map((scenario) => {
@@ -379,7 +413,11 @@ export default function ScenarioPage() {
             </section>
             </AnalysisDetail>
           </Reveal>
+        </>
+      )}
 
+      {ready && (
+        <>
           <Reveal>
             <ModelPrintNotice onPrint={() => window.print()} />
           </Reveal>

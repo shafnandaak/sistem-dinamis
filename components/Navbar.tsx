@@ -19,7 +19,6 @@ export const menuItems = [
   { name: "Kebijakan", href: "/kebijakan" },
   { name: "Skenario", href: "/scenario" },
   { name: "Simulasi", href: "/simulation" },
-  { name: "Estimasi Data SRN", href: "/estimasi-srn" },
   { name: "Pengujian", href: "/pengujian" },
   { name: "About", href: "/about" },
 ];

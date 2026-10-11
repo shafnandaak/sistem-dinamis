@@ -1,4 +1,4 @@
-// Kartu "Kebaruan penelitian" di halaman Estimasi Data SRN: data citra satelit untuk mengatasi jeda (lag) publikasi
+// Kartu "Kebaruan penelitian" (bagian 3 halaman About): estimasi data dengan citra satelit untuk mengatasi jeda (lag) publikasi
 // statistik resmi. Ikon berupa path SVG 24x24 bergaya garis.
 
 const SOURCES = [
@@ -35,7 +35,7 @@ function Icon({ d }: { d: string }) {
 export default function SatelliteNovelty({ onExplore }: { onExplore?: () => void }) {
   return (
     <aside className="rounded-2xl border border-lime-200 bg-lime-50/40 p-5 md:p-6">
-      <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Kebaruan penelitian</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">3 · Kebaruan penelitian</p>
       <h2 className="mt-1 text-lg font-bold leading-snug text-lime-950 md:text-xl">Mengatasi jeda data statistik resmi dengan citra satelit</h2>
       <p className="mt-2 text-sm leading-relaxed text-lime-900/75">
         Statistik resmi negara terbit dengan jeda waktu, sehingga kondisi terbaru belum tercatat. Penelitian ini memanfaatkan data citra

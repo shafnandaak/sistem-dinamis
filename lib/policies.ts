@@ -146,6 +146,72 @@ export function scenarioValues(scenario: Scenario): PolicyValues {
   return Object.fromEntries(POLICY_ORDER.map((key) => [key, scenario.policies.includes(key) ? POLICIES[key].high : 0])) as PolicyValues;
 }
 
+// ---- Skenario berbasis target ----
+// Kombinasi kebijakan dengan intervensi terkecil yang cukup mencapai target produksi pemerintah daerah.
+
+export const PRODUCTION_TARGET = {
+  source: "Rencana Strategis Dinas Tanaman Pangan dan Hortikultura Provinsi Jawa Barat 2025–2029",
+  baseYear: 2024,
+  targetYear: 2030,
+  /** Produksi tanaman pangan dan hortikultura (ton) menurut Renstra. */
+  renstraBase: 13_774_058,
+  renstraTarget: 14_292_209,
+};
+/** Kenaikan relatif target Renstra (%), diterapkan ke produksi total tujuh komoditas model. */
+export const TARGET_GROWTH_PCT = (PRODUCTION_TARGET.renstraTarget / PRODUCTION_TARGET.renstraBase - 1) * 100;
+
+export const PRODUCTION_COMMODITIES = ["Padi", "Jagung", "Kedelai", "Kacang Tanah", "Kacang Hijau", "Ubi Kayu", "Ubi Jalar"];
+
+/** Produksi total tujuh komoditas tanaman pangan (ton/tahun). */
+export function totalProduction(row: DataRow): number {
+  return PRODUCTION_COMMODITIES.reduce((sum, k) => sum + num(row[`Produksi ${k}`]), 0);
+}
+
+/** Target produksi total tahun target = produksi total model tahun dasar × (1 + kenaikan Renstra). */
+export function productionTarget(baselineRows: DataRow[]): number {
+  return totalProduction(rowAt(baselineRows, PRODUCTION_TARGET.baseYear)) * (1 + TARGET_GROWTH_PCT / 100);
+}
+
+export type TargetScenario = {
+  id: string;
+  code: string;
+  name: string;
+  tagline: string;
+  description: string;
+  values: PolicyValues;
+  color: string;
+};
+
+export const TARGET_SCENARIOS: TargetScenario[] = [
+  {
+    id: "t1",
+    code: "T1",
+    name: "Irigasi + Belanja Sedang",
+    tagline: "Tanpa LP2B dan tanpa tambahan subsidi",
+    description: "Perluasan irigasi 3% per tahun dengan tambahan belanja pertanian 20% sudah cukup untuk melampaui target.",
+    values: { lp2b: 0, rab: 20, subsidi: 0, irigasi: 3 },
+    color: "#7c3aed",
+  },
+  {
+    id: "t2",
+    code: "T2",
+    name: "Irigasi + Belanja Tinggi",
+    tagline: "Margin terbesar di atas target",
+    description: "Tambahan belanja pertanian dinaikkan menjadi 30% sehingga produksi berada paling jauh di atas target.",
+    values: { lp2b: 0, rab: 30, subsidi: 0, irigasi: 3 },
+    color: "#0891b2",
+  },
+  {
+    id: "t3",
+    code: "T3",
+    name: "Lindungi Lahan, Belanja Rendah",
+    tagline: "LP2B menggantikan sebagian belanja",
+    description: "Perlindungan 25% lahan pangan menahan alih fungsi lahan, sehingga tambahan belanja cukup 10% untuk mencapai target.",
+    values: { lp2b: 25, rab: 10, subsidi: 0, irigasi: 3 },
+    color: "#be185d",
+  },
+];
+
 export type Metric = {
   key: string;
   label: string;

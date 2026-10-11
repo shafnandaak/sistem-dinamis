@@ -23,6 +23,8 @@ type ChartProps = {
     points: Point[];
     lineColor?: string;
     areaColor?: string;
+    /** Garis putus-putus, mis. garis target. */
+    dashed?: boolean;
   }[];
 };
 
@@ -95,7 +97,7 @@ function formatTicks(ticks: number[]): string[] {
   return ticks.map((t) => t.toLocaleString("id-ID"));
 }
 
-type ExportSeries = { name: string; lineColor: string; points: Point[] };
+type ExportSeries = { name: string; lineColor: string; points: Point[]; dashed?: boolean };
 
 const XML_ESCAPES: Record<string, string> = { "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;" };
 
@@ -169,8 +171,9 @@ function buildExportSvg(options: {
 
   series.forEach((s) => {
     const d = s.points.map((p, i) => `${i === 0 ? "M" : "L"}${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`).join(" ");
-    parts.push(`<path d="${d}" fill="none" stroke="${s.lineColor}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
-    if (s.points.length <= 20) {
+    const dash = s.dashed ? ` stroke-dasharray="10 7"` : "";
+    parts.push(`<path d="${d}" fill="none" stroke="${s.lineColor}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"${dash}/>`);
+    if (s.points.length <= 20 && !s.dashed) {
       s.points.forEach((p) => parts.push(`<circle cx="${sx(p.x).toFixed(1)}" cy="${sy(p.y).toFixed(1)}" r="4" fill="${s.lineColor}"/>`));
     }
   });
@@ -342,7 +345,7 @@ export default function Chart({
     const { svg, width: exportWidth, height: exportHeight } = buildExportSvg({
       title,
       subtitle,
-      series: preparedSeries.map((item) => ({ name: item.name, lineColor: item.lineColor, points: item.points })),
+      series: preparedSeries.map((item) => ({ name: item.name, lineColor: item.lineColor, points: item.points, dashed: item.dashed })),
       xAxisLabel,
       yAxisLabel,
       valueFormatter,
@@ -465,8 +468,17 @@ export default function Chart({
             return (
               <g key={item.name}>
                 {showArea && item.areaColor !== "transparent" && <path d={areaPath} fill={`url(#area-${index})`} />}
-                <path d={linePath} fill="none" stroke={item.lineColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d={linePath}
+                  fill="none"
+                  stroke={item.lineColor}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={item.dashed ? "6 5" : undefined}
+                />
                 {item.points.length <= 20 &&
+                  !item.dashed &&
                   item.points.map((p) => (
                     <circle key={p.x} cx={toSvgX(p.x)} cy={toSvgY(p.y)} r="2.5" fill={item.lineColor} />
                   ))}

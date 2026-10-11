@@ -9,14 +9,19 @@ type LeaveGuardProps = {
   active: boolean;
   /** Dipanggil setelah pengguna mencetak (Print PDF), agar peringatan tidak muncul lagi untuk hasil yang sama. */
   onDocumented: () => void;
+  /**
+   * Tampilkan pop-up saat pindah halaman di dalam aplikasi. Matikan bila halaman mengingat hasilnya
+   * (lib/sessionState.ts); peringatan menutup tab tetap aktif karena hasil hilang saat tab ditutup.
+   */
+  warnInApp?: boolean;
 };
 
 /**
  * Mengingatkan pengguna sebelum meninggalkan halaman bila hasil simulasi belum didokumentasikan.
- * - Pindah halaman lewat link di aplikasi: pop-up dengan pilihan Print PDF / tinggalkan / batal.
+ * - Pindah halaman lewat link di aplikasi (bila warnInApp): pop-up dengan pilihan Print PDF / tinggalkan / batal.
  * - Menutup tab atau memuat ulang: konfirmasi bawaan browser (teksnya tidak bisa diubah).
  */
-export default function LeaveGuard({ active, onDocumented }: LeaveGuardProps) {
+export default function LeaveGuard({ active, onDocumented, warnInApp = true }: LeaveGuardProps) {
   const router = useRouter();
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
@@ -41,12 +46,12 @@ export default function LeaveGuard({ active, onDocumented }: LeaveGuardProps) {
     };
 
     window.addEventListener("beforeunload", onBeforeUnload);
-    document.addEventListener("click", onClick, true);
+    if (warnInApp) document.addEventListener("click", onClick, true);
     return () => {
       window.removeEventListener("beforeunload", onBeforeUnload);
       document.removeEventListener("click", onClick, true);
     };
-  }, [active]);
+  }, [active, warnInApp]);
 
   useEffect(() => {
     window.addEventListener("afterprint", onDocumented);

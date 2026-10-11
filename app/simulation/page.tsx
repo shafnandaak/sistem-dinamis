@@ -9,6 +9,7 @@ import ModelPrintNotice from "@/components/ModelPrintNotice";
 import LeaveGuard from "@/components/LeaveGuard";
 import AnalysisDetail from "@/components/AnalysisDetail";
 import { setViewMode, useViewMode } from "@/lib/viewMode";
+import { useSessionState } from "@/lib/sessionState";
 import {
   BELANJA_DASAR,
   FINAL_YEAR,
@@ -17,16 +18,21 @@ import {
   NO_POLICY,
   POLICIES,
   POLICY_ORDER,
+  PRODUCTION_TARGET,
   SCENARIOS,
+  TARGET_GROWTH_PCT,
+  TARGET_SCENARIOS,
   changeTone,
   exportCsv,
   formatPct,
   formatValue,
   num,
   pctChange,
+  productionTarget,
   rowAt,
   scenarioValues,
   toModelConstants,
+  totalProduction,
   type DataRow,
   type PolicyKey,
   type PolicyValues,
@@ -44,10 +50,18 @@ const MAX_SNAPSHOTS = SNAPSHOT_COLORS.length;
 const SIM_COLOR = "#3f7d20";
 const BASE_COLOR = "#9ca3af";
 
-const PRESETS: { id: string; label: string; values: PolicyValues }[] = [
-  { id: "baseline", label: "Tanpa kebijakan", values: NO_POLICY },
-  ...SCENARIOS.map((s) => ({ id: s.id, label: `${s.rank}. ${s.name}`, values: scenarioValues(s) })),
+/** Skenario yang dapat dipilih sebagai pembanding, dikelompokkan seperti di halaman Skenario. */
+const COMPARE_GROUPS = [
+  {
+    title: "Skenario terbaik",
+    items: SCENARIOS.map((s) => ({ id: s.id, tag: `Skenario ${s.rank}`, chip: `${s.rank}. ${s.name}`, label: s.name, values: scenarioValues(s), color: SCENARIO_COLORS[s.id] })),
+  },
+  {
+    title: "Skenario target",
+    items: TARGET_SCENARIOS.map((s) => ({ id: s.id, tag: `Skenario ${s.code}`, chip: `${s.code}. ${s.name}`, label: s.name, values: s.values, color: s.color })),
+  },
 ];
+const COMPARE_OPTIONS = COMPARE_GROUPS.flatMap((g) => g.items);
 
 const sameValues = (a: PolicyValues, b: PolicyValues) => POLICY_ORDER.every((key) => a[key] === b[key]);
 
@@ -137,18 +151,18 @@ export default function SimulationPage() {
   const modelRef = useRef<Model | null>(null);
   const [baseline, setBaseline] = useState<DataRow[]>([]);
   const [rows, setRows] = useState<DataRow[]>([]);
-  const [values, setValues] = useState<PolicyValues>(NO_POLICY);
-  const [year, setYear] = useState(FINAL_YEAR);
-  const [metricKey, setMetricKey] = useState(METRICS[0].key);
-  const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
+  // Slider, pembanding, dan pilihan tampilan diingat selama tab terbuka, jadi tidak hilang saat pindah halaman.
+  const [values, setValues] = useSessionState<PolicyValues>("simulasi.slider", NO_POLICY);
+  const [year, setYear] = useSessionState("simulasi.tahun", FINAL_YEAR);
+  const [metricKey, setMetricKey] = useSessionState("simulasi.indikator", METRICS[0].key);
+  // Pembanding P1–P3 disimpan tanpa hasil run; hasilnya dihitung ulang dari nilai slidernya.
+  const [savedSnapshots, setSavedSnapshots] = useSessionState<Omit<Snapshot, "rows">[]>("simulasi.pembanding", []);
+  const [snapshotRows, setSnapshotRows] = useState<Record<number, DataRow[]>>({});
   const [scenarioRuns, setScenarioRuns] = useState<Record<string, DataRow[]>>({});
-  const [compareIds, setCompareIds] = useState<string[]>([]);
-  const [showBaseline, setShowBaseline] = useState(true);
-  /** Skenario terakhir yang dimuat ke slider (untuk petunjuk "bandingkan dengan skenario aslinya"). */
-  const [loadedPreset, setLoadedPreset] = useState<string | null>(null);
-  const [documentedSig, setDocumentedSig] = useState("");
+  const [compareIds, setCompareIds] = useSessionState<string[]>("simulasi.skenario", []);
+  const [showBaseline, setShowBaseline] = useSessionState("simulasi.baseline", true);
+  const [documentedSig, setDocumentedSig] = useSessionState("simulasi.dicetak", "");
   const [error, setError] = useState("");
-  const snapshotId = useRef(0);
 
   // Muat model sekali, lalu jalankan baseline.
   useEffect(() => {
@@ -158,10 +172,10 @@ export default function SimulationPage() {
         model.setModelFunctions(buildModelFunctions());
         modelRef.current = model;
         const base = runSimulation(model) as unknown as DataRow[];
-        // Hasil tiga skenario terbaik disiapkan sekali untuk pilihan "Bandingkan dengan".
+        // Hasil skenario terbaik dan skenario target disiapkan sekali untuk pilihan pembanding.
         const runs: Record<string, DataRow[]> = {};
-        for (const scenario of SCENARIOS) {
-          runs[scenario.id] = runSimulation(model, { constants: toModelConstants(scenarioValues(scenario)) }) as unknown as DataRow[];
+        for (const option of COMPARE_OPTIONS) {
+          runs[option.id] = runSimulation(model, { constants: toModelConstants(option.values) }) as unknown as DataRow[];
         }
         setScenarioRuns(runs);
         setBaseline(base);
@@ -172,6 +186,22 @@ export default function SimulationPage() {
     };
     void load();
   }, []);
+
+  // Pembanding yang dipulihkan dari sesi dijalankan ulang setelah model siap.
+  useEffect(() => {
+    const model = modelRef.current;
+    if (!model || baseline.length === 0) return;
+    const missing = savedSnapshots.filter((snap) => !snapshotRows[snap.id]);
+    if (missing.length === 0) return;
+    setSnapshotRows((prev) => ({
+      ...prev,
+      ...Object.fromEntries(missing.map((snap) => [snap.id, runSimulation(model, { constants: toModelConstants(snap.values) }) as unknown as DataRow[]])),
+    }));
+  }, [savedSnapshots, snapshotRows, baseline]);
+  const snapshots = useMemo<Snapshot[]>(
+    () => savedSnapshots.filter((snap) => snapshotRows[snap.id]).map((snap) => ({ ...snap, rows: snapshotRows[snap.id] })),
+    [savedSnapshots, snapshotRows],
+  );
 
   // Simulasi ulang otomatis setiap kali slider berubah (sedikit ditunda agar geseran tetap mulus).
   useEffect(() => {
@@ -186,8 +216,6 @@ export default function SimulationPage() {
 
   const ready = baseline.length > 0 && rows.length > 0;
   const metric = METRICS.find((m) => m.key === metricKey) ?? METRICS[0];
-  const activePreset = PRESETS.find((p) => sameValues(p.values, values))?.id;
-  const loadedScenario = SCENARIOS.find((sc) => sc.id === loadedPreset) ?? null;
 
   const cards = useMemo(() => {
     if (!ready) return [];
@@ -199,12 +227,12 @@ export default function SimulationPage() {
   // Pembanding aktif: skenario terbaik yang dipilih + pembanding yang disimpan (P1–P3).
   const references = useMemo<Reference[]>(
     () => [
-      ...SCENARIOS.filter((sc) => compareIds.includes(sc.id) && scenarioRuns[sc.id]).map((sc) => ({
-        key: `sc-${sc.id}`,
-        tag: `Skenario ${sc.rank}`,
-        label: sc.name,
-        rows: scenarioRuns[sc.id],
-        color: SCENARIO_COLORS[sc.id],
+      ...COMPARE_OPTIONS.filter((o) => compareIds.includes(o.id) && scenarioRuns[o.id]).map((o) => ({
+        key: `sc-${o.id}`,
+        tag: o.tag,
+        label: o.label,
+        rows: scenarioRuns[o.id],
+        color: o.color,
       })),
       ...snapshots.map((snap) => ({ key: `s${snap.id}`, tag: snap.tag, label: snap.label, rows: snap.rows, color: snap.color })),
     ],
@@ -218,7 +246,7 @@ export default function SimulationPage() {
     signatureRef.current = signature;
   }, [signature]);
   const hasComparison = !sameValues(values, NO_POLICY) || compareIds.length > 0 || snapshots.length > 0;
-  const markDocumented = useCallback(() => setDocumentedSig(signatureRef.current), []);
+  const markDocumented = useCallback(() => setDocumentedSig(signatureRef.current), [setDocumentedSig]);
 
   // Baris tabel "Perbandingan hasil": setiap pembanding + simulasi saat ini, perubahan vs baseline pada `year`.
   const comparison = useMemo(() => {
@@ -241,6 +269,16 @@ export default function SimulationPage() {
     return { rows: runs, best };
   }, [references, rows, baseline, year, values]);
 
+  // Status target Renstra untuk simulasi saat ini (lihat skenario berbasis target di halaman Skenario).
+  const targetStatus = useMemo(() => {
+    if (!ready) return null;
+    const target = productionTarget(baseline);
+    const base = totalProduction(rowAt(baseline, PRODUCTION_TARGET.baseYear));
+    const value = totalProduction(rowAt(rows, PRODUCTION_TARGET.targetYear));
+    return { target, value, growth: (value / base - 1) * 100, reached: value >= target };
+  }, [ready, rows, baseline]);
+  const jutaTon = (v: number) => (v / 1_000_000).toLocaleString("id-ID", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+
   const toPoints = (data: DataRow[]) => data.map((r) => ({ x: num(r["Time"]), y: metric.value(r) }));
   const series = ready
     ? [
@@ -256,9 +294,11 @@ export default function SimulationPage() {
     if (snapshots.length >= MAX_SNAPSHOTS) return;
     // Nomor P1–P3 dan warnanya dipakai ulang setelah pembanding dihapus.
     const slot = SNAPSHOT_COLORS.findIndex((c) => !snapshots.some((s) => s.color === c));
-    snapshotId.current += 1;
-    const snapshot = { id: snapshotId.current, tag: `P${slot + 1}`, label: describe(values), values, rows, color: SNAPSHOT_COLORS[slot] };
-    setSnapshots((prev) => [...prev, snapshot].sort((a, b) => a.tag.localeCompare(b.tag)));
+    const id = Math.max(0, ...savedSnapshots.map((snap) => snap.id)) + 1;
+    setSnapshotRows((prev) => ({ ...prev, [id]: rows }));
+    setSavedSnapshots((prev) =>
+      [...prev, { id, tag: `P${slot + 1}`, label: describe(values), values, color: SNAPSHOT_COLORS[slot] }].sort((a, b) => a.tag.localeCompare(b.tag)),
+    );
   };
 
   const exportIndicator = () => {
@@ -299,49 +339,14 @@ export default function SimulationPage() {
               <p className="font-semibold text-lime-950">Atur simulasi bebas</p>
               <p className="text-xs text-lime-900/60">Geser slider; hasil di kanan diperbarui langsung.</p>
             </div>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Isi slider dari</p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => {
-                    setValues(preset.values);
-                    setLoadedPreset(preset.id);
-                  }}
-                  aria-pressed={activePreset === preset.id}
-                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                    activePreset === preset.id ? "bg-lime-700 text-white shadow-sm" : "bg-lime-100 text-lime-900 hover:bg-lime-200"
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              ))}
-            </div>
-            {loadedScenario && (
-              <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-xs text-sky-900">
-                <p>
-                  {activePreset === loadedScenario.id ? "Slider memakai nilai" : "Slider diubah dari"}{" "}
-                  <span className="font-semibold">
-                    {loadedScenario.rank}. {loadedScenario.name}
-                  </span>
-                  . Ubah slider untuk mencoba variasinya, lalu bandingkan dengan skenario aslinya.
-                </p>
-                {compareIds.includes(loadedScenario.id) ? (
-                  <p className="mt-2 font-semibold text-sky-800">✓ Skenario aslinya sudah menjadi pembanding.</p>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setCompareIds((prev) => [...prev, loadedScenario.id])}
-                    className="mt-2 w-full rounded-lg border border-sky-300 bg-white px-3 py-1.5 font-semibold text-sky-800 transition hover:bg-sky-100"
-                  >
-                    + Bandingkan dengan {loadedScenario.rank}. {loadedScenario.name}
-                  </button>
-                )}
-              </div>
+            {!sameValues(values, NO_POLICY) && (
+              <button
+                type="button"
+                onClick={() => setValues(NO_POLICY)}
+                className="ml-auto shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold text-lime-700 transition hover:bg-lime-50"
+              >
+                Reset
+              </button>
             )}
           </div>
 
@@ -371,78 +376,43 @@ export default function SimulationPage() {
 
           {ready && (
             <>
-              {/* ===== 2. Pembanding: semua yang dibandingkan dengan simulasi bebas ===== */}
-              <section className="space-y-3 rounded-2xl border border-lime-200 bg-white p-4 shadow-sm">
-                <div className="flex items-start gap-2.5">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-lime-700 text-xs font-bold text-white">2</span>
-                  <div>
-                    <p className="font-semibold text-lime-950">Pilih pembanding</p>
-                    <p className="text-xs text-lime-900/60">
-                      Yang dipilih tampil di grafik dan tabel bersama <span className="font-semibold text-lime-800">simulasi saat ini</span>.
-                      Perubahan (%) selalu dihitung terhadap baseline.
+              {targetStatus && (
+                <section
+                  className={`flex flex-col gap-3 rounded-2xl border p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between ${
+                    targetStatus.reached ? "border-lime-300 bg-lime-50" : "border-amber-200 bg-amber-50"
+                  }`}
+                >
+                  <div className="min-w-0 space-y-1">
+                    <p className={`text-xs font-semibold uppercase tracking-wide ${targetStatus.reached ? "text-lime-700" : "text-amber-800"}`}>
+                      Target produksi {PRODUCTION_TARGET.targetYear}
+                    </p>
+                    <p className="text-sm text-lime-950">
+                      Produksi total 7 komoditas <span className="font-bold tabular-nums">{jutaTon(targetStatus.value)} juta ton</span>{" "}
+                      <span className="tabular-nums text-lime-900/70">
+                        ({formatPct(targetStatus.growth)} dari {PRODUCTION_TARGET.baseYear})
+                      </span>
+                    </p>
+                    <p className="text-xs text-lime-900/65">
+                      Target Renstra: ≥ <span className="tabular-nums">{jutaTon(targetStatus.target)}</span> juta ton (
+                      {formatPct(TARGET_GROWTH_PCT)})
                     </p>
                   </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowBaseline((v) => !v)}
-                    aria-pressed={showBaseline}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                      showBaseline ? "border-gray-400 bg-gray-100 text-gray-800" : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50"
+                  <span
+                    className={`shrink-0 self-start rounded-full border px-3 py-1 text-sm font-semibold sm:self-center ${
+                      targetStatus.reached ? "border-lime-300 bg-white text-lime-800" : "border-amber-300 bg-white text-amber-800"
                     }`}
                   >
-                    <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: BASE_COLOR }} />
-                    {showBaseline ? "✓ " : ""}Baseline
-                  </button>
-                  {SCENARIOS.map((sc) => {
-                    const on = compareIds.includes(sc.id);
-                    return (
-                      <button
-                        key={sc.id}
-                        type="button"
-                        onClick={() => setCompareIds((prev) => (on ? prev.filter((id) => id !== sc.id) : [...prev, sc.id]))}
-                        aria-pressed={on}
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                          on ? "bg-white shadow-sm" : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
-                        }`}
-                        style={on ? { borderColor: SCENARIO_COLORS[sc.id], color: SCENARIO_COLORS[sc.id] } : undefined}
-                      >
-                        <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: SCENARIO_COLORS[sc.id] }} />
-                        {on ? "✓ " : "+ "}
-                        {sc.rank}. {sc.name}
-                      </button>
-                    );
-                  })}
-                  {snapshots.map((snap) => (
-                    <span
-                      key={snap.id}
-                      className="inline-flex items-center gap-1.5 rounded-full border bg-white py-1 pl-3 pr-1 text-xs font-semibold shadow-sm"
-                      style={{ borderColor: snap.color, color: snap.color }}
-                      title={snap.label}
-                    >
-                      <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: snap.color }} />
-                      {snap.tag}
-                      <span className="max-w-40 truncate font-normal text-gray-600">{snap.label}</span>
-                      <button
-                        type="button"
-                        onClick={() => setSnapshots((prev) => prev.filter((x) => x.id !== snap.id))}
-                        className="rounded-full px-1.5 text-gray-400 hover:bg-red-50 hover:text-red-700"
-                        aria-label={`Hapus pembanding ${snap.tag}`}
-                      >
-                        ✕
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </section>
+                    {targetStatus.reached ? "✓ Target tercapai" : "Belum mencapai target"}
+                  </span>
+                </section>
+              )}
 
               <section className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <h2 className="text-lg font-semibold text-lime-900">Dampak tahun {year}</h2>
                     <p className="text-xs text-lime-900/60">
-                      Perubahan terhadap baseline. Klik kartu untuk menampilkannya di grafik.
+                      Perubahan hasil slider terhadap baseline. Klik kartu untuk menampilkannya di grafik.
                       {viewMode === "ringkas" && (
                         <>
                           {" "}
@@ -490,6 +460,79 @@ export default function SimulationPage() {
                       </button>
                     );
                   })}
+                </div>
+              </section>
+
+              {/* ===== 2. Pembanding: semua yang dibandingkan dengan simulasi bebas ===== */}
+              <section className="space-y-3 rounded-2xl border border-lime-200 bg-white p-4 shadow-sm">
+                <div className="flex items-start gap-2.5">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-lime-700 text-xs font-bold text-white">2</span>
+                  <div>
+                    <p className="font-semibold text-lime-950">Pilih pembanding</p>
+                    <p className="text-xs text-lime-900/60">
+                      Yang dipilih tampil di grafik dan tabel bersama <span className="font-semibold text-lime-800">simulasi saat ini</span>.
+                      Perubahan (%) selalu dihitung terhadap baseline.
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowBaseline((v) => !v)}
+                      aria-pressed={showBaseline}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                        showBaseline ? "border-gray-400 bg-gray-100 text-gray-800" : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: BASE_COLOR }} />
+                      {showBaseline ? "✓ " : ""}Baseline
+                    </button>
+                    {snapshots.map((snap) => (
+                      <span
+                        key={snap.id}
+                        className="inline-flex items-center gap-1.5 rounded-full border bg-white py-1 pl-3 pr-1 text-xs font-semibold shadow-sm"
+                        style={{ borderColor: snap.color, color: snap.color }}
+                        title={snap.label}
+                      >
+                        <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: snap.color }} />
+                        {snap.tag}
+                        <span className="max-w-40 truncate font-normal text-gray-600">{snap.label}</span>
+                        <button
+                          type="button"
+                          onClick={() => setSavedSnapshots((prev) => prev.filter((x) => x.id !== snap.id))}
+                          className="rounded-full px-1.5 text-gray-400 hover:bg-red-50 hover:text-red-700"
+                          aria-label={`Hapus pembanding ${snap.tag}`}
+                        >
+                          ✕
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  {COMPARE_GROUPS.map((group) => (
+                    <div key={group.title} className="flex flex-wrap items-center gap-2">
+                      <span className="w-full text-[11px] font-semibold uppercase tracking-wide text-lime-900/50 sm:w-32">{group.title}</span>
+                      {group.items.map((o) => {
+                        const on = compareIds.includes(o.id);
+                        return (
+                          <button
+                            key={o.id}
+                            type="button"
+                            onClick={() => setCompareIds((prev) => (on ? prev.filter((id) => id !== o.id) : [...prev, o.id]))}
+                            aria-pressed={on}
+                            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                              on ? "bg-white shadow-sm" : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                            }`}
+                            style={on ? { borderColor: o.color, color: o.color } : undefined}
+                          >
+                            <span className="h-0.5 w-3 rounded-full" style={{ backgroundColor: o.color }} />
+                            {on ? "✓ " : "+ "}
+                            {o.chip}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               </section>
 
@@ -651,7 +694,7 @@ export default function SimulationPage() {
               <ModelPrintNotice onPrint={() => window.print()} />
             </>
           )}
-          <LeaveGuard active={ready && hasComparison && signature !== documentedSig} onDocumented={markDocumented} />
+          <LeaveGuard active={ready && hasComparison && signature !== documentedSig} onDocumented={markDocumented} warnInApp={false} />
         </div>
       </div>
     </div>

@@ -197,7 +197,8 @@ export default function ProvinsiPage() {
       setMessage({ tone: "error", text: "Penyimpanan browser tidak tersedia (mode privat atau diblokir)." });
       return;
     }
-    window.location.assign("/baseline");
+    // Langsung ke tahap evaluasi model (Simulasi Historis) dengan data provinsi baru, tanpa klik "Mulai Simulasi".
+    window.location.assign("/baseline?evaluasi=1");
   };
 
   const backToJabar = () => {

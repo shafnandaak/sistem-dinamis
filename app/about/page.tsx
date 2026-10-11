@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
+import SatelliteNovelty from "@/components/SatelliteNovelty";
 import { BASELINE_END_YEAR, BASELINE_START_YEAR } from "@/lib/historicalActuals";
 import { FINAL_YEAR, FORECAST_START } from "@/lib/policies";
 
-// Halaman About: pengantar aplikasi + materi singkat "Apa itu tanaman pangan?" dan jenis-jenisnya
-// (Permentan No. 41/Permentan/OT.140/9/2009; BPS, 2025; Pusdatin Pertanian, 2025).
+// Halaman About: tiga hal yang dipaparkan, yaitu lokus penelitian, tanaman pangan (Permentan No. 41/Permentan/OT.140/9/2009;
+// BPS, 2025; Pusdatin Pertanian, 2025), dan kebaruan penelitian berupa estimasi data citra satelit.
 
 type Commodity = { id: string; name: string; alias?: string; desc: string; peran: string; color: string; sub?: { name: string; desc: string }[] };
 type Group = { id: "padi" | "palawija"; name: string; tagline: string; desc: string; items: Commodity[] };
@@ -135,8 +136,26 @@ function CropIcon({ id, className }: { id: string; className?: string }) {
 
 const FACTORS = ["Luas lahan", "Kondisi iklim", "Teknologi budi daya"];
 
+// Citra raster untuk overlay peta. Isi dengan path file (mis. "/map.png") setelah file citra
+// ditaruh di folder public; selama null, overlay tidak dimuat (menghindari error 404).
+const RASTER_IMAGE: string | null = null;
+
+// Batas wilayah Provinsi Jawa Barat (lon/lat) untuk tampilan awal peta
+const JABAR_MAP_URL =
+  "https://www.openstreetmap.org/export/embed.html?bbox=106.30%2C-7.90%2C108.90%2C-5.85&layer=mapnik";
+
+const years = Array.from({ length: 2026 - 2015 + 1 }, (_, i) => 2015 + i);
+
+/** Tiga hal yang dipaparkan di halaman ini, sesuai urutan bagian di bawahnya. */
+const TOPICS = [
+  { id: "lokus", n: 1, title: "Lokus penelitian", desc: "Provinsi Jawa Barat sebagai wilayah kajian." },
+  { id: "tanaman-pangan", n: 2, title: "Tanaman pangan", desc: "Padi dan palawija yang dimodelkan." },
+  { id: "kebaruan", n: 3, title: "Kebaruan penelitian", desc: "Estimasi data dengan citra satelit." },
+];
+
+
 const LOKUS_FACTS = [
-  { label: "Wilayah", value: "18 kabupaten, 9 kota" },
+  { label: "Tingkat analisis", value: "Provinsi" },
   { label: "Komoditas", value: "7 tanaman pangan" },
   { label: "Periode historis", value: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}` },
   { label: "Periode simulasi", value: `${FORECAST_START}–${FINAL_YEAR}` },
@@ -146,6 +165,9 @@ export default function AboutPage() {
   const [groupId, setGroupId] = useState<Group["id"]>("padi");
   const group = GROUPS.find((g) => g.id === groupId) ?? GROUPS[0];
   const [selectedId, setSelectedId] = useState<string>("padi");
+  const [showRaster, setShowRaster] = useState(true);
+  const [rasterOpacity, setRasterOpacity] = useState(60);
+  const [selectedYear, setSelectedYear] = useState(2015);
   const selected = group.items.find((c) => c.id === selectedId) ?? group.items[0];
 
   const pickGroup = (id: Group["id"]) => {
@@ -160,18 +182,33 @@ export default function AboutPage() {
           <p className="text-xs uppercase tracking-wide text-lime-700">Tentang Aplikasi</p>
           <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">About</h1>
           <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
-            Aplikasi simulasi model sistem dinamis untuk kebijakan pertanian tanaman pangan di Jawa Barat. Model mencakup tujuh komoditas
-            tanaman pangan: padi dan enam jenis palawija.
+            Aplikasi simulasi model sistem dinamis untuk kebijakan pertanian tanaman pangan di Jawa Barat.
           </p>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-3">
+            {TOPICS.map((t) => (
+              <li key={t.id}>
+                <a
+                  href={`#${t.id}`}
+                  className="card-hover flex h-full gap-3 rounded-2xl border border-lime-200 bg-lime-50/60 p-4 transition hover:border-lime-400 hover:bg-lime-50"
+                >
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-lime-700 text-xs font-bold text-white">{t.n}</span>
+                  <span>
+                    <span className="block font-semibold text-lime-950">{t.title}</span>
+                    <span className="block text-xs text-lime-900/65">{t.desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
         </section>
       </Reveal>
 
-      <Reveal>
+      <Reveal id="lokus" className="scroll-mt-24">
         <section className="grid gap-6 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7 lg:grid-cols-[1.15fr_1fr] lg:items-center">
           <figure className="overflow-hidden rounded-2xl border border-lime-100 bg-white">
             <Image
               src="/lokus-penelitian.png"
-              alt="Peta Indonesia dengan Provinsi Jawa Barat ditandai merah, beserta peta perbesaran batas kabupaten/kota Jawa Barat"
+              alt="Peta Indonesia dengan Provinsi Jawa Barat ditandai merah, beserta peta perbesaran Provinsi Jawa Barat"
               width={826}
               height={584}
               className="h-auto w-full"
@@ -181,12 +218,13 @@ export default function AboutPage() {
             </figcaption>
           </figure>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Lokus penelitian</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">1 · Lokus penelitian</p>
             <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Provinsi Jawa Barat</h2>
             <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
-              Penelitian dilakukan di Provinsi Jawa Barat, yang terdiri atas <strong>18 kabupaten dan 9 kota</strong>. Jawa Barat merupakan
-              provinsi dengan <strong>jumlah penduduk terbanyak</strong> di Indonesia sekaligus salah satu <strong>sentra produksi padi</strong>{" "}
-              nasional, sehingga ketersediaan pangan dan tekanan alih fungsi lahan pertanian menjadi isu penting bagi kebijakan daerah.
+              Penelitian dilakukan pada <strong>tingkat provinsi</strong>, dengan Provinsi Jawa Barat sebagai satu kesatuan wilayah kajian. Jawa
+              Barat merupakan provinsi dengan <strong>jumlah penduduk terbanyak</strong> di Indonesia sekaligus salah satu{" "}
+              <strong>sentra produksi padi</strong> nasional, sehingga ketersediaan pangan dan tekanan alih fungsi lahan pertanian menjadi isu
+              penting bagi kebijakan pemerintah provinsi.
             </p>
             <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
               {LOKUS_FACTS.map((f) => (
@@ -200,11 +238,11 @@ export default function AboutPage() {
         </section>
       </Reveal>
 
-      <Reveal>
+      <Reveal id="tanaman-pangan" className="scroll-mt-24">
         <section className="space-y-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7">
           <div className="grid gap-4 lg:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Mengenal komoditas</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">2 · Tanaman pangan</p>
               <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Apa itu tanaman pangan?</h2>
               <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
                 Tanaman pangan adalah kelompok tanaman yang menghasilkan <strong>bahan pangan utama</strong> bagi masyarakat. Budi dayanya
@@ -336,6 +374,107 @@ export default function AboutPage() {
           </p>
         </section>
       </Reveal>
+
+      <div id="kebaruan" className="scroll-mt-24 space-y-6">
+        <Reveal>
+          <SatelliteNovelty />
+        </Reveal>
+
+        <Reveal>
+        <section className="rounded-3xl border border-lime-200 bg-white p-5 md:p-7 shadow-sm space-y-4">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Estimasi data citra</p>
+              <h2 className="text-xl md:text-2xl font-bold text-lime-900">Data Citra Satelit Jawa Barat</h2>
+              <p className="max-w-3xl text-sm text-lime-900/75">
+                Data citra satelit (NDVI, curah hujan, LST, dan evapotranspirasi) dipakai untuk mengatasi jeda publikasi statistik resmi. Peta
+                menampilkan wilayah Jawa Barat; layer citra akan ditampilkan sebagai overlay di atasnya.
+              </p>
+            </div>
+
+            <fieldset
+              disabled={!RASTER_IMAGE}
+              title={RASTER_IMAGE ? undefined : "Data raster belum tersedia (pengembangan lanjutan)"}
+              className="flex flex-wrap items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <label className="text-sm text-lime-900 flex items-center gap-2">
+                Tahun
+                <select
+                  className="rounded-md border border-lime-300 bg-white px-2 py-1"
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(Number(e.target.value))}
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                onClick={() => setShowRaster((prev) => !prev)}
+                className="rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-lime-950 hover:bg-amber-400 transition"
+              >
+                {showRaster ? "Sembunyikan Raster" : "Tampilkan Raster"}
+              </button>
+              <label className="text-sm text-lime-900 flex items-center gap-2">
+                Opacity
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={rasterOpacity}
+                  onChange={(e) => setRasterOpacity(Number(e.target.value))}
+                />
+              </label>
+            </fieldset>
+          </div>
+
+          {!RASTER_IMAGE && (
+            <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <span className="mt-0.5 shrink-0 rounded-full bg-amber-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-900">
+                Pengembangan lanjutan
+              </span>
+              <p>
+                Data raster (citra satelit tutupan lahan per tahun) <span className="font-semibold">belum tersedia</span> di aplikasi ini. Saat ini
+                peta hanya menampilkan basemap Jawa Barat; pengaturan tahun, tampil/sembunyi, dan opacity raster akan aktif setelah data raster
+                ditambahkan.
+              </p>
+            </div>
+          )}
+
+          <div className="relative overflow-hidden rounded-2xl border border-lime-200" style={{ height: 420 }}>
+            {/* Peta dibekukan pada tampilan Jawa Barat (tidak bisa digeser/di-zoom) selama data raster belum tersedia. */}
+            <iframe
+              title="Peta Jawa Barat"
+              className="pointer-events-none h-full w-full"
+              loading="lazy"
+              tabIndex={-1}
+              aria-hidden="true"
+              src={JABAR_MAP_URL}
+            />
+
+            {showRaster && RASTER_IMAGE && (
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  opacity: rasterOpacity / 100,
+                  backgroundImage: `url('${RASTER_IMAGE}')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  mixBlendMode: "multiply",
+                }}
+              />
+            )}
+
+            <div className="absolute left-3 bottom-3 rounded-md bg-white/90 px-3 py-2 text-xs text-lime-900 border border-lime-200">
+              Layer raster: {!RASTER_IMAGE ? "belum tersedia (pengembangan lanjutan) · peta dinonaktifkan" : showRaster ? `aktif (${selectedYear})` : "nonaktif"}
+            </div>
+          </div>
+
+        </section>
+        </Reveal>
+      </div>
     </div>
   );
 }

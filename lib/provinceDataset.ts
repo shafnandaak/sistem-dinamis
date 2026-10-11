@@ -5,6 +5,7 @@
 // Mengganti provinsi aktif memuat ulang halaman, sehingga modul yang membaca data aktif saat
 // dimuat (mis. ACTUAL di lib/historicalActuals.ts) selalu konsisten.
 import { MODEL_CONSTANTS, MODEL_LOOKUPS, STOCK_INITIALS } from "@/lib/modelInputs";
+import { clearSessionState } from "@/lib/sessionState";
 
 export const DEFAULT_PROVINCE = "Jawa Barat";
 export const DATA_YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
@@ -53,6 +54,8 @@ export function readDataset(): ProvinceDataset | null {
 export function writeDataset(dataset: ProvinceDataset): boolean {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(dataset));
+    // Pengaturan halaman dari data sebelumnya tidak dipakai untuk data baru.
+    clearSessionState();
     return true;
   } catch {
     return false;
@@ -62,6 +65,7 @@ export function writeDataset(dataset: ProvinceDataset): boolean {
 export function clearDataset() {
   try {
     window.localStorage.removeItem(STORAGE_KEY);
+    clearSessionState();
   } catch {
     // abaikan: tanpa localStorage memang tidak ada data tersimpan
   }

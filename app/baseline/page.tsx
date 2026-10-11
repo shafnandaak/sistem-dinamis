@@ -19,6 +19,7 @@ import {
 import AnalysisDetail from "@/components/AnalysisDetail";
 import { changeTone } from "@/lib/policies";
 import { useViewMode } from "@/lib/viewMode";
+import { useSessionState } from "@/lib/sessionState";
 import Toast from "@/components/Toast";
 import ModelPrintNotice from "@/components/ModelPrintNotice";
 import Chart from "@/components/Chart";
@@ -180,21 +181,37 @@ const CATEGORY_STYLE = {
   bad: "bg-red-100 text-red-800",
 } as const;
 
+/** Batas MAPE (%) agar model dinyatakan dapat digunakan. */
+const MAPE_USABLE = 10;
+
 function KeyAccuracy({ rows }: { rows: DataRow[] }) {
   const items = KEY_ACCURACY.flatMap(({ key, label }) => {
     const variable = MAPE_VARIABLES.find((v) => v.key === key);
     const result = variable ? computeMape(variable, rows) : null;
     return result && result.mape !== null ? [{ label, mape: result.mape, category: mapeCategory(result.mape) }] : [];
   });
+  const failed = items.filter((item) => item.mape >= MAPE_USABLE);
+  const usable = items.length > 0 && failed.length === 0;
   return (
     <div className="space-y-3 rounded-2xl border border-lime-200 bg-white p-5 shadow-sm">
       <div>
         <h3 className="text-lg font-semibold text-lime-900">Seberapa akurat model?</h3>
         <p className="text-sm text-lime-900/70">
-          Rata-rata selisih hasil model dengan data resmi {BASELINE_START_YEAR}–{BASELINE_END_YEAR} (MAPE). Makin kecil makin akurat; di bawah 10%
-          tergolong sangat baik.
+          Rata-rata selisih hasil model dengan data resmi {BASELINE_START_YEAR}–{BASELINE_END_YEAR} (MAPE). Makin kecil makin akurat; model dapat
+          digunakan bila MAPE di bawah {MAPE_USABLE}%.
         </p>
       </div>
+      {items.length > 0 && (
+        <p
+          className={`rounded-xl border px-4 py-2.5 text-sm font-semibold ${
+            usable ? "border-lime-300 bg-lime-50 text-lime-800" : "border-amber-300 bg-amber-50 text-amber-900"
+          }`}
+        >
+          {usable
+            ? `✓ Model dapat digunakan: MAPE semua indikator utama di bawah ${MAPE_USABLE}%.`
+            : `Model belum dapat digunakan: MAPE ${failed.map((f) => f.label.toLowerCase()).join(", ")} masih ${MAPE_USABLE}% atau lebih.`}
+        </p>
+      )}
       <div className="grid gap-3 sm:grid-cols-3">
         {items.map((item) => (
           <div key={item.label} className="rounded-xl border border-lime-100 bg-lime-50/60 p-4">
@@ -220,10 +237,11 @@ export default function BaselinePage() {
   const provinceName = useProvinceName();
   const [results, setResults] = useState<DataRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [stage, setStage] = useState<Stage>(0);
+  // Tahap yang sudah dibuka dan pilihan grafik diingat selama tab terbuka (lihat lib/sessionState.ts).
+  const [stage, setStage] = useSessionState<Stage>("baseline.tahap", 0);
   const [modelInfo, setModelInfo] = useState<ModelInfo | null>(null);
-  const [baselineKey, setBaselineKey] = useState<string>("produksi-padi");
-  const [forecastMetric, setForecastMetric] = useState<string>(METRICS[0].variable);
+  const [baselineKey, setBaselineKey] = useSessionState<string>("baseline.validasi", "produksi-padi");
+  const [forecastMetric, setForecastMetric] = useSessionState<string>("baseline.proyeksi", METRICS[0].variable);
   const [notification, setNotification] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
   const baselineRef = useRef<HTMLDivElement | null>(null);
   const forecastRef = useRef<HTMLDivElement | null>(null);
@@ -260,6 +278,18 @@ export default function BaselinePage() {
     };
     void run();
   }, []);
+
+  // Datang dari "Simpan & jalankan" di halaman Data Provinsi (?evaluasi=1): buka tahap evaluasi model setelah model selesai dijalankan.
+  useEffect(() => {
+    if (loading || results.length === 0) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("evaluasi") !== "1") return;
+    url.searchParams.delete("evaluasi");
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    setStage((prev) => (prev < 1 ? 1 : prev));
+    const timer = window.setTimeout(() => baselineRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+    return () => window.clearTimeout(timer);
+  }, [loading, results.length, setStage]);
 
   const baselineRows = useMemo(
     () => results.filter((r) => toNumber(r["Time"]) >= BASELINE_START_YEAR && toNumber(r["Time"]) <= BASELINE_END_YEAR),
@@ -347,7 +377,7 @@ export default function BaselinePage() {
               })}
             </ol>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="space-y-2">
               <button
                 type="button"
                 onClick={() => goTo(1)}
@@ -355,14 +385,19 @@ export default function BaselinePage() {
                 className="inline-flex items-center gap-2 rounded-xl bg-lime-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-lime-800 hover:shadow-md disabled:bg-lime-300"
               >
                 {loading ? "Menjalankan model..." : "Mulai Simulasi"}
-                {!loading && <span aria-hidden="true">→</span>}
+                {!loading && <span aria-hidden="true">↓</span>}
               </button>
-              <Link
-                href="/provinsi"
-                className="rounded-xl border border-dashed border-amber-400 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
-              >
-                Provinsi Lain
-              </Link>
+              <p className="text-xs text-lime-900/60">Untuk Provinsi {provinceName}</p>
+              <p className="text-sm text-lime-900/70">
+                atau{" "}
+                <Link href="/provinsi" className="inline-flex items-center gap-1 font-semibold text-lime-700 underline-offset-2 hover:underline">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                  uji model untuk provinsi lain
+                </Link>
+              </p>
             </div>
           </div>
 
