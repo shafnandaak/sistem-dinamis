@@ -624,7 +624,7 @@ function PengujianContent() {
       <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
         <p className="text-xs uppercase tracking-wide text-lime-700">Pengujian aplikasi</p>
         <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">Verifikasi Data dan Hasil Model</h1>
-        <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
+        <p className="mt-2 text-sm text-lime-900/75">
           Halaman ini menjalankan model baseline ({MODEL_FILE}) langsung di browser, lalu menampilkan seluruh variabel model beserta data
           aktual yang dipakai aplikasi. Semua angka dihitung saat halaman dibuka dan dapat diekspor ke CSV.
         </p>

@@ -141,3 +141,17 @@ a:active {
 @media print {
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Paragraf penjelasan di area konten rata kiri-kanan. Kelas text-center/text-right pada paragraf
+   (atau pada pembungkusnya, mis. hero Beranda) tetap diutamakan. */
+main p {
+  text-align: justify;
+}
+main .text-center p,
+main p.text-center {
+  text-align: center;
+}
+main .text-right p,
+main p.text-right {
+  text-align: right;
+}

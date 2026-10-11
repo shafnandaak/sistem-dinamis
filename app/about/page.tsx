@@ -7,8 +7,8 @@ import SatelliteNovelty from "@/components/SatelliteNovelty";
 import { BASELINE_END_YEAR, BASELINE_START_YEAR } from "@/lib/historicalActuals";
 import { FINAL_YEAR, FORECAST_START } from "@/lib/policies";
 
-// Halaman About: tiga hal yang dipaparkan, yaitu lokus penelitian, tanaman pangan (Permentan No. 41/Permentan/OT.140/9/2009;
-// BPS, 2025; Pusdatin Pertanian, 2025), dan kebaruan penelitian berupa estimasi data citra satelit.
+// Halaman About: tiga hal yang dipaparkan, yaitu tanaman pangan (Permentan No. 41/Permentan/OT.140/9/2009; BPS, 2025;
+// Pusdatin Pertanian, 2025), lokus penelitian, dan kebaruan penelitian berupa estimasi data citra satelit.
 
 type Commodity = { id: string; name: string; alias?: string; desc: string; peran: string; color: string; sub?: { name: string; desc: string }[] };
 type Group = { id: "padi" | "palawija"; name: string; tagline: string; desc: string; items: Commodity[] };
@@ -148,8 +148,8 @@ const years = Array.from({ length: 2026 - 2015 + 1 }, (_, i) => 2015 + i);
 
 /** Tiga hal yang dipaparkan di halaman ini, sesuai urutan bagian di bawahnya. */
 const TOPICS = [
-  { id: "lokus", n: 1, title: "Lokus penelitian", desc: "Provinsi Jawa Barat sebagai wilayah kajian." },
-  { id: "tanaman-pangan", n: 2, title: "Tanaman pangan", desc: "Padi dan palawija yang dimodelkan." },
+  { id: "tanaman-pangan", n: 1, title: "Tanaman pangan", desc: "Padi dan palawija yang dimodelkan." },
+  { id: "lokus", n: 2, title: "Lokus penelitian", desc: "Provinsi Jawa Barat sebagai wilayah kajian." },
   { id: "kebaruan", n: 3, title: "Kebaruan penelitian", desc: "Estimasi data dengan citra satelit." },
 ];
 
@@ -181,7 +181,7 @@ export default function AboutPage() {
         <section className="rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7">
           <p className="text-xs uppercase tracking-wide text-lime-700">Tentang Aplikasi</p>
           <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">About</h1>
-          <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
+          <p className="mt-2 text-sm text-lime-900/75">
             Aplikasi simulasi model sistem dinamis untuk kebijakan pertanian tanaman pangan di Jawa Barat.
           </p>
           <ol className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -203,46 +203,11 @@ export default function AboutPage() {
         </section>
       </Reveal>
 
-      <Reveal id="lokus" className="scroll-mt-24">
-        <section className="grid gap-6 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-          <figure className="overflow-hidden rounded-2xl border border-lime-100 bg-white">
-            <Image
-              src="/lokus-penelitian.png"
-              alt="Peta Indonesia dengan Provinsi Jawa Barat ditandai merah, beserta peta perbesaran Provinsi Jawa Barat"
-              width={826}
-              height={584}
-              className="h-auto w-full"
-            />
-            <figcaption className="border-t border-lime-100 bg-lime-50/60 px-4 py-2 text-xs text-lime-900/70">
-              Lokus penelitian: Provinsi Jawa Barat
-            </figcaption>
-          </figure>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">1 · Lokus penelitian</p>
-            <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Provinsi Jawa Barat</h2>
-            <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
-              Penelitian dilakukan pada <strong>tingkat provinsi</strong>, dengan Provinsi Jawa Barat sebagai satu kesatuan wilayah kajian. Jawa
-              Barat merupakan provinsi dengan <strong>jumlah penduduk terbanyak</strong> di Indonesia sekaligus salah satu{" "}
-              <strong>sentra produksi padi</strong> nasional, sehingga ketersediaan pangan dan tekanan alih fungsi lahan pertanian menjadi isu
-              penting bagi kebijakan pemerintah provinsi.
-            </p>
-            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-              {LOKUS_FACTS.map((f) => (
-                <div key={f.label} className="rounded-xl border border-lime-100 bg-lime-50/60 p-3">
-                  <dt className="text-xs text-lime-900/60">{f.label}</dt>
-                  <dd className="mt-0.5 font-semibold text-lime-950">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
-      </Reveal>
-
       <Reveal id="tanaman-pangan" className="scroll-mt-24">
         <section className="space-y-5 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7">
           <div className="grid gap-4 lg:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">2 · Tanaman pangan</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">1 · Tanaman pangan</p>
               <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Apa itu tanaman pangan?</h2>
               <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
                 Tanaman pangan adalah kelompok tanaman yang menghasilkan <strong>bahan pangan utama</strong> bagi masyarakat. Budi dayanya
@@ -375,6 +340,41 @@ export default function AboutPage() {
         </section>
       </Reveal>
 
+      <Reveal id="lokus" className="scroll-mt-24">
+        <section className="grid gap-6 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+          <figure className="overflow-hidden rounded-2xl border border-lime-100 bg-white">
+            <Image
+              src="/lokus-penelitian.png"
+              alt="Peta Indonesia dengan Provinsi Jawa Barat ditandai merah, beserta peta perbesaran Provinsi Jawa Barat"
+              width={826}
+              height={584}
+              className="h-auto w-full"
+            />
+            <figcaption className="border-t border-lime-100 bg-lime-50/60 px-4 py-2 text-xs text-lime-900/70">
+              Lokus penelitian: Provinsi Jawa Barat
+            </figcaption>
+          </figure>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">2 · Lokus penelitian</p>
+            <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Provinsi Jawa Barat</h2>
+            <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
+              Penelitian dilakukan pada <strong>tingkat provinsi</strong>, dengan Provinsi Jawa Barat sebagai satu kesatuan wilayah kajian. Jawa
+              Barat merupakan provinsi dengan <strong>jumlah penduduk terbanyak</strong> di Indonesia sekaligus salah satu{" "}
+              <strong>sentra produksi padi</strong> nasional, sehingga ketersediaan pangan dan tekanan alih fungsi lahan pertanian menjadi isu
+              penting bagi kebijakan pemerintah provinsi.
+            </p>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              {LOKUS_FACTS.map((f) => (
+                <div key={f.label} className="rounded-xl border border-lime-100 bg-lime-50/60 p-3">
+                  <dt className="text-xs text-lime-900/60">{f.label}</dt>
+                  <dd className="mt-0.5 font-semibold text-lime-950">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      </Reveal>
+
       <div id="kebaruan" className="scroll-mt-24 space-y-6">
         <Reveal>
           <SatelliteNovelty />
@@ -386,7 +386,7 @@ export default function AboutPage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Estimasi data citra</p>
               <h2 className="text-xl md:text-2xl font-bold text-lime-900">Data Citra Satelit Jawa Barat</h2>
-              <p className="max-w-3xl text-sm text-lime-900/75">
+              <p className="text-sm text-lime-900/75">
                 Data citra satelit (NDVI, curah hujan, LST, dan evapotranspirasi) dipakai untuk mengatasi jeda publikasi statistik resmi. Peta
                 menampilkan wilayah Jawa Barat; layer citra akan ditampilkan sebagai overlay di atasnya.
               </p>

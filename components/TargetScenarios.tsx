@@ -94,7 +94,7 @@ export default function TargetScenarios({ baseline, results }: { baseline: DataR
         <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
           <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Skenario berbasis target</p>
           <h2 className="mt-1 text-2xl font-bold text-lime-900">Intervensi terkecil untuk mencapai target daerah</h2>
-          <p className="mt-2 max-w-4xl text-sm leading-relaxed text-lime-900/75">
+          <p className="mt-2 text-sm leading-relaxed text-lime-900/75">
             Berbeda dari skenario terbaik, skenario ini mencari <strong>kombinasi kebijakan dengan intervensi terkecil</strong> yang cukup untuk
             mencapai target produksi pemerintah daerah dalam {PRODUCTION_TARGET.source}.
           </p>

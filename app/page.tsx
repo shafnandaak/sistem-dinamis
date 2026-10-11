@@ -328,7 +328,7 @@ export default function Home() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Tahap 2 · Struktur model</p>
           <h2 className="text-xl font-bold text-lime-900 md:text-2xl">Model Kebijakan Tanaman Pangan</h2>
-          <p className="mt-1 max-w-3xl text-sm text-lime-900/75">
+          <p className="mt-1 text-sm text-lime-900/75">
             Causal Loop Diagram menunjukkan hubungan sebab-akibat antarvariabel, sedangkan Stock Flow Diagram menunjukkan struktur stok,
             aliran, dan rumus yang dijalankan di halaman Baseline, Skenario, dan Simulasi. Klik diagram untuk memperbesar; pada SFD,
             klik variabel untuk melihat rumusnya.

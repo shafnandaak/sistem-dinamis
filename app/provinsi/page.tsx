@@ -219,7 +219,7 @@ export default function ProvinsiPage() {
       <section className="rounded-3xl border border-lime-200 bg-white p-5 shadow-sm md:p-7">
         <p className="text-xs uppercase tracking-wide text-lime-700">Data provinsi</p>
         <h1 className="mt-1 text-2xl font-bold text-lime-900 md:text-3xl">Jalankan Model untuk Provinsi Lain</h1>
-        <p className="mt-2 max-w-3xl text-sm text-lime-900/75">
+        <p className="mt-2 text-sm text-lime-900/75">
           Isi template Excel dengan data provinsi, sesuaikan parameter, lalu simpan. Data hanya tersimpan di browser ini.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-lime-100 bg-lime-50/70 px-4 py-3 text-sm">

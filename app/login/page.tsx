@@ -129,7 +129,7 @@ export default function LoginPage() {
           <section className="fade-up space-y-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center" style={{ animationDelay: "200ms" }}>
             <div className="rounded-3xl border border-lime-200 bg-white/90 p-7 shadow-xl shadow-lime-900/5 backdrop-blur md:p-8">
               <h2 className="text-2xl font-bold text-lime-950">Masuk</h2>
-              <p className="mt-1 text-sm text-lime-900/70">Gunakan akun Google Anda untuk membuka dashboard simulasi.</p>
+              <p className="mt-1 text-sm text-lime-900/70">Gunakan akun Google Anda untuk membuka aplikasi simulasi.</p>
 
               <Suspense fallback={null}>
                 <LoginError hidden={loading} />
