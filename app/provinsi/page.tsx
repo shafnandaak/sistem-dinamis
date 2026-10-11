@@ -121,6 +121,14 @@ export default function ProvinsiPage() {
     [paramText],
   );
 
+  // Dihitung ulang setiap kali pilihan provinsi berubah, sehingga catatan hilang begitu namanya disamakan.
+  const selected = draft.province.trim();
+  const provinceMismatch =
+    upload && upload.province && selected && upload.province.toLowerCase() !== selected.toLowerCase()
+      ? `Nama provinsi di file (${upload.province}) berbeda dengan provinsi yang dipilih (${selected}).`
+      : null;
+  const uploadWarnings = upload ? [...(provinceMismatch ? [provinceMismatch] : []), ...upload.warnings] : [];
+
   const showProblems = (list: string[], step: Step) => {
     setMessage(null);
     setProblems({ list, step });
@@ -148,8 +156,8 @@ export default function ProvinsiPage() {
       return;
     }
     // Isian kosong diganti data Jawa Barat saat dibaca; tidak boleh tersimpan diam-diam sebagai data provinsi lain.
-    if (upload.warnings.length > 0) {
-      showProblems([`File ${upload.fileName} belum lengkap:`, ...upload.warnings], 2);
+    if (uploadWarnings.length > 0) {
+      showProblems([`File ${upload.fileName} belum sesuai:`, ...uploadWarnings], 2);
       return;
     }
     if (paramErrors.length > 0) {
@@ -289,11 +297,11 @@ export default function ProvinsiPage() {
                 </ul>
               </div>
             )}
-            {upload.warnings.length > 0 && (
-              <details className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-900">
-                <summary className="cursor-pointer font-semibold">{upload.warnings.length} catatan</summary>
+            {uploadWarnings.length > 0 && (
+              <details open={provinceMismatch !== null} className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-900">
+                <summary className="cursor-pointer font-semibold">{uploadWarnings.length} catatan</summary>
                 <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs">
-                  {upload.warnings.map((w) => (
+                  {uploadWarnings.map((w) => (
                     <li key={w}>{w}</li>
                   ))}
                 </ul>

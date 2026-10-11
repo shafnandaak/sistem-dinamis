@@ -1,4 +1,4 @@
-// Kartu "Kebaruan penelitian" di Langkah 3 Dashboard: data citra satelit untuk mengatasi jeda (lag) publikasi
+// Kartu "Kebaruan penelitian" di halaman Estimasi Data SRN: data citra satelit untuk mengatasi jeda (lag) publikasi
 // statistik resmi. Ikon berupa path SVG 24x24 bergaya garis.
 
 const SOURCES = [

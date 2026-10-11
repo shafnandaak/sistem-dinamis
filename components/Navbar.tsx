@@ -12,12 +12,14 @@ import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 import { DEFAULT_PROVINCE } from "@/lib/provinceDataset";
 import { useProvinceName } from "@/lib/useProvinceName";
 
-const menuItems = [
+/** Menu utama; dipakai juga oleh Footer. */
+export const menuItems = [
   { name: "Dashboard", href: "/" },
   { name: "Baseline", href: "/baseline" },
   { name: "Kebijakan", href: "/kebijakan" },
   { name: "Skenario", href: "/scenario" },
   { name: "Simulasi", href: "/simulation" },
+  { name: "Estimasi Data SRN", href: "/estimasi-srn" },
   { name: "Pengujian", href: "/pengujian" },
   { name: "About", href: "/about" },
 ];

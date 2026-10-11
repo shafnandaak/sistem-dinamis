@@ -106,6 +106,8 @@ export function buildWorkbook(xlsx: XLSX, data: ProvinceDataset) {
 
 export type ParseResult = {
   dataset: ProvinceDataset;
+  /** Nama provinsi di file (sheet Info, sel B1); "" bila kosong. */
+  province: string;
   errors: string[];
   warnings: string[];
   /** Jumlah isian yang terbaca per sheet. */
@@ -153,7 +155,8 @@ export function parseWorkbook(xlsx: XLSX, buffer: ArrayBuffer, base: ProvinceDat
 
   const info = rowsOf(SHEETS.info);
   const province = String(info?.[0]?.[1] ?? "").trim();
-  if (province) dataset.province = province;
+  // Provinsi yang dipilih di web diutamakan; nama di file hanya dipakai bila belum ada pilihan.
+  if (province) dataset.province = base.province.trim() || province;
   else warnings.push(`Nama provinsi (sheet ${SHEETS.info}, sel B1) kosong.`);
 
   // Nilai Awal
@@ -233,5 +236,5 @@ export function parseWorkbook(xlsx: XLSX, buffer: ArrayBuffer, base: ProvinceDat
     }
   }
 
-  return { dataset, errors, warnings, counts };
+  return { dataset, province, errors, warnings, counts };
 }
