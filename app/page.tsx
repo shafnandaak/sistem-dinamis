@@ -50,7 +50,7 @@ const concepts = [
     id: "decision",
     icon: "⚙",
     title: "Decision Variable",
-    subtitle: "Tuas kebijakan",
+    subtitle: "Variabel kebijakan",
     description:
       "Decision variable adalah parameter yang dapat diatur oleh pengambil keputusan. Di aplikasi ini, variabel inilah yang Anda ubah pada halaman Simulasi.",
     examples: ["% Kenaikan Subsidi Pupuk", "% Penambahan RAB", "% LP2B", "Persentase Perubahan Irigasi"],

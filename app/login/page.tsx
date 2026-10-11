@@ -17,7 +17,7 @@ const BALANCING = FEEDBACK_LOOPS.length - REINFORCING;
 const STATS = [
   { value: "7", label: "komoditas pangan" },
   { value: `${BASELINE_START_YEAR}–${FINAL_YEAR}`, label: "periode simulasi" },
-  { value: String(POLICY_ORDER.length), label: "tuas kebijakan" },
+  { value: String(POLICY_ORDER.length), label: "variabel kebijakan" },
   { value: String(VALIDATED), label: "variabel divalidasi" },
 ];
 

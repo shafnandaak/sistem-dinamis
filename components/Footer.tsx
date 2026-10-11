@@ -16,6 +16,8 @@ const RESEARCHER = {
   email: "222212878@stis.ac.id",
   whatsapp: "085812723448",
 };
+const RESEARCH_TITLE =
+  "Perancangan Aplikasi Simulasi Kebijakan Pertanian Tanaman Pangan dengan Sistem Dinamis menggunakan Data Statistik Resmi Negara dan Citra Satelit (Studi Kasus: Provinsi Jawa Barat)";
 const SUPERVISOR = "Dr. Eng. Arie Wahyu Wijayanto";
 const INSTITUTION = "Politeknik Statistika STIS";
 const ADDRESS = "Jalan Otto Iskandardinata No. 64 C";
@@ -89,6 +91,7 @@ export default function Footer() {
         {/* Data penelitian */}
         <div>
           <p className={heading}>Penelitian</p>
+          <p className="mt-4 max-w-xl text-[15px] italic leading-relaxed text-lime-50">“{RESEARCH_TITLE}”</p>
           <dl className="mt-4 grid grid-cols-[130px_1fr] gap-x-4 gap-y-2.5">
             {details.map((d) => (
               <div key={d.label} className="contents">
