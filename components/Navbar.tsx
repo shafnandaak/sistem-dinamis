@@ -14,7 +14,7 @@ import { useProvinceName } from "@/lib/useProvinceName";
 
 /** Menu utama; dipakai juga oleh Footer. */
 export const menuItems = [
-  { name: "Dashboard", href: "/" },
+  { name: "Beranda", href: "/" },
   { name: "Baseline", href: "/baseline" },
   { name: "Kebijakan", href: "/kebijakan" },
   { name: "Skenario", href: "/scenario" },

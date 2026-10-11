@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { PENGUJIAN_PATH, canAccessPengujian } from "@/lib/access";
 
 const menuItems = [
-  { name: "Dashboard", href: "/" },
+  { name: "Beranda", href: "/" },
   { name: "Baseline", href: "/baseline" },
   { name: "Kebijakan", href: "/kebijakan" },
   { name: "Skenario", href: "/scenario" },

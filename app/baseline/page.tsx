@@ -512,7 +512,7 @@ export default function BaselinePage() {
                   onClick={() => goTo(2)}
                   className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-amber-700 hover:shadow-md"
                 >
-                  Lanjut <span aria-hidden="true">→</span>
+                  Lanjut <span aria-hidden="true">↓</span>
                 </button>
               </div>
             </Reveal>

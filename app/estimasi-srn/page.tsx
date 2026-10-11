@@ -5,7 +5,7 @@ import Reveal from "@/components/Reveal";
 import SatelliteNovelty from "@/components/SatelliteNovelty";
 
 // Halaman kebaruan penelitian: data citra satelit untuk mengestimasi data Statistik Resmi Negara (SRN)
-// yang terbit dengan jeda. Sebelumnya bagian ini ada di Dashboard.
+// yang terbit dengan jeda. Sebelumnya bagian ini ada di Beranda.
 
 // Citra raster untuk overlay peta. Isi dengan path file (mis. "/map.png") setelah file citra
 // ditaruh di folder public; selama null, overlay tidak dimuat (menghindari error 404).

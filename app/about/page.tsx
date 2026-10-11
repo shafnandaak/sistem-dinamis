@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
+import { BASELINE_END_YEAR, BASELINE_START_YEAR } from "@/lib/historicalActuals";
+import { FINAL_YEAR, FORECAST_START } from "@/lib/policies";
 
 // Halaman About: pengantar aplikasi + materi singkat "Apa itu tanaman pangan?" dan jenis-jenisnya
 // (Permentan No. 41/Permentan/OT.140/9/2009; BPS, 2025; Pusdatin Pertanian, 2025).
@@ -132,6 +135,13 @@ function CropIcon({ id, className }: { id: string; className?: string }) {
 
 const FACTORS = ["Luas lahan", "Kondisi iklim", "Teknologi budi daya"];
 
+const LOKUS_FACTS = [
+  { label: "Wilayah", value: "18 kabupaten, 9 kota" },
+  { label: "Komoditas", value: "7 tanaman pangan" },
+  { label: "Periode historis", value: `${BASELINE_START_YEAR}–${BASELINE_END_YEAR}` },
+  { label: "Periode simulasi", value: `${FORECAST_START}–${FINAL_YEAR}` },
+];
+
 export default function AboutPage() {
   const [groupId, setGroupId] = useState<Group["id"]>("padi");
   const group = GROUPS.find((g) => g.id === groupId) ?? GROUPS[0];
@@ -153,6 +163,40 @@ export default function AboutPage() {
             Aplikasi simulasi model sistem dinamis untuk kebijakan pertanian tanaman pangan di Jawa Barat. Model mencakup tujuh komoditas
             tanaman pangan: padi dan enam jenis palawija.
           </p>
+        </section>
+      </Reveal>
+
+      <Reveal>
+        <section className="grid gap-6 rounded-3xl border border-lime-200 bg-white p-6 shadow-sm md:p-7 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+          <figure className="overflow-hidden rounded-2xl border border-lime-100 bg-white">
+            <Image
+              src="/lokus-penelitian.png"
+              alt="Peta Indonesia dengan Provinsi Jawa Barat ditandai merah, beserta peta perbesaran batas kabupaten/kota Jawa Barat"
+              width={826}
+              height={584}
+              className="h-auto w-full"
+            />
+            <figcaption className="border-t border-lime-100 bg-lime-50/60 px-4 py-2 text-xs text-lime-900/70">
+              Lokus penelitian: Provinsi Jawa Barat
+            </figcaption>
+          </figure>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Lokus penelitian</p>
+            <h2 className="mt-1 text-xl font-bold text-lime-900 md:text-2xl">Provinsi Jawa Barat</h2>
+            <p className="mt-2 text-sm leading-relaxed text-lime-900/80">
+              Penelitian dilakukan di Provinsi Jawa Barat, yang terdiri atas <strong>18 kabupaten dan 9 kota</strong>. Jawa Barat merupakan
+              provinsi dengan <strong>jumlah penduduk terbanyak</strong> di Indonesia sekaligus salah satu <strong>sentra produksi padi</strong>{" "}
+              nasional, sehingga ketersediaan pangan dan tekanan alih fungsi lahan pertanian menjadi isu penting bagi kebijakan daerah.
+            </p>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              {LOKUS_FACTS.map((f) => (
+                <div key={f.label} className="rounded-xl border border-lime-100 bg-lime-50/60 p-3">
+                  <dt className="text-xs text-lime-900/60">{f.label}</dt>
+                  <dd className="mt-0.5 font-semibold text-lime-950">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </section>
       </Reveal>
 

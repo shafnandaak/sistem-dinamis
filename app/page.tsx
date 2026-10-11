@@ -107,7 +107,7 @@ export default function Home() {
         <div className="mx-auto max-w-3xl space-y-5 text-center">
           <p className="fade-up inline-flex items-center gap-2 rounded-full border border-lime-300 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-lime-800 backdrop-blur">
             <span className="h-2 w-2 animate-pulse rounded-full bg-lime-600" />
-            Dashboard Penelitian · Jawa Barat
+            Beranda · Jawa Barat
           </p>
           <h1 className="fade-up text-3xl font-bold leading-tight text-lime-950 md:text-5xl" style={{ animationDelay: "80ms" }}>
             Model Simulasi Kebijakan <span className="text-lime-700">Pertanian Tanaman Pangan</span>
@@ -125,7 +125,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Alur eksplorasi 6 tahap (lib/explorationSteps.ts): tahap 1-2 di Dashboard, tahap 3-6 di halaman masing-masing. */}
+          {/* Alur eksplorasi 6 tahap (lib/explorationSteps.ts): tahap 1-2 di Beranda, tahap 3-6 di halaman masing-masing. */}
           <div className="fade-up space-y-3 pt-1" style={{ animationDelay: "320ms" }}>
             <p className="text-xs font-semibold uppercase tracking-wide text-lime-700">Alur eksplorasi</p>
             <ol className="grid grid-cols-1 gap-2 text-left sm:grid-cols-2 lg:grid-cols-3">

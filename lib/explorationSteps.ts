@@ -1,4 +1,4 @@
-// Alur eksplorasi aplikasi (dipakai di hero Dashboard dan tombol "Lanjut ke Tahap ..." di akhir tiap tahap).
+// Alur eksplorasi aplikasi (dipakai di hero Beranda dan tombol "Lanjut ke Tahap ..." di akhir tiap tahap).
 export type ExplorationStep = { n: number; label: string; hint: string; href: string };
 
 export const EXPLORATION_STEPS: ExplorationStep[] = [

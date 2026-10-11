@@ -527,7 +527,7 @@ export default function PengujianPage() {
         <h1 className="mt-1 text-xl font-bold text-lime-950">Halaman Pengujian tidak tersedia untuk akun ini</h1>
         <p className="mt-2 text-sm text-lime-900/70">Halaman ini hanya dapat dibuka oleh akun penguji aplikasi.</p>
         <Link href="/" className="mt-4 inline-flex rounded-lg bg-lime-700 px-4 py-2 text-sm font-semibold text-white hover:bg-lime-800">
-          Kembali ke Dashboard
+          Kembali ke Beranda
         </Link>
       </section>
     );

@@ -10,7 +10,7 @@ const authSecret =
 
 export default withAuth(
   function proxy(req) {
-    // Halaman Pengujian hanya untuk akun tertentu; akun lain diarahkan ke Dashboard.
+    // Halaman Pengujian hanya untuk akun tertentu; akun lain diarahkan ke Beranda.
     const path = req.nextUrl.pathname;
     if ((path === PENGUJIAN_PATH || path.startsWith(`${PENGUJIAN_PATH}/`)) && !canAccessPengujian(req.nextauth.token?.email)) {
       return NextResponse.redirect(new URL("/", req.url));
