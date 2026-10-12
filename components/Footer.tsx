@@ -18,7 +18,7 @@ const RESEARCHER = {
 };
 const RESEARCH_TITLE =
   "Perancangan Aplikasi Simulasi Kebijakan Pertanian Tanaman Pangan dengan Sistem Dinamis menggunakan Data Statistik Resmi Negara dan Citra Satelit (Studi Kasus: Provinsi Jawa Barat)";
-const SUPERVISOR = "Dr. Eng. Arie Wahyu Wijayanto";
+const SUPERVISOR = "Dr. Eng. Arie Wahyu Wijayanto, S.S.T., M.T.";
 const INSTITUTION = "Politeknik Statistika STIS";
 const ADDRESS = "Jalan Otto Iskandardinata No. 64 C";
 
