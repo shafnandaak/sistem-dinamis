@@ -324,7 +324,10 @@ export default function SimulationPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="pt-2 text-center text-3xl font-bold text-lime-900 md:text-4xl">Simulasi Kebijakan Interaktif</h1>
+      <header className="space-y-1 pt-2">
+        <p className="text-xs uppercase tracking-wide text-lime-700">Tahap 6 · Simulasi kebijakan</p>
+        <h1 className="text-center text-3xl font-bold text-lime-900 md:text-4xl">Simulasi Kebijakan Interaktif</h1>
+      </header>
 
       {error && <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">Gagal memuat model: {error}</p>}
 
